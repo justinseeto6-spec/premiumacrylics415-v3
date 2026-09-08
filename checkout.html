@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Your Order | Premium Acrylics 415</title>
+<meta name="description" content="Review your cart and submit an order request.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body data-page="">
+
+<div id="site-header"></div>
+
+<main class="wrap content-page" style="max-width:760px;">
+  <h1>Request Your Order</h1>
+  <p class="subtitle">Review what's in your cart, then send us your info. We'll follow up
+    to confirm details and arrange payment — nothing is charged automatically here.</p>
+
+  <div id="orderSummary" class="contact-card" style="margin-bottom:24px;">
+    <div class="empty-state">Loading your cart…</div>
+  </div>
+
+  <form id="orderForm" class="contact-card">
+    <h3>Your info</h3>
+    <div class="form-field">
+      <label for="custName">Full name</label>
+      <input id="custName" name="name" type="text" required autocomplete="name">
+    </div>
+    <div class="form-field">
+      <label for="custEmail">Email</label>
+      <input id="custEmail" name="email" type="email" required autocomplete="email">
+    </div>
+    <div class="form-field">
+      <label for="custPhone">Phone</label>
+      <input id="custPhone" name="phone" type="tel" required autocomplete="tel">
+    </div>
+    <div class="form-field">
+      <label for="custAddress">Shipping address (optional — we'll confirm with you either way)</label>
+      <input id="custAddress" name="address" type="text" placeholder="Street, City, State, ZIP" autocomplete="street-address">
+    </div>
+    <div class="form-field">
+      <label for="custNotes">Notes (optional)</label>
+      <textarea id="custNotes" name="notes" placeholder="Anything else we should know?"></textarea>
+    </div>
+
+    <!-- Populated by order.js right before submit so the email shows a clean itemized order -->
+    <input type="hidden" name="Order Summary" id="orderSummaryField">
+    <input type="hidden" name="Order Total" id="orderTotalField">
+    <input type="hidden" name="_subject" value="New order request — Premium Acrylics 415">
+
+    <button type="submit" class="btn btn-primary btn-block" id="submitOrderBtn">Submit Order Request</button>
+    <p class="cart-note" id="orderFormNote">We'll reply by email or text to confirm your order and arrange payment.</p>
+  </form>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/js/cart.js"></script>
+<script src="/js/products.js"></script>
+<script src="/js/checkout.js"></script>
+<script src="/js/partials.js"></script>
+<script src="/js/order.js"></script>
+</body>
+</html>

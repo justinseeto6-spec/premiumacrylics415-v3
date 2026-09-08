@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Us | Premium Acrylics 415</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body data-page="contact">
+
+<div id="site-header"></div>
+
+<main class="wrap content-page" style="max-width:960px;">
+  <h1>Contact Us</h1>
+  <p class="subtitle">Questions, custom orders, or anything else — we're happy to help.</p>
+
+  <div class="contact-grid">
+    <div>
+      <div class="contact-card">
+        <h3>Text / SMS</h3>
+        <p>The fastest way to reach us — great for custom order questions.</p>
+        <a class="btn btn-secondary" href="sms:6502482473">650-248-2473</a>
+      </div>
+      <div class="contact-card" style="margin-top:16px;">
+        <h3>Email</h3>
+        <p>We reply within 1–2 business days.</p>
+        <a class="btn btn-secondary" href="mailto:support@premiumacrylics415.com">support@premiumacrylics415.com</a>
+      </div>
+    </div>
+
+    <form class="contact-card" id="contactForm">
+      <h3>Send us a message</h3>
+      <div class="form-field">
+        <label for="cName">Name</label>
+        <input id="cName" name="name" type="text" required>
+      </div>
+      <div class="form-field">
+        <label for="cEmail">Email</label>
+        <input id="cEmail" name="email" type="email" required>
+      </div>
+      <div class="form-field">
+        <label for="cMessage">Message</label>
+        <textarea id="cMessage" name="message" required placeholder="Tell us what box you need a case for, or ask us anything."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+    </form>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/js/cart.js"></script>
+<script src="/js/products.js"></script>
+<script src="/js/checkout.js"></script>
+<script src="/js/partials.js"></script>
+<script>
+  document.getElementById('contactForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('cName').value;
+    const email = document.getElementById('cEmail').value;
+    const message = document.getElementById('cMessage').value;
+    const subject = encodeURIComponent(`Website inquiry from ${name}`);
+    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
+    window.location.href = `mailto:support@premiumacrylics415.com?subject=${subject}&body=${body}`;
+  });
+</script>
+</body>
+</html>

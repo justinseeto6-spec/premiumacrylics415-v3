@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premium Acrylics 415 | Acrylic Display Cases for TCG Collectors</title>
+<meta name="description" content="Precision-cut acrylic display cases for Pokémon, One Piece, and other TCG sealed product. Shipping at cost, no markup.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body data-page="home">
+
+<div id="site-header"></div>
+
+<main>
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <div>
+        <span class="eyebrow">Made for collectors, by collectors</span>
+        <h1>Display your sealed product like it deserves to be seen.</h1>
+        <p class="lead">Precision-cut, crystal-clear acrylic cases built to fit Pokémon and One Piece sealed product exactly — protecting your collection from dust, sun, and shelf wear.</p>
+        <div class="hero-actions">
+          <a href="/shop.html" class="btn btn-primary">Shop All Cases</a>
+          <a href="/shop.html?category=pokemon" class="btn btn-secondary">Pokémon Cases</a>
+        </div>
+        <div class="trust-row">
+          <span><span class="dot"></span> Shipping at cost, no markup</span>
+          <span><span class="dot"></span> Precision fit, tool-free assembly</span>
+          <span><span class="dot"></span> Text us anytime: 650-248-2473</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="/images/hero-charizard.jpg" alt="Premium Acrylics 415 acrylic display case">
+      </div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div>
+        <h2>Shop by category</h2>
+        <p>Find the exact fit for your sealed product.</p>
+      </div>
+    </div>
+    <div class="category-grid">
+      <a class="category-card" href="/shop.html?category=pokemon">
+        <div class="cat-icon">⚡</div>
+        <h3>Pokémon</h3>
+        <p>UPCs, ETBs, tins &amp; booster boxes</p>
+      </a>
+      <a class="category-card" href="/shop.html?category=one-piece">
+        <div class="cat-icon">🏴‍☠️</div>
+        <h3>One Piece</h3>
+        <p>Booster boxes &amp; collector tins</p>
+      </a>
+      <a class="category-card" href="/shop.html?category=bundles">
+        <div class="cat-icon">📦</div>
+        <h3>Bundles</h3>
+        <p>Booster bundle displays</p>
+      </a>
+      <a class="category-card" href="/contact.html">
+        <div class="cat-icon">✎</div>
+        <h3>Custom Order</h3>
+        <p>Don't see your box? Ask us.</p>
+      </a>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div>
+        <h2>Featured cases</h2>
+        <p>Our most popular display cases right now.</p>
+      </div>
+      <a href="/shop.html" class="view-all">View all &rarr;</a>
+    </div>
+    <div class="product-grid" id="featuredGrid">
+      <div class="empty-state">Loading products…</div>
+    </div>
+  </section>
+
+  <section class="section wrap">
+    <div class="section-head">
+      <div>
+        <h2>Why collectors choose us</h2>
+      </div>
+    </div>
+    <div class="category-grid">
+      <div class="category-card">
+        <div class="cat-icon">📐</div>
+        <h3>Precision fit</h3>
+        <p>Every case is cut to match its box exactly — no gaps, no rattling.</p>
+      </div>
+      <div class="category-card">
+        <div class="cat-icon">🔍</div>
+        <h3>Crystal clarity</h3>
+        <p>Premium cast acrylic stays clear and scratch-resistant for years.</p>
+      </div>
+      <div class="category-card">
+        <div class="cat-icon">🚚</div>
+        <h3>Honest shipping</h3>
+        <p>We charge exactly what shipping costs — never a markup.</p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/js/cart.js"></script>
+<script src="/js/products.js"></script>
+<script src="/js/checkout.js"></script>
+<script src="/js/partials.js"></script>
+<script>
+  (async () => {
+    const products = await Products.all();
+    const featured = products.filter(p => p.featured).slice(0, 8);
+    Products.renderGrid(document.getElementById('featuredGrid'), featured.length ? featured : products.slice(0, 8));
+  })();
+</script>
+</body>
+</html>

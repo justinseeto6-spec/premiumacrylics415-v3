@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ | Premium Acrylics 415</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body data-page="faq">
+
+<div id="site-header"></div>
+
+<main class="wrap content-page">
+  <h1>Frequently Asked Questions</h1>
+  <p class="subtitle">Everything you need to know before you order.</p>
+
+  <div id="faqList">
+    <div class="faq-item">
+      <div class="faq-question"><span>What are your cases made of?</span><span class="chev">▾</span></div>
+      <div class="faq-answer"><p>Every case is cut from premium 3mm cast acrylic — clear, rigid, and scratch-resistant. Cast acrylic holds its clarity far better over time than cheaper extruded plastic.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>Will a case fit my exact box?</span><span class="chev">▾</span></div>
+      <div class="faq-answer"><p>Each listing is cut for a specific box, tin, or bundle — check the product title and description for the exact fit. If you don't see your box listed, message us and we'll let you know if we can cut a custom size.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>How is shipping calculated?</span><span class="chev">▾</span></div>
+      <div class="faq-answer"><p>We charge shipping at cost — exactly what carriers charge us, with no markup. Submit an order and we'll confirm your exact shipping cost with you directly based on your address and order size, before anything is charged.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>How long does an order take to ship?</span><span class="chev">▾</span></div>
+      <div class="faq-answer"><p>In-stock cases typically ship within 2–4 business days. Custom orders may take longer — we'll confirm a timeline with you before starting.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>Do you accept returns or exchanges?</span><span class="chev">▾</span></div>
+      <div class="faq-answer"><p>Yes — see our full <a href="/shipping-returns.html" style="color:var(--accent);">Shipping &amp; Returns</a> page for details. If something arrives damaged or isn't right, message us and we'll make it right.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>Can I order a custom size?</span><span class="chev">▾</span></div>
+      <div class="faq-answer"><p>Absolutely. Text us at 650-248-2473 or use the contact form with your box's dimensions and we'll quote you a custom cut.</p></div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-question"><span>How do I actually pay?</span><span class="chev">▾</span></div>
+      <div class="faq-answer"><p>Submitting an order on the site sends us a request — it doesn't charge you anything automatically. We'll follow up by email or text to confirm your order and total (including shipping), and arrange payment from there.</p></div>
+    </div>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/js/cart.js"></script>
+<script src="/js/products.js"></script>
+<script src="/js/checkout.js"></script>
+<script src="/js/partials.js"></script>
+<script>
+  document.querySelectorAll('.faq-question').forEach(q => {
+    q.addEventListener('click', () => q.parentElement.classList.toggle('open'));
+  });
+</script>
+</body>
+</html>

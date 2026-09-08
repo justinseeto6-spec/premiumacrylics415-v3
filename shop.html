@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shop All Display Cases | Premium Acrylics 415</title>
+<meta name="description" content="Browse all acrylic display cases for Pokémon, One Piece, and TCG sealed product.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body data-page="shop">
+
+<div id="site-header"></div>
+
+<main class="wrap section">
+  <div class="section-head">
+    <div>
+      <h1 style="margin:0;font-size:1.8rem;">Shop All Cases</h1>
+      <p>Precision-fit acrylic display cases for your sealed product.</p>
+    </div>
+  </div>
+
+  <div class="filter-bar" id="filterBar">
+    <button class="filter-chip active" data-cat="all">All</button>
+    <button class="filter-chip" data-cat="pokemon">Pokémon</button>
+    <button class="filter-chip" data-cat="one-piece">One Piece</button>
+    <button class="filter-chip" data-cat="bundles">Bundles</button>
+    <input class="search-input" id="searchInput" type="text" placeholder="Search cases…">
+  </div>
+
+  <div class="product-grid" id="productGrid">
+    <div class="empty-state">Loading products…</div>
+  </div>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/js/cart.js"></script>
+<script src="/js/products.js"></script>
+<script src="/js/checkout.js"></script>
+<script src="/js/partials.js"></script>
+<script src="/js/shop.js"></script>
+</body>
+</html>
