@@ -43,6 +43,7 @@ const Products = {
           <div class="product-price-row">
             <span class="price">${this.formatPrice(p.price)}</span>
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
+            ${p.inStock !== false ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">Add to Cart</button>` : ''}
           </div>
         </div>
       </a>
@@ -55,6 +56,17 @@ const Products = {
       return;
     }
     container.innerHTML = products.map(p => this.cardHTML(p)).join('');
+    container.querySelectorAll('.btn-card-add').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const id = decodeURIComponent(btn.dataset.addId);
+        Cart.add(id, 1);
+        this.byId(id).then(p => {
+          if (window.showToast) showToast(`Added ${p ? p.name : 'item'} to cart`);
+        });
+      });
+    });
   }
 };
 

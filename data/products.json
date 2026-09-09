@@ -6,11 +6,14 @@
     "price": 27,
     "compareAtPrice": null,
     "image": "/images/30th-anniversary-upc-1.jpg",
-    "images": ["/images/30th-anniversary-upc-1.jpg", "/images/30th-anniversary-upc-2.jpg"],
-    "shortDescription": "Crystal-clear acrylic case built for the Pokémon 30th Anniversary Ultra Premium Collection box.",
+    "images": [
+      "/images/30th-anniversary-upc-1.jpg",
+      "/images/30th-anniversary-upc-2.jpg"
+    ],
+    "shortDescription": "Crystal-clear acrylic case built for the Pok\u00e9mon 30th Anniversary Ultra Premium Collection box.",
     "description": "Protect and showcase your 30th Anniversary Ultra Premium Collection with a precision-cut, crystal-clear acrylic display case. Built to fit the UPC box exactly, with a removable lid for easy access and a scratch-resistant finish that keeps your collection looking pristine.",
     "specs": [
-      "Fits: Pokémon 30th Anniversary UPC",
+      "Fits: Pok\u00e9mon 30th Anniversary UPC",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear, scratch-resistant",
       "Assembly: No Assembly Required"
@@ -20,15 +23,15 @@
   },
   {
     "id": "pokemon-center-30th-etb",
-    "name": "Pokémon Center 30th Anniversary ETB Case",
+    "name": "Pok\u00e9mon Center 30th Anniversary ETB Case",
     "category": "pokemon",
     "price": 18,
     "compareAtPrice": null,
     "image": "/images/pokemon-center-30th-etb.jpg",
-    "shortDescription": "Exclusive-fit case for the Pokémon Center 30th Anniversary Elite Trainer Box.",
-    "description": "A dedicated display case sized precisely for the Pokémon Center exclusive 30th Anniversary Elite Trainer Box. Keep this hard-to-find ETB safe from dust, sun fade, and shelf wear while it stays on full display.",
+    "shortDescription": "Exclusive-fit case for the Pok\u00e9mon Center 30th Anniversary Elite Trainer Box.",
+    "description": "A dedicated display case sized precisely for the Pok\u00e9mon Center exclusive 30th Anniversary Elite Trainer Box. Keep this hard-to-find ETB safe from dust, sun fade, and shelf wear while it stays on full display.",
     "specs": [
-      "Fits: Pokémon Center 30th Anniv. ETB (exclusive)",
+      "Fits: Pok\u00e9mon Center 30th Anniv. ETB (exclusive)",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear, scratch-resistant",
       "Assembly: No Assembly Required"
@@ -43,10 +46,10 @@
     "price": 27,
     "compareAtPrice": null,
     "image": "/images/25th-anniversary-upc.jpg",
-    "shortDescription": "Precision-fit acrylic case for the Pokémon 25th Anniversary Ultra Premium Collection.",
+    "shortDescription": "Precision-fit acrylic case for the Pok\u00e9mon 25th Anniversary Ultra Premium Collection.",
     "description": "Show off your 25th Anniversary Ultra Premium Collection in a museum-quality acrylic case, cut to fit the box exactly with zero wasted space. A permanent way to protect one of the most sought-after UPCs.",
     "specs": [
-      "Fits: Pokémon 25th Anniversary UPC",
+      "Fits: Pok\u00e9mon 25th Anniversary UPC",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear, scratch-resistant",
       "Assembly: No Assembly Required"
@@ -62,7 +65,7 @@
     "compareAtPrice": 27,
     "image": "/images/prismatic-evolutions-figure-collection.jpg",
     "shortDescription": "On sale: display case for the Prismatic Evolutions Figure Collection box.",
-    "description": "Fitted acrylic protection for the Prismatic Evolutions Figure Collection. Currently on sale — grab it while it lasts.",
+    "description": "Fitted acrylic protection for the Prismatic Evolutions Figure Collection. Currently on sale \u2014 grab it while it lasts.",
     "specs": [
       "Fits: Prismatic Evolutions Figure Collection",
       "Material: 5mm + 8mm premium cast acrylic",
@@ -98,7 +101,7 @@
     "compareAtPrice": null,
     "image": "/images/japanese-regional-boxes-display.jpg",
     "shortDescription": "Fits Hiroshima, Fukuoka, and Tohoku regional promo boxes.",
-    "description": "Purpose-built for the Japanese exclusive Pokémon Center \"Hiroshima Special Collection\" box — also fits Fukuoka and Tohoku regional editions. A great way to protect these limited-run imports.",
+    "description": "Purpose-built for the Japanese exclusive Pok\u00e9mon Center \"Hiroshima Special Collection\" box \u2014 also fits Fukuoka and Tohoku regional editions. A great way to protect these limited-run imports.",
     "specs": [
       "Fits: Hiroshima / Fukuoka / Tohoku regional boxes",
       "Material: 5mm + 8mm premium cast acrylic",
@@ -188,7 +191,7 @@
     "compareAtPrice": null,
     "image": "/images/sealed-booster-bundle-display.jpg",
     "shortDescription": "Premium display case for a sealed booster bundle.",
-    "description": "Our premium option for sealed booster bundles — thicker walls, a tighter fit, and an even clearer finish for collectors who want the best on their shelf.",
+    "description": "Our premium option for sealed booster bundles \u2014 thicker walls, a tighter fit, and an even clearer finish for collectors who want the best on their shelf.",
     "specs": [
       "Fits: Sealed booster bundle",
       "Material: 5mm + 8mm premium cast acrylic",
@@ -236,13 +239,13 @@
   },
   {
     "id": "mini-tin-ascended-heros",
-    "name": "Mini Tin Display Case — Ascended Heroes",
+    "name": "Mini Tin Display Case \u2014 Ascended Heroes",
     "category": "pokemon",
     "price": 14.5,
     "compareAtPrice": null,
     "image": "/images/mini-tin-ascended-heros.jpg",
     "shortDescription": "Compact case for Ascended Heroes mini tins.",
-    "description": "A compact, precisely-sized case for Ascended Heroes mini tins — perfect for collectors building out a shelf of smaller sealed product.",
+    "description": "A compact, precisely-sized case for Ascended Heroes mini tins \u2014 perfect for collectors building out a shelf of smaller sealed product.",
     "specs": [
       "Fits: Ascended Heroes mini tin",
       "Material: 5mm + 8mm premium cast acrylic",
@@ -254,15 +257,15 @@
   },
   {
     "id": "one-piece-tin-display-vol1-2",
-    "name": "One Piece Tin Display Case (Vol. 1–2)",
+    "name": "One Piece Tin Display Case (Vol. 1\u20132)",
     "category": "one-piece",
     "price": 25,
     "compareAtPrice": null,
     "image": "/images/one-piece-tin-display-vol1-2.jpg",
-    "shortDescription": "Display case for One Piece Card Game tins, Volumes 1–2.",
+    "shortDescription": "Display case for One Piece Card Game tins, Volumes 1\u20132.",
     "description": "A dedicated acrylic case for One Piece Card Game collector tins from Volumes 1 and 2. Keep your One Piece sealed product safe and on display.",
     "specs": [
-      "Fits: One Piece Card Game tin, Vol. 1–2",
+      "Fits: One Piece Card Game tin, Vol. 1\u20132",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear",
       "Assembly: No Assembly Required"
@@ -280,7 +283,7 @@
     "shortDescription": "Universal-fit case for One Piece booster boxes, sets OP-05 through OP-16.",
     "description": "A universal-fit case sized for One Piece Card Game booster boxes across sets OP-05 through OP-16. One case, an entire range of sets covered.",
     "specs": [
-      "Fits: One Piece booster boxes, OP-05–OP-16",
+      "Fits: One Piece booster boxes, OP-05\u2013OP-16",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear",
       "Assembly: No Assembly Required"
@@ -296,7 +299,7 @@
     "compareAtPrice": null,
     "image": "/images/dark-sylveon-25th.jpg",
     "shortDescription": "Character-specific case for the Dark Sylveon 25th Anniversary box.",
-    "description": "A precision case built specifically for the Dark Sylveon 25th Anniversary box — a fan-favorite piece deserving a dedicated display.",
+    "description": "A precision case built specifically for the Dark Sylveon 25th Anniversary box \u2014 a fan-favorite piece deserving a dedicated display.",
     "specs": [
       "Fits: Dark Sylveon 25th Anniversary box",
       "Material: 5mm + 8mm premium cast acrylic",
@@ -308,7 +311,7 @@
   },
   {
     "id": "pokemon-151-upc",
-    "name": "Pokémon 151 UPC Display Case",
+    "name": "Pok\u00e9mon 151 UPC Display Case",
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
@@ -316,7 +319,7 @@
     "shortDescription": "Standard-fit case for the Scarlet & Violet 151 Ultra Premium Collection.",
     "description": "A precision-cut acrylic case for the 151 UPC, one of the most popular boxes in recent memory. Keep it dust-free and display-ready indefinitely.",
     "specs": [
-      "Fits: Pokémon 151 UPC",
+      "Fits: Pok\u00e9mon 151 UPC",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear, scratch-resistant",
       "Assembly: No Assembly Required"
@@ -330,7 +333,7 @@
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
-    "image": "/images/placeholder.svg",
+    "image": "/images/prismatic-evolutions-super-premium.jpg",
     "shortDescription": "Premium-fit case for the Prismatic Evolutions Super Premium Collection.",
     "description": "Built for the Prismatic Evolutions Super Premium Collection box, this case offers a snug, precise fit with a crystal-clear finish worthy of a top-tier release.",
     "specs": [
@@ -344,15 +347,15 @@
   },
   {
     "id": "pokemon-booster-box-standard",
-    "name": "Pokémon Booster Box Display Case (Standard)",
+    "name": "Pok\u00e9mon Booster Box Display Case (Standard)",
     "category": "pokemon",
     "price": 12.5,
     "compareAtPrice": null,
-    "image": "/images/placeholder.svg",
-    "shortDescription": "Universal-fit case for a standard 36-pack Pokémon booster box.",
-    "description": "Our everyday-carry case for a standard Pokémon booster box. Affordable, precisely fitted, and finished to the same crystal-clear standard as our premium cases.",
+    "image": "/images/pokemon-booster-box-standard.jpg",
+    "shortDescription": "Universal-fit case for a standard 36-pack Pok\u00e9mon booster box.",
+    "description": "Our everyday-carry case for a standard Pok\u00e9mon booster box. Affordable, precisely fitted, and finished to the same crystal-clear standard as our premium cases.",
     "specs": [
-      "Fits: Standard 36-pack Pokémon booster box",
+      "Fits: Standard 36-pack Pok\u00e9mon booster box",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear",
       "Assembly: No Assembly Required"
@@ -366,7 +369,7 @@
     "category": "pokemon",
     "price": 13.5,
     "compareAtPrice": null,
-    "image": "/images/placeholder.svg",
+    "image": "/images/elite-trainer-box-standard.jpg",
     "shortDescription": "Universal-fit case for a standard Elite Trainer Box.",
     "description": "A dependable, precisely-fitted case for any standard Elite Trainer Box. Our most popular everyday case for collectors building out a full shelf.",
     "specs": [

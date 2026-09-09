@@ -397,14 +397,24 @@ button { font-family: inherit; cursor: pointer; }
   align-items: center;
   gap: 8px;
   margin-top: 4px;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 .price { font-weight: 700; font-size: 1.05rem; }
 .price-compare {
   color: var(--text-faint);
   text-decoration: line-through;
   font-size: 0.85rem;
+  margin-right: auto;
 }
 .product-actions { margin-top: 10px; }
+
+.btn-card-add {
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
 
 /* ---------- Filters ---------- */
 .filter-bar {
