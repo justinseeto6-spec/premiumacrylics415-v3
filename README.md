@@ -44,7 +44,7 @@ with no backend code required.
 
 1. Go to [formspree.io](https://formspree.io) and create a free account.
 2. Create a new form. Set the email it should send to (your real inbox — this can be
-   different from the placeholder `support@premiumacrylics415.com` used on the Contact page;
+   different from `support@premiumacrylics.mozmail.com` used on the Contact page;
    update that too if you'd like them to match).
 3. Formspree will give you an endpoint URL that looks like
    `https://formspree.io/f/abcd1234`.
@@ -150,8 +150,8 @@ actual total when you follow up.
 
 - **Return window** — I used 14 days as a placeholder in the Shipping & Returns and FAQ
   pages; update if yours differs
-- **Support email** (`support@premiumacrylics415.com`) — swap for your real inbox, and make
-  sure it matches whatever email you set up in Formspree
+- **Support email** (`support@premiumacrylics.mozmail.com`) — this is now live on the site;
+  make sure it matches whatever email you set up in Formspree
 - **Social links** in the footer currently point nowhere — add your real Instagram/Facebook/
   etc. URLs
 - **A few product photos** — see "Product photos" above

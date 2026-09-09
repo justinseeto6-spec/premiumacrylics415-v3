@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Us | Premium Acrylics 415</title>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/images/favicon.png" type="image/png">
 <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body data-page="contact">
@@ -25,7 +25,7 @@
       <div class="contact-card" style="margin-top:16px;">
         <h3>Email</h3>
         <p>We reply within 1–2 business days.</p>
-        <a class="btn btn-secondary" href="mailto:support@premiumacrylics415.com">support@premiumacrylics415.com</a>
+        <a class="btn btn-secondary" href="mailto:support@premiumacrylics.mozmail.com">support@premiumacrylics.mozmail.com</a>
       </div>
     </div>
 
@@ -43,7 +43,12 @@
         <label for="cMessage">Message</label>
         <textarea id="cMessage" name="message" required placeholder="Tell us what box you need a case for, or ask us anything."></textarea>
       </div>
-      <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+      <div class="form-field">
+        <label for="cPhoto">Photo of the box (optional)</label>
+        <input id="cPhoto" name="attachment" type="file" accept="image/*">
+        <p style="color:var(--text-faint);font-size:0.78rem;margin:6px 0 0;">Great for custom order requests — attach a photo so we can measure it accurately. Max 10MB.</p>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block" id="contactSubmitBtn">Send Message</button>
     </form>
   </div>
 </main>
@@ -55,14 +60,43 @@
 <script src="/js/checkout.js"></script>
 <script src="/js/partials.js"></script>
 <script>
-  document.getElementById('contactForm').addEventListener('submit', (e) => {
+  const CONTACT_FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
+
+  document.getElementById('contactForm').addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = document.getElementById('cName').value;
-    const email = document.getElementById('cEmail').value;
-    const message = document.getElementById('cMessage').value;
-    const subject = encodeURIComponent(`Website inquiry from ${name}`);
-    const body = encodeURIComponent(`${message}\n\n— ${name} (${email})`);
-    window.location.href = `mailto:support@premiumacrylics415.com?subject=${subject}&body=${body}`;
+    const form = e.target;
+    const submitBtn = document.getElementById('contactSubmitBtn');
+    const photoInput = document.getElementById('cPhoto');
+
+    if (photoInput.files[0] && photoInput.files[0].size > 10 * 1024 * 1024) {
+      showToast?.('That photo is too large — please attach something under 10MB.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    try {
+      const res = await fetch(CONTACT_FORMSPREE_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form)
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data?.errors?.[0]?.message || 'Could not send your message.');
+      }
+
+      form.reset();
+      showToast?.('Message sent — we\'ll get back to you within 1–2 business days.');
+    } catch (err) {
+      console.error(err);
+      showToast?.(err.message || 'Something went wrong — please try again or text us at 650-248-2473.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Message';
+    }
   });
 </script>
 </body>

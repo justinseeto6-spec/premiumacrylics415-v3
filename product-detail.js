@@ -18,11 +18,23 @@
   if (titleEl) titleEl.textContent = document.title;
 
   const onSale = product.compareAtPrice && product.compareAtPrice > product.price;
+  const images = (product.images && product.images.length) ? product.images : [product.image];
 
   root.innerHTML = `
     <div class="pdp">
       <div class="pdp-gallery">
-        <img src="${product.image}" alt="${product.name}">
+        <div class="pdp-gallery-main">
+          <img id="pdpMainImage" src="${images[0]}" alt="${product.name}">
+        </div>
+        ${images.length > 1 ? `
+          <div class="pdp-thumbs" id="pdpThumbs">
+            ${images.map((img, i) => `
+              <button class="pdp-thumb${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="View photo ${i + 1}">
+                <img src="${img}" alt="${product.name} photo ${i + 1}">
+              </button>
+            `).join('')}
+          </div>
+        ` : ''}
       </div>
       <div class="pdp-info">
         <div class="breadcrumbs">
@@ -57,6 +69,17 @@
       </div>
     </div>
   `;
+
+  const thumbButtons = document.querySelectorAll('.pdp-thumb');
+  const mainImage = document.getElementById('pdpMainImage');
+  thumbButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const i = parseInt(btn.dataset.index, 10);
+      mainImage.src = images[i];
+      thumbButtons.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
 
   const qtyInput = document.getElementById('qtyInput');
   document.getElementById('qtyInc').addEventListener('click', () => {

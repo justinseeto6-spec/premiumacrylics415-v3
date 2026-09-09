@@ -72,6 +72,11 @@ button { font-family: inherit; cursor: pointer; }
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
+.brand-logo {
+  height: 36px;
+  width: auto;
+  display: block;
+}
 .brand .mark {
   width: 32px;
   height: 32px;
@@ -237,6 +242,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
 .hero-visual {
+  position: relative;
   aspect-ratio: 1 / 1;
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -244,6 +250,35 @@ button { font-family: inherit; cursor: pointer; }
   background: var(--surface);
 }
 .hero-visual img { width: 100%; height: 100%; object-fit: cover; }
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+  pointer-events: none;
+}
+.hero-slide.active { opacity: 1; pointer-events: auto; }
+.hero-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  z-index: 2;
+}
+.hero-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.4);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.hero-dot.active { background: #fff; transform: scale(1.2); }
 
 .trust-row {
   display: flex;
@@ -420,14 +455,35 @@ button { font-family: inherit; cursor: pointer; }
   gap: 48px;
   padding: 48px 0;
 }
-.pdp-gallery {
+.pdp-gallery-main {
   border-radius: var(--radius-lg);
   overflow: hidden;
   border: 1px solid var(--border);
   background: var(--surface);
   aspect-ratio: 1 / 1;
 }
-.pdp-gallery img { width: 100%; height: 100%; object-fit: cover; }
+.pdp-gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+.pdp-thumbs {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+.pdp-thumb {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 2px solid var(--border);
+  background: var(--surface);
+  padding: 0;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+.pdp-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pdp-thumb:hover { opacity: 1; }
+.pdp-thumb.active { opacity: 1; border-color: var(--accent); }
 .breadcrumbs {
   color: var(--text-faint);
   font-size: 0.82rem;

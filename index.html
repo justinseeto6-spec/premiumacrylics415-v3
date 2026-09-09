@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Premium Acrylics 415 | Acrylic Display Cases for TCG Collectors</title>
 <meta name="description" content="Precision-cut acrylic display cases for Pokémon, One Piece, and other TCG sealed product. Shipping at cost, no markup.">
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/images/favicon.png" type="image/png">
 <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body data-page="home">
@@ -25,12 +25,25 @@
         </div>
         <div class="trust-row">
           <span><span class="dot"></span> Shipping at cost, no markup</span>
-          <span><span class="dot"></span> Precision fit, tool-free assembly</span>
+          <span><span class="dot"></span> Precision fit, no assembly required</span>
           <span><span class="dot"></span> Text us anytime: 650-248-2473</span>
         </div>
       </div>
-      <div class="hero-visual">
-        <img src="/images/hero-charizard.jpg" alt="Premium Acrylics 415 acrylic display case">
+      <div class="hero-visual" id="heroSlideshow">
+        <div class="hero-slide active"><img src="/images/hero-charizard.jpg" alt="Sword &amp; Shield Ultra-Premium Collection acrylic display case"></div>
+        <div class="hero-slide"><img src="/images/sword-shield-upc.jpg" alt="Sword &amp; Shield Ultra-Premium Collection acrylic display case"></div>
+        <div class="hero-slide"><img src="/images/pokemon-151-upc.jpg" alt="Pokémon 151 Ultra-Premium Collection acrylic display case"></div>
+        <div class="hero-slide"><img src="/images/dark-sylveon-25th.jpg" alt="Dark Sylveon 25th Anniversary acrylic display case"></div>
+        <div class="hero-slide"><img src="/images/one-piece-tin-display-vol1-2.jpg" alt="One Piece tin display acrylic case"></div>
+        <div class="hero-slide"><img src="/images/sealed-booster-bundle-display.jpg" alt="Sealed booster bundle acrylic display case"></div>
+        <div class="hero-dots">
+          <button class="hero-dot active" aria-label="Slide 1"></button>
+          <button class="hero-dot" aria-label="Slide 2"></button>
+          <button class="hero-dot" aria-label="Slide 3"></button>
+          <button class="hero-dot" aria-label="Slide 4"></button>
+          <button class="hero-dot" aria-label="Slide 5"></button>
+          <button class="hero-dot" aria-label="Slide 6"></button>
+        </div>
       </div>
     </div>
   </section>
@@ -52,11 +65,6 @@
         <div class="cat-icon">🏴‍☠️</div>
         <h3>One Piece</h3>
         <p>Booster boxes &amp; collector tins</p>
-      </a>
-      <a class="category-card" href="/shop.html?category=bundles">
-        <div class="cat-icon">📦</div>
-        <h3>Bundles</h3>
-        <p>Booster bundle displays</p>
       </a>
       <a class="category-card" href="/contact.html">
         <div class="cat-icon">✎</div>
@@ -116,6 +124,37 @@
     const products = await Products.all();
     const featured = products.filter(p => p.featured).slice(0, 8);
     Products.renderGrid(document.getElementById('featuredGrid'), featured.length ? featured : products.slice(0, 8));
+  })();
+
+  (() => {
+    const root = document.getElementById('heroSlideshow');
+    if (!root) return;
+    const slides = root.querySelectorAll('.hero-slide');
+    const dots = root.querySelectorAll('.hero-dot');
+    let current = 0;
+    let timer;
+
+    function show(index) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (index + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+
+    function startAutoplay() {
+      clearInterval(timer);
+      timer = setInterval(() => show(current + 1), 4000);
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        show(i);
+        startAutoplay();
+      });
+    });
+
+    startAutoplay();
   })();
 </script>
 </body>
