@@ -23,7 +23,6 @@ const Products = {
     const map = {
       'pokemon': 'Pokémon',
       'one-piece': 'One Piece',
-      'bundles': 'Bundles',
       'custom': 'Custom'
     };
     return map[cat] || cat;
