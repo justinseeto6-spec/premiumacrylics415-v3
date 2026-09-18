@@ -36,6 +36,20 @@
       <input id="custPhone" name="phone" type="tel" required autocomplete="tel">
     </div>
     <div class="form-field">
+      <label>Delivery method</label>
+      <div class="delivery-options">
+        <label class="delivery-option">
+          <input type="radio" name="deliveryMethod" value="Ship to me" id="deliveryShip" checked>
+          <span>Ship to me</span>
+        </label>
+        <label class="delivery-option">
+          <input type="radio" name="deliveryMethod" value="Local pick-up — 1158 Mission Rd, South San Francisco, CA 94080" id="deliveryPickup">
+          <span>Local pick-up — South San Francisco</span>
+        </label>
+      </div>
+      <p class="cart-note" id="pickupNote" style="text-align:left;margin-top:8px;display:none;">Pick up in person at <strong>1158 Mission Rd, South San Francisco, CA 94080</strong>. We'll text you when your order is ready — no shipping charge.</p>
+    </div>
+    <div class="form-field" id="addressField">
       <label for="custAddress">Shipping address (optional — we'll confirm with you either way)</label>
       <input id="custAddress" name="address" type="text" placeholder="Street, City, State, ZIP" autocomplete="street-address">
     </div>
@@ -48,6 +62,26 @@
     <input type="hidden" name="Order Summary" id="orderSummaryField">
     <input type="hidden" name="Order Total" id="orderTotalField">
     <input type="hidden" name="_subject" value="New order request — Premium Acrylics 415">
+
+    <script>
+      (() => {
+        const shipRadio = document.getElementById('deliveryShip');
+        const pickupRadio = document.getElementById('deliveryPickup');
+        const pickupNote = document.getElementById('pickupNote');
+        const addressField = document.getElementById('addressField');
+        const addressInput = document.getElementById('custAddress');
+
+        function updateDeliveryUI() {
+          const isPickup = pickupRadio.checked;
+          pickupNote.style.display = isPickup ? 'block' : 'none';
+          addressField.style.display = isPickup ? 'none' : '';
+          if (isPickup) addressInput.value = '';
+        }
+        shipRadio.addEventListener('change', updateDeliveryUI);
+        pickupRadio.addEventListener('change', updateDeliveryUI);
+        updateDeliveryUI();
+      })();
+    </script>
 
     <button type="submit" class="btn btn-primary btn-block" id="submitOrderBtn">Submit Order Request</button>
     <p class="cart-note" id="orderFormNote">We'll reply by email or text to confirm your order and arrange payment.</p>
