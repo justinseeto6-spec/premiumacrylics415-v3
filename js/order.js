@@ -28,15 +28,16 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   const rows = items.map(item => {
     const p = products.find(pp => pp.id === item.id);
     if (!p) return '';
-    const lineTotal = p.price * item.qty;
+    const lineTotal = Products.lineTotal(p, item.qty);
     subtotal += lineTotal;
-    lines.push(`${item.qty} × ${p.name} (${Products.formatPrice(p.price)} each) = ${Products.formatPrice(lineTotal)}`);
+    const dealApplied = lineTotal < p.price * item.qty;
+    lines.push(`${item.qty} × ${p.name} (${Products.formatPrice(p.price)} each${dealApplied ? `, ${Products.dealLabel(p)} deal applied` : ''}) = ${Products.formatPrice(lineTotal)}`);
     return `
       <div class="cart-item" data-id="${p.id}">
         <img src="${p.image}" alt="${p.name}">
         <div>
           <p class="cart-item-name">${p.name}</p>
-          <span class="cart-item-price">Qty ${item.qty} × ${Products.formatPrice(p.price)}</span>
+          <span class="cart-item-price">Qty ${item.qty} × ${Products.formatPrice(p.price)}${dealApplied ? ` &middot; ${Products.dealLabel(p)} deal applied` : ''}</span>
         </div>
         <div class="cart-item-total">${Products.formatPrice(lineTotal)}</div>
       </div>

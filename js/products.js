@@ -19,6 +19,26 @@ const Products = {
     return '$' + Number(n).toFixed(2);
   },
 
+  // Line total honoring optional multi-buy pricing, e.g.
+  // "quantityPricing": [{ "qty": 2, "price": 55 }]  =>  every 2 cost $55, leftovers cost the normal price.
+  lineTotal(p, qty) {
+    let remaining = qty;
+    let total = 0;
+    const tiers = (p.quantityPricing || []).slice().sort((a, b) => b.qty - a.qty);
+    for (const t of tiers) {
+      const sets = Math.floor(remaining / t.qty);
+      total += sets * t.price;
+      remaining -= sets * t.qty;
+    }
+    return total + remaining * p.price;
+  },
+
+  // Short label like "2 for $55.00" (or '' if the product has no multi-buy pricing)
+  dealLabel(p) {
+    const t = (p.quantityPricing || [])[0];
+    return t ? `${t.qty} for ${this.formatPrice(t.price)}` : '';
+  },
+
   categoryLabel(cat) {
     const map = {
       'pokemon': 'Pokémon',
@@ -42,6 +62,7 @@ const Products = {
           <p class="product-desc">${p.shortDescription}</p>
           <div class="product-price-row">
             <span class="price">${this.formatPrice(p.price)}</span>
+            ${this.dealLabel(p) ? `<span class="price-compare" style="text-decoration:none;color:var(--accent);">${this.dealLabel(p)}</span>` : ''}
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
             ${p.inStock !== false ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">Add to Cart</button>` : ''}
           </div>

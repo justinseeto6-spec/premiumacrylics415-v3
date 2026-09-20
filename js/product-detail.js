@@ -48,6 +48,7 @@
           <span class="pdp-price">${Products.formatPrice(product.price)}</span>
           ${onSale ? `<span class="price-compare">${Products.formatPrice(product.compareAtPrice)}</span>` : ''}
         </div>
+        ${Products.dealLabel(product) ? `<p class="pdp-deal" style="margin:6px 0 0;color:var(--accent);font-weight:600;">Multi-buy deal: ${Products.dealLabel(product)} (save ${Products.formatPrice(product.price * product.quantityPricing[0].qty - product.quantityPricing[0].price)})</p>` : ''}
         <p class="pdp-desc">${product.description}</p>
         <ul class="spec-list">
           ${(product.specs || []).map(s => `<li>${s}</li>`).join('')}

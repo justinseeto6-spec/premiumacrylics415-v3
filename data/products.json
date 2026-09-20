@@ -3,7 +3,8 @@
     "id": "30th-anniversary-upc",
     "name": "30th Anniversary UPC Display Case",
     "category": "pokemon",
-    "price": 27,
+    "price": 30,
+    "quantityPricing": [{ "qty": 2, "price": 55 }],
     "compareAtPrice": null,
     "image": "/images/30th-anniversary-upc-3.jpg",
     "images": [
@@ -408,7 +409,7 @@
     "id": "30th-anniversary-sylveon-ex-box",
     "name": "Pok\u00e9mon Center 30th Anniversary Sylveon ex Box",
     "category": "pokemon",
-    "price": 16,
+    "price": 18,
     "compareAtPrice": null,
     "image": "/images/30th-anniversary-sylveon-ex-box.jpg",
     "shortDescription": "Exclusive-fit case for the Pok\u00e9mon Center 30th Anniversary Sylveon ex Box.",
@@ -417,6 +418,24 @@
       "Fits: Pok\u00e9mon Center 30th Anniversary Sylveon ex Box",
       "Material: 5mm + 8mm premium cast acrylic",
       "Finish: Crystal clear",
+      "Assembly: No Assembly Required"
+    ],
+    "inStock": true,
+    "featured": false
+  },
+  {
+    "id": "crown-zenith-etb-plus",
+    "name": "Crown Zenith Pok\u00e9mon Center ETB Plus Case",
+    "category": "pokemon",
+    "price": 16,
+    "compareAtPrice": null,
+    "image": "/images/crown-zenith-etb-plus.jpg",
+    "shortDescription": "Precision-fit case for the Pok\u00e9mon Center Crown Zenith Elite Trainer Box Plus.",
+    "description": "A dedicated display case sized precisely for the Pok\u00e9mon Center exclusive Crown Zenith Elite Trainer Box Plus. Keep this collector favorite safe from dust, sun fade, and shelf wear while it stays on full display.",
+    "specs": [
+      "Fits: Pok\u00e9mon Center Crown Zenith Elite Trainer Box Plus",
+      "Material: 5mm + 8mm premium cast acrylic",
+      "Finish: Crystal clear, scratch-resistant",
       "Assembly: No Assembly Required"
     ],
     "inStock": true,

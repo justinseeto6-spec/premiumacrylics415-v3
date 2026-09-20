@@ -91,14 +91,15 @@ async function renderCartDrawer(items) {
   const rows = items.map(item => {
     const p = products.find(pp => pp.id === item.id);
     if (!p) return '';
-    const lineTotal = p.price * item.qty;
+    const lineTotal = Products.lineTotal(p, item.qty);
     subtotal += lineTotal;
+    const dealApplied = lineTotal < p.price * item.qty;
     return `
       <div class="cart-item" data-id="${p.id}">
         <img src="${p.image}" alt="${p.name}">
         <div>
           <p class="cart-item-name">${p.name}</p>
-          <span class="cart-item-price">${Products.formatPrice(p.price)} each</span>
+          <span class="cart-item-price">${Products.formatPrice(p.price)} each${dealApplied ? ` &middot; ${Products.dealLabel(p)} deal applied` : ''}</span>
           <div class="cart-item-qty">
             <button class="qty-dec" aria-label="Decrease quantity">&minus;</button>
             <span>${item.qty}</span>
