@@ -71,7 +71,7 @@ const Products = {
             <span class="price">${this.formatPrice(p.price)}</span>
             ${this.dealLabel(p) ? `<span class="price-compare" style="text-decoration:none;color:var(--accent);">${this.dealLabel(p)}</span>` : ''}
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
-            ${p.status === 'special-order' ? `<a href="/contact.html" class="btn btn-secondary" style="text-decoration:none;">Contact to Order</a>` : (p.inStock !== false ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${p.status === 'preorder' ? 'Pre-Order' : 'Add to Cart'}</button>` : '')}
+            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (p.inStock !== false ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${p.status === 'preorder' ? 'Pre-Order' : 'Add to Cart'}</button>` : '')}
           </div>
         </div>
       </a>
@@ -93,6 +93,13 @@ const Products = {
         this.byId(id).then(p => {
           if (window.showToast) showToast(`Added ${p ? p.name : 'item'} to cart`);
         });
+      });
+    });
+    container.querySelectorAll('.btn-card-contact').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        window.location.href = '/contact.html';
       });
     });
   }
