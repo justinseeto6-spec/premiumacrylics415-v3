@@ -22,24 +22,24 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   }
 
   const products = await Products.all();
-  let subtotal = 0;
+  const { lines: cartLines, subtotal } = Products.cartTotals(products, items);
   const lines = [];
 
-  const rows = items.map(item => {
-    const p = products.find(pp => pp.id === item.id);
-    if (!p) return '';
-    const lineTotal = Products.lineTotal(p, item.qty);
-    subtotal += lineTotal;
-    const dealApplied = lineTotal < p.price * item.qty;
-    lines.push(`${item.qty} × ${p.name} (${Products.formatPrice(p.price)} each${dealApplied ? `, ${Products.dealLabel(p)} deal applied` : ''}) = ${Products.formatPrice(lineTotal)}`);
+  const rows = cartLines.map(l => {
+    const p = l.product;
+    const dealApplied = l.mixMatchApplied || l.lineTotal < p.price * l.qty;
+    const dealText = l.mixMatchApplied
+      ? `Mix &amp; match ${p.mixMatch.minQty}+ for ${Products.formatPrice(p.mixMatch.price)} each`
+      : Products.dealLabel(p, l.qty);
+    lines.push(`${l.qty} × ${p.name} (${Products.formatPrice(p.price)} each${dealApplied ? `, ${dealText} deal applied` : ''}) = ${Products.formatPrice(l.lineTotal)}`);
     return `
       <div class="cart-item" data-id="${p.id}">
         <img src="${p.image}" alt="${p.name}">
         <div>
           <p class="cart-item-name">${p.name}</p>
-          <span class="cart-item-price">Qty ${item.qty} × ${Products.formatPrice(p.price)}${dealApplied ? ` &middot; ${Products.dealLabel(p)} deal applied` : ''}</span>
+          <span class="cart-item-price">Qty ${l.qty} × ${Products.formatPrice(p.price)}${dealApplied ? ` &middot; ${dealText} deal applied` : ''}</span>
         </div>
-        <div class="cart-item-total">${Products.formatPrice(lineTotal)}</div>
+        <div class="cart-item-total">${Products.formatPrice(l.lineTotal)}</div>
       </div>
     `;
   }).join('');

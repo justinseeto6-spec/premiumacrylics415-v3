@@ -1,8 +1,16 @@
 /* Premium Acrylics 415 — product detail page */
 
 (async () => {
+  // Canonical product pages live at /products/<id>/ (see
+  // scripts/generate-product-pages.js), each pre-built with its own title/
+  // meta/canonical/OG tags. The old /product.html?id=... path still works
+  // for any bookmarked or previously-shared links.
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
+  let id = params.get('id');
+  if (!id) {
+    const pathMatch = window.location.pathname.match(/\/products\/([^/]+)\/?$/);
+    if (pathMatch) id = decodeURIComponent(pathMatch[1]);
+  }
   const root = document.getElementById('pdpRoot');
 
   const products = await Products.all();
@@ -16,6 +24,17 @@
   document.title = `${product.name} | Premium Acrylics 415`;
   const titleEl = document.getElementById('pageTitle');
   if (titleEl) titleEl.textContent = document.title;
+
+  // Point crawlers at the canonical clean URL no matter which path loaded
+  // this page — the generated /products/<id>/ pages already carry this tag
+  // server-side, so this mainly covers the legacy ?id= path.
+  let canonicalEl = document.querySelector('link[rel="canonical"]');
+  if (!canonicalEl) {
+    canonicalEl = document.createElement('link');
+    canonicalEl.rel = 'canonical';
+    document.head.appendChild(canonicalEl);
+  }
+  canonicalEl.href = new URL(Products.url(product), window.location.origin).href;
 
   const onSale = product.compareAtPrice && product.compareAtPrice > product.price;
   const images = (product.images && product.images.length) ? product.images : [product.image];
@@ -31,13 +50,13 @@
     <div class="pdp">
       <div class="pdp-gallery">
         <div class="pdp-gallery-main">
-          <img id="pdpMainImage" src="${images[0]}" alt="${product.name}">
+          <img id="pdpMainImage" src="${images[0]}" alt="${product.name}" width="800" height="800">
         </div>
         ${images.length > 1 ? `
           <div class="pdp-thumbs" id="pdpThumbs">
             ${images.map((img, i) => `
               <button class="pdp-thumb${i === 0 ? ' active' : ''}" data-index="${i}" aria-label="View photo ${i + 1}">
-                <img src="${img}" alt="${product.name} photo ${i + 1}">
+                <img src="${img}" alt="${product.name} photo ${i + 1}" width="72" height="72">
               </button>
             `).join('')}
           </div>
@@ -55,7 +74,22 @@
           <span class="pdp-price">${Products.formatPrice(product.price)}</span>
           ${onSale ? `<span class="price-compare">${Products.formatPrice(product.compareAtPrice)}</span>` : ''}
         </div>
-        ${Products.dealLabel(product) ? `<p class="pdp-deal" style="margin:6px 0 0;color:var(--accent);font-weight:600;">Multi-buy deal: ${Products.dealLabel(product)} (save ${Products.formatPrice(product.price * product.quantityPricing[0].qty - product.quantityPricing[0].price)})</p>` : ''}
+        ${Products.dealLabels(product).length ? `
+          <div class="pdp-deal" style="margin:6px 0 0;">
+            ${Products.dealLabels(product).map(l => `<p style="margin:2px 0;color:var(--accent);font-weight:600;">Bulk pricing: ${l}</p>`).join('')}
+          </div>
+        ` : ''}
+        ${product.mixMatch ? (() => {
+          const siblings = products.filter(o => o.id !== product.id && o.mixMatch && o.mixMatch.group === product.mixMatch.group);
+          if (!siblings.length) return '';
+          const save = (product.price - product.mixMatch.price) * product.mixMatch.minQty;
+          const links = siblings.map(s => `<a href="${Products.url(s)}" style="color:var(--accent);">${s.name}</a>`).join(', ');
+          return `
+            <div class="pdp-deal" style="margin:6px 0 0;">
+              <p style="margin:2px 0;color:var(--accent);font-weight:600;">Mix &amp; match: buy ${product.mixMatch.minQty}+ combined with ${links} for ${Products.formatPrice(product.mixMatch.price)} each (save ${Products.formatPrice(save)} at ${product.mixMatch.minQty})</p>
+            </div>
+          `;
+        })() : ''}
         <p class="pdp-desc">${product.description}</p>
         <ul class="spec-list">
           ${(product.specs || []).map(s => `<li>${s}</li>`).join('')}

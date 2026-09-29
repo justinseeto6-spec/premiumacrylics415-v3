@@ -827,7 +827,7 @@ button { font-family: inherit; cursor: pointer; }
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .hero-inner { grid-template-columns: 1fr; }
-  .hero-visual { order: -1; max-width: 420px; margin: 0 auto; }
+  .hero-visual { order: -1; width: 100%; max-width: 420px; margin: 0 auto; }
   .pdp { grid-template-columns: 1fr; gap: 28px; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .contact-grid { grid-template-columns: 1fr; }

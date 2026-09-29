@@ -86,28 +86,28 @@ async function renderCartDrawer(items) {
   if (footer) footer.style.display = 'block';
 
   const products = await Products.all();
-  let subtotal = 0;
+  const { lines, subtotal } = Products.cartTotals(products, items);
 
-  const rows = items.map(item => {
-    const p = products.find(pp => pp.id === item.id);
-    if (!p) return '';
-    const lineTotal = Products.lineTotal(p, item.qty);
-    subtotal += lineTotal;
-    const dealApplied = lineTotal < p.price * item.qty;
+  const rows = lines.map(l => {
+    const p = l.product;
+    const dealApplied = l.mixMatchApplied || l.lineTotal < p.price * l.qty;
+    const dealText = l.mixMatchApplied
+      ? `Mix &amp; match ${p.mixMatch.minQty}+ for ${Products.formatPrice(p.mixMatch.price)} each`
+      : Products.dealLabel(p, l.qty);
     return `
       <div class="cart-item" data-id="${p.id}">
         <img src="${p.image}" alt="${p.name}">
         <div>
           <p class="cart-item-name">${p.name}</p>
-          <span class="cart-item-price">${Products.formatPrice(p.price)} each${dealApplied ? ` &middot; ${Products.dealLabel(p)} deal applied` : ''}</span>
+          <span class="cart-item-price">${Products.formatPrice(p.price)} each${dealApplied ? ` &middot; ${dealText} deal applied` : ''}</span>
           <div class="cart-item-qty">
             <button class="qty-dec" aria-label="Decrease quantity">&minus;</button>
-            <span>${item.qty}</span>
+            <span>${l.qty}</span>
             <button class="qty-inc" aria-label="Increase quantity">+</button>
           </div>
           <button class="cart-item-remove">Remove</button>
         </div>
-        <div class="cart-item-total">${Products.formatPrice(lineTotal)}</div>
+        <div class="cart-item-total">${Products.formatPrice(l.lineTotal)}</div>
       </div>
     `;
   }).join('');
