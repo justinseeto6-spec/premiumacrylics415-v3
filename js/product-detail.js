@@ -19,6 +19,13 @@
 
   const onSale = product.compareAtPrice && product.compareAtPrice > product.price;
   const images = (product.images && product.images.length) ? product.images : [product.image];
+  const isPreorder = product.status === 'preorder';
+  const isSpecialOrder = product.status === 'special-order';
+  const stockLabel = isPreorder
+    ? 'Pre-Order &mdash; ships mid-to-late October'
+    : isSpecialOrder
+    ? 'Special Order Only &mdash; contact us to order'
+    : (product.inStock ? 'In stock, ready to ship' : 'Currently out of stock');
 
   root.innerHTML = `
     <div class="pdp">
@@ -43,7 +50,7 @@
           ${product.name}
         </div>
         <h1>${product.name}</h1>
-        <div class="stock-pill"><span class="dot"></span> ${product.inStock ? 'In stock, ready to ship' : 'Currently out of stock'}</div>
+        <div class="stock-pill"><span class="dot"></span> ${stockLabel}</div>
         <div class="pdp-price-row">
           <span class="pdp-price">${Products.formatPrice(product.price)}</span>
           ${onSale ? `<span class="price-compare">${Products.formatPrice(product.compareAtPrice)}</span>` : ''}
@@ -53,6 +60,7 @@
         <ul class="spec-list">
           ${(product.specs || []).map(s => `<li>${s}</li>`).join('')}
         </ul>
+        ${isSpecialOrder ? '' : `
         <div class="qty-row">
           <span>Quantity</span>
           <div class="qty-control">
@@ -61,11 +69,17 @@
             <button id="qtyInc">+</button>
           </div>
         </div>
+        `}
         <div class="pdp-actions">
-          <button class="btn btn-primary" id="addToCartBtn" ${product.inStock ? '' : 'disabled'}>
-            ${product.inStock ? 'Add to Cart' : 'Out of Stock'}
-          </button>
-          <button class="btn btn-secondary" id="pdpCheckoutBtn" ${product.inStock ? '' : 'disabled'}>Order Now</button>
+          ${isSpecialOrder ? `
+            <a class="btn btn-primary" href="/contact.html" style="text-decoration:none;">Contact Us to Order</a>
+            <a class="btn btn-secondary" href="sms:6502482473" style="text-decoration:none;">Text 650-248-2473</a>
+          ` : `
+            <button class="btn btn-primary" id="addToCartBtn" ${product.inStock ? '' : 'disabled'}>
+              ${product.inStock ? (isPreorder ? 'Pre-Order Now' : 'Add to Cart') : 'Out of Stock'}
+            </button>
+            <button class="btn btn-secondary" id="pdpCheckoutBtn" ${product.inStock ? '' : 'disabled'}>Order Now</button>
+          `}
         </div>
       </div>
     </div>
@@ -83,20 +97,20 @@
   });
 
   const qtyInput = document.getElementById('qtyInput');
-  document.getElementById('qtyInc').addEventListener('click', () => {
+  document.getElementById('qtyInc')?.addEventListener('click', () => {
     qtyInput.value = Math.max(1, parseInt(qtyInput.value || '1', 10) + 1);
   });
-  document.getElementById('qtyDec').addEventListener('click', () => {
+  document.getElementById('qtyDec')?.addEventListener('click', () => {
     qtyInput.value = Math.max(1, parseInt(qtyInput.value || '1', 10) - 1);
   });
 
-  document.getElementById('addToCartBtn').addEventListener('click', () => {
+  document.getElementById('addToCartBtn')?.addEventListener('click', () => {
     const qty = Math.max(1, parseInt(qtyInput.value || '1', 10));
     Cart.add(product.id, qty);
     showToast(`Added ${qty} × ${product.name} to cart`);
   });
 
-  document.getElementById('pdpCheckoutBtn').addEventListener('click', () => {
+  document.getElementById('pdpCheckoutBtn')?.addEventListener('click', () => {
     const qty = Math.max(1, parseInt(qtyInput.value || '1', 10));
     Cart.add(product.id, qty);
     goToCheckout();

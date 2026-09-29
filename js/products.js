@@ -48,12 +48,19 @@ const Products = {
     return map[cat] || cat;
   },
 
+  statusBadge(p) {
+    if (p.status === 'preorder') return { label: 'PRE-ORDER', bg: 'var(--accent)', fg: 'var(--accent-text)' };
+    if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
+    return null;
+  },
+
   cardHTML(p) {
     const onSale = p.compareAtPrice && p.compareAtPrice > p.price;
+    const status = this.statusBadge(p);
     return `
       <a class="product-card" href="/product.html?id=${encodeURIComponent(p.id)}">
         <div class="product-thumb">
-          ${onSale ? '<span class="badge">SALE</span>' : ''}
+          ${onSale ? '<span class="badge">SALE</span>' : (status ? `<span class="badge" style="background:${status.bg};color:${status.fg};">${status.label}</span>` : '')}
           <img src="${p.image}" alt="${p.name}" loading="lazy">
         </div>
         <div class="product-body">
@@ -64,7 +71,7 @@ const Products = {
             <span class="price">${this.formatPrice(p.price)}</span>
             ${this.dealLabel(p) ? `<span class="price-compare" style="text-decoration:none;color:var(--accent);">${this.dealLabel(p)}</span>` : ''}
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
-            ${p.inStock !== false ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">Add to Cart</button>` : ''}
+            ${p.status === 'special-order' ? `<a href="/contact.html" class="btn btn-secondary" style="text-decoration:none;">Contact to Order</a>` : (p.inStock !== false ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${p.status === 'preorder' ? 'Pre-Order' : 'Add to Cart'}</button>` : '')}
           </div>
         </div>
       </a>

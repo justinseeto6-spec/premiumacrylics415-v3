@@ -1,0 +1,2152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ACO Data</title>
+<style>
+:root{
+  --bg:#0a0a0c; --surface:#131317; --surface2:#1b1b21; --line:#27272e;
+  --ink:#f5f5f7; --ink2:#a4a4ae; --ink3:#71717a;
+  --good:#2bd9a4; --good-bg:rgba(43,217,164,.13);
+  --warn:#f6c945; --warn-bg:rgba(246,201,69,.14);
+  --info:#7db4ff; --info-bg:rgba(125,180,255,.14);
+  --bad:#ff7d7d;  --bad-bg:rgba(255,125,125,.14);
+  --focus:#7db4ff;
+}
+@media (prefers-color-scheme: light){
+  :root{
+    --bg:#f5f5f8; --surface:#ffffff; --surface2:#f0f0f4; --line:#e0e0e7;
+    --ink:#131316; --ink2:#52525b; --ink3:#71717a;
+    --good:#0a8a63; --good-bg:rgba(10,138,99,.10);
+    --warn:#8a6100; --warn-bg:rgba(200,140,0,.14);
+    --info:#1f5fbf; --info-bg:rgba(31,95,191,.10);
+    --bad:#c02f2f;  --bad-bg:rgba(192,47,47,.10);
+    --focus:#1f5fbf;
+  }
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:24px 16px 48px}
+button,input{font:inherit;color:inherit}
+button:focus-visible,input:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.who{display:flex;align-items:center;gap:14px;min-width:0}
+.avatar{width:48px;height:48px;border-radius:50%;background:var(--surface2);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:20px;color:var(--good)}
+.name{background:transparent;border:0;border-bottom:1px dashed transparent;font-size:22px;font-weight:700;padding:0;width:min(60vw,360px)}
+.name:hover{border-bottom-color:var(--line)}
+.sub{color:var(--ink3);font-size:13px;margin-top:2px}
+.actions{display:flex;gap:8px}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer}
+a.btn{display:inline-block;text-decoration:none;color:inherit}
+.btn:hover{background:var(--surface2)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.btn.primary:hover{opacity:.9;background:var(--ink)}
+
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.tabgroups{display:flex;flex-direction:column;gap:8px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tlab{width:64px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.tab{background:transparent;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer;color:var(--ink2)}
+.tab:hover{background:var(--surface)}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink);font-weight:600}
+.toggle{display:flex;align-items:center;gap:8px;color:var(--ink2);font-size:13px;cursor:pointer}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.tlabel{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:600}
+.tval{font-size:34px;font-weight:700;line-height:1.15;margin-top:6px;font-variant-numeric:tabular-nums}
+.tsub{font-size:12px;color:var(--ink3);margin-top:4px}
+.tval.good{color:var(--good)} .tval.warn{color:var(--warn)} .tval.bad{color:var(--bad)}
+
+.cols{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:start;margin-bottom:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h2{margin:0 0 14px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink2);font-weight:600}
+.empty{color:var(--ink3);padding:12px 0}
+
+.grow{display:grid;grid-template-columns:28px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.grow:first-of-type{border-top:0;padding-top:0}
+.idx{width:28px;height:28px;border-radius:50%;background:var(--surface2);display:grid;place-items:center;color:var(--ink2);font-size:12px;font-weight:600}
+.gname{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gmeta{color:var(--ink2);font-size:13px;margin-top:2px}
+.gvar{color:var(--ink3);font-size:12px;margin-top:2px}
+.gspend{font-weight:700;font-size:16px;text-align:right}
+.gspend small{display:block;font-weight:400;color:var(--ink3);font-size:11px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.chip{font-size:11px;font-weight:600;border-radius:999px;padding:2px 9px}
+.chip.good{background:var(--good-bg);color:var(--good)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.info{background:var(--info-bg);color:var(--info)}
+.chip.bad{background:var(--bad-bg);color:var(--bad)}
+.chip.neutral{background:var(--surface2);color:var(--ink2)}
+.csvrow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;color:var(--ink2);font-size:13px}
+.csvrow input[type=date]{background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:4px 8px;color-scheme:light dark}
+#csv-name{color:var(--ink);font-weight:600}
+.good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+.gname-wrap{min-width:0}
+
+.pbig{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.pbig .v{font-size:44px;font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}
+.roi{border:1px solid var(--good);background:var(--good-bg);color:var(--good);border-radius:999px;padding:4px 12px;font-weight:600;font-size:13px}
+.psub{color:var(--ink3);font-size:12px;margin-bottom:12px}
+.prow{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.pname{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pmeta{color:var(--ink2);font-size:13px;margin-top:4px;display:flex;flex-wrap:wrap;gap:4px 14px;align-items:center}
+.pmeta label{display:inline-flex;align-items:center;gap:4px}
+.pin{width:72px;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:3px 6px;text-align:right;font-variant-numeric:tabular-nums}
+.pin::placeholder{color:var(--ink3);font-style:italic}
+.pval{text-align:right;font-weight:700;font-size:16px;white-space:nowrap}
+.pval small{display:block;font-weight:500;font-size:12px}
+.pval.muted{font-weight:500;color:var(--ink3);font-size:12px}
+
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px 8px;text-align:right;border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2);font-weight:600;border-top:0}
+th:first-child,td:first-child{text-align:left}
+tbody tr{cursor:pointer}
+tbody tr:hover{background:var(--surface2)}
+tbody tr.sel td{font-weight:700}
+.tablewrap{overflow-x:auto}
+
+.foot{color:var(--ink3);font-size:12px;margin:16px 0 0}
+dialog{background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:14px;padding:20px;width:min(640px,calc(100vw - 32px))}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+dialog h3{margin:0 0 6px}
+dialog p{margin:0 0 12px;color:var(--ink2);font-size:13px}
+textarea{width:100%;height:240px;background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:10px;font:12px/1.4 ui-monospace,Consolas,monospace;resize:vertical}
+.dlgbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px}
+#msg{color:var(--ink2);font-size:13px}
+
+@media (max-width:860px){
+  .cols{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:480px){
+  .tval{font-size:28px} .pbig .v{font-size:36px}
+}
+
+.lockscreen{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:16px}
+.lockscreen.hidden{display:none}
+.lockcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;width:min(340px,100%);text-align:center}
+.lockcard .avatar{margin:0 auto 14px}
+.lockcard h1{font-size:17px;margin:0 0 4px}
+.lockcard p{color:var(--ink3);font-size:13px;margin:0 0 18px}
+.lockcard input{width:100%;background:var(--surface2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:center;font-size:15px;margin-bottom:10px}
+.lockcard .btn{width:100%;justify-content:center;display:flex}
+.lockerr{color:var(--bad);font-size:12px;min-height:16px;margin-top:8px}
+body:not(.unlocked) .wrap{display:none}
+</style>
+</head>
+<body>
+<div class="lockscreen" id="lockscreen">
+  <form class="lockcard" id="lockForm">
+    <div class="avatar" aria-hidden="true">$</div>
+    <h1>ACO Data</h1>
+    <p>Enter the password to view this page.</p>
+    <input type="password" id="lockPw" autocomplete="current-password" placeholder="Password" autofocus>
+    <button type="submit" class="btn primary">Unlock</button>
+    <div class="lockerr" id="lockErr" role="alert"></div>
+  </form>
+</div>
+<!-- Client-side gate only: this static site has no backend, so this is a deterrent against someone
+     stumbling onto the URL, not real security — the page's HTML (including the embedded order data
+     below) is still downloadable by anyone who requests the file directly, password or not. -->
+<script>
+(() => {
+  const HASH = '1ef6425aaba0dfb38add7f34aaee9cdb85bd463b536b6aece7a5e1caffcde384'; // sha256 of the password
+  const KEY = 'spend-dashboard-auth';
+  async function sha256(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  function unlock() { document.body.classList.add('unlocked'); document.getElementById('lockscreen').classList.add('hidden'); }
+  function tryStored() { try { return sessionStorage.getItem(KEY) === HASH; } catch (e) { return false; } }
+  if (tryStored()) unlock();
+  document.getElementById('lockForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const pwField = document.getElementById('lockPw');
+    const h = await sha256(pwField.value);
+    if (h === HASH) {
+      try { sessionStorage.setItem(KEY, HASH); } catch (e) {}
+      unlock();
+    } else {
+      document.getElementById('lockErr').textContent = 'Wrong password.';
+      pwField.select();
+    }
+  });
+})();
+</script>
+<div class="wrap">
+  <header class="top">
+    <div class="who">
+      <div class="avatar" aria-hidden="true">$</div>
+      <div>
+        <input id="name" class="name" value="My spend" aria-label="Dashboard name" spellcheck="false">
+        <div class="sub" id="range"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn" href="images/aco-recap-card.svg" target="_blank" rel="noopener">Recap card</a>
+      <button class="btn primary" id="btn-paste">Paste chat</button>
+      <button class="btn" id="btn-clear">Clear data</button>
+    </div>
+  </header>
+
+  <div class="bar">
+    <div class="tabgroups">
+      <nav class="tabs" id="rtabs" aria-label="Retailer"></nav>
+      <nav class="tabs" id="tabs" aria-label="Period"></nav>
+    </div>
+    <label class="toggle"><input type="checkbox" id="pending" checked> Count Amazon orders still waiting on 3DS approval</label>
+  </div>
+
+  <section class="kpis" id="kpis"></section>
+
+  <section class="cols">
+    <div class="card" id="list"></div>
+    <div class="card" id="profit"></div>
+  </section>
+
+  <section class="card">
+    <h2 id="months-title">By month</h2>
+    <div class="tablewrap" id="months"></div>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</div>
+
+<dialog id="dlg">
+  <h3>Add orders</h3>
+  <p>Paste Discord messages below, or import a CSV order export. Everything stays in this browser. Only the order fields are kept (product, quantity, price, order number, status, time). Logins, emails, proxies and addresses are ignored and never stored. "Yesterday" and "Today" are resolved to real dates when you paste.</p>
+  <textarea id="paste" placeholder="Paste here..." spellcheck="false"></textarea>
+  <div class="csvrow">
+    <label class="btn">Import CSV<input type="file" id="csv-file" accept=".csv,text/csv" hidden></label>
+    <span id="csv-name"></span>
+    <label>CSV order date <input type="date" id="csv-date"></label>
+    <span>(CSV exports have no dates)</span>
+  </div>
+  <div class="dlgbar">
+    <span id="msg" role="status"></span>
+    <span class="actions">
+      <button class="btn" id="dlg-close">Close</button>
+      <button class="btn primary" id="dlg-add">Add to dashboard</button>
+    </span>
+  </div>
+</dialog>
+
+<script type="text/plain" id="sample">
+Spidey BotAPP — 9/16/2026 12:39 AM
+[Shikari](https://shikari.tech/)
+Successful Checkout!
+[Pokemon Trading Card Game: 30th Celebration Tin (Sylveon or Greninja)- Styles May Vary](https://www.target.com/p/x/-/A-1010892069)
+Site
+Target
+Profile
+Profile A
+Order ID
+102003566304383
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/16/2026 12:39 AM
+[Shikari](https://shikari.tech/)
+Successful Checkout!
+[Pokemon Trading Card Game: 30th Celebration Tin (Sylveon or Greninja)- Styles May Vary](https://www.target.com/p/x/-/A-1010892069)
+Site
+Target
+Profile
+Profile B
+Order ID
+102003639266026
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/16/2026 12:40 AM
+Spidey BotAPP — 9/16/2026 1:02 AM
+[Shikari](https://shikari.tech/)
+Successful Checkout!
+[Pokemon Trading Card Game: 30th Celebration Tin (Sylveon or Greninja)- Styles May Vary](https://www.target.com/p/x/-/A-1010892069)
+Site
+Target
+Profile
+Profile C
+Order ID
+902003740861486
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/16/2026 1:02 AM
+Penguin ShipAPP — 9/16/2026 2:16 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038288155` from Pokemon Center is on the truck!
+Carrier
+FedEx
+Tracking #
+`000000000000`
+Est. Delivery
+2026-09-16
+Delivering To
+Jane Doe, 1 Example St, Town, Ca 90000, US
+Track Package
+[View on FedEx](https://www.fedex.com/fedextrack/?trknbr=000000000000)
+Account
+user@example.com
+Penguin Ship•9/16/2026 2:16 AM
+Penguin ShipAPP — 9/16/2026 2:25 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038466185` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 2:25 AM
+Penguin ShipAPP — 9/16/2026 2:40 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box
+Order `P0038798527` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 2:40 AM
+Spidey BotAPP — 9/16/2026 2:40 AM
+[Shikari](https://shikari.tech/)
+Your card was declined
+[Pokémon Trading Card Game: 30th Celebration Elite Trainer Box](https://www.target.com/p/x/-/A-1010892076)
+Site
+Target
+Profile
+Profile D
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/16/2026 2:40 AM
+Penguin ShipAPP — 9/16/2026 2:48 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038293495` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 2:48 AM
+Spidey BotAPP — 9/16/2026 2:51 AM
+[Shikari](https://shikari.tech/)
+Order Canceled: Item Demand
+[Pokémon Trading Card Game: 30th Celebration Elite Trainer Box](https://www.target.com/p/x/-/A-1010892076)
+Site
+Target
+Profile
+Profile E
+Order ID
+102003454641083
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/16/2026 2:51 AM
+Penguin ShipAPP — 9/16/2026 2:51 AM
+ Order Cancelled
+Unknown Item
+from Target was cancelled.
+Order #
+`102003454641083`
+Status
+ Cancelled
+Account
+user@example.com
+Penguin Ship•9/16/2026 2:51 AM
+Order Cancelled
+Anti-Plaque Sonic Brush Heads - 6ct - up&up™
+from Target was cancelled.
+Order #
+`102003454641083`
+Status
+ Cancelled
+Total
+~~$40.59~~
+Account
+user@example.com
+Penguin Ship•9/16/2026 2:51 AM
+New Order Detected
+Anti-Plaque Sonic Brush Heads - 6ct - up&up™
+from Target
+Order #
+`102003454641083`
+Retailer
+Target
+Total
+$40.59
+Order Date
+2026-09-16
+Account
+user@example.com
+Penguin Ship•9/16/2026 2:51 AM
+Penguin ShipAPP — 9/16/2026 2:52 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038447999` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 2:52 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box
+Order `P0038726459` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 2:53 AM
+Penguin ShipAPP — 9/16/2026 3:47 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038335192` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 3:47 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038331260` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 3:50 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038818356` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 3:50 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+Order `P0038241587` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 3:52 AM
+Penguin ShipAPP — 9/16/2026 3:54 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+Order `P0038508266` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 3:54 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+Order `P0038312305` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 3:55 AM
+Penguin ShipAPP — 9/16/2026 4:59 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+Order `P0038682878` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 4:59 AM
+Penguin ShipAPP — 9/16/2026 7:18 AM
+ Out for Delivery
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+Order `P0038620443` from Pokemon Center is on the truck!
+Penguin Ship•9/16/2026 7:18 AM
+Penguin ShipAPP — 9/16/2026 9:29 AM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+from Pokemon Center has been delivered!
+Order #
+`P0038312305`
+Status
+ Delivered
+Delivered To
+Jane Doe, 1 Example St, Town, Ca 90000, US
+Tracking #
+`000000000000`
+Carrier
+FedEx
+Track Package
+[View on FedEx](https://www.fedex.com/fedextrack/?trknbr=000000000000)
+Account
+user@example.com
+Penguin Ship•9/16/2026 9:29 AM
+Penguin ShipAPP — 9/16/2026 10:59 AM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038682878`
+Status
+ Delivered
+Penguin Ship•9/16/2026 10:59 AM
+ Order Delivered
+Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box
+from Pokemon Center has been delivered!
+Order #
+`P0038798527`
+Status
+ Delivered
+Penguin Ship•9/16/2026 11:11 AM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038335192`
+Status
+ Delivered
+Penguin Ship•9/16/2026 11:28 AM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038466185`
+Status
+ Delivered
+Penguin Ship•9/16/2026 11:47 AM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038818356`
+Status
+ Delivered
+Penguin Ship•9/16/2026 12:53 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038447999`
+Status
+ Delivered
+Penguin Ship•9/16/2026 1:16 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box
+from Pokemon Center has been delivered!
+Order #
+`P0038726459`
+Status
+ Delivered
+Penguin Ship•9/16/2026 1:31 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+from Pokemon Center has been delivered!
+Order #
+`P0038241587`
+Status
+ Delivered
+Penguin Ship•9/16/2026 2:08 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038288155`
+Status
+ Delivered
+Penguin Ship•9/16/2026 2:22 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038331260`
+Status
+ Delivered
+Penguin Ship•9/16/2026 2:45 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+from Pokemon Center has been delivered!
+Order #
+`P0038620443`
+Status
+ Delivered
+Penguin Ship•9/16/2026 4:29 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor)
+from Pokemon Center has been delivered!
+Order #
+`P0038293495`
+Status
+ Delivered
+Penguin Ship•9/16/2026 5:21 PM
+ Order Delivered
+Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario)
+from Pokemon Center has been delivered!
+Order #
+`P0038508266`
+Status
+ Delivered
+Penguin Ship•9/16/2026 5:45 PM
+Spidey BotAPP — 9/16/2026 8:16 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0G3GGVJD5
+REDACTED
+Prism Technologies - 1.49.18 (1.0.76)•9/16/2026 8:16 PM
+Spidey BotAPP — 9/18/2026 12:24 AM
+[Shikari](https://shikari.tech/)
+$35 Minimum Bypass Failed
+Pokémon Trading Card Game: 30th Celebration Battle Deck—Umbreon ex went out of stock at checkout — Target placed order 912003760695571 without it. Canceling filler and restarting.
+Site
+Target
+Profile
+Profile A
+@shikaritech•9/18/2026 12:24 AM
+Penguin ShipAPP — 9/18/2026 12:50 AM
+ New Order Detected
+Pokémon Trading Card Game: First Partner Illustration Collection—Series 3
+from Target
+Order #
+`102003383538500`
+Retailer
+Target
+Total
+$74.68
+Order Date
+2026-09-18
+Qty
+3
+Account
+user@example.com
+Penguin Ship•9/18/2026 12:50 AM
+Spidey BotAPP — 9/18/2026 12:50 AM
+[Shikari](https://shikari.tech/)
+Successful Checkout!
+[Pokémon Trading Card Game: First Partner Illustration Collection—Series 3](https://www.target.com/p/x/-/A-1011960739)
+Site
+Target
+Profile
+Profile F
+Order ID
+102003383538500
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/18/2026 12:49 AM
+[Shikari](https://shikari.tech/)
+Your card was declined
+[Pokémon Trading Card Game: First Partner Illustration Collection—Series 3](https://www.target.com/p/x/-/A-1011960739)
+Site
+Target
+Profile
+Profile G
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/18/2026 12:50 AM
+Penguin ShipAPP — 9/18/2026 12:56 AM
+ Order Cancelled
+Unknown Item
+from Target was cancelled.
+Order #
+`912003780795880`
+Status
+ Cancelled
+Account
+user@example.com
+Penguin Ship•9/18/2026 12:56 AM
+Order Cancelled
+Anti-Plaque Sonic Brush Heads - 6ct - up&up™
+from Target was cancelled.
+Order #
+`912003780795880`
+Status
+ Cancelled
+Total
+~~$40.59~~
+Account
+user@example.com
+Penguin Ship•9/18/2026 12:56 AM
+New Order Detected
+Anti-Plaque Sonic Brush Heads - 6ct - up&up™
+from Target
+Order #
+`912003780795880`
+Retailer
+Target
+Total
+$40.59
+Order Date
+2026-09-18
+Account
+user@example.com
+Penguin Ship•9/18/2026 12:56 AM
+Spidey BotAPP — 9/18/2026 12:57 AM
+[Shikari](https://shikari.tech/)
+Order Canceled: Item Demand
+[Pokémon Trading Card Game: First Partner Illustration Collection—Series 3](https://www.target.com/p/x/-/A-1011960739)
+Site
+Target
+Profile
+Profile F
+Order ID
+912003780795880
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/18/2026 12:56 AM
+Penguin ShipAPP — 9/18/2026 1:32 AM
+ New Order Detected
+Philips Sonicare C2 Optimal Plaque Control Replacement Electric Toothbrush Head - HX9023/65 - White - 3pk
+from Target
+Order #
+`902003760823489`
+Retailer
+Target
+Total
+$38.99
+Order Date
+2026-09-18
+Account
+user@example.com
+Penguin Ship•9/18/2026 1:32 AM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Tech Sticker Collection](https://www.amazon.com/dp/B0H77VZBX4)
+Price
+$26.99
+Profile
+Unknown
+Proxy Details
+bart proxies | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+2
+Order Number
+[#111-9127617-4942627](https://www.amazon.com/gp/your-account/order-details/?orderID=111-9127617-4942627)
+Mode
+normal
+Offer ID
+REDACTED
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 11:05 AM
+Spidey BotAPP — 9/18/2026 11:16 AM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Tech Sticker Collection](https://www.amazon.com/dp/B0H77VZBX4)
+Price
+$26.99
+Profile
+Unknown
+Proxy Details
+bart proxies | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+2
+Order Number
+[#113-3244424-0408263](https://www.amazon.com/gp/your-account/order-details/?orderID=113-3244424-0408263)
+Mode
+normal
+Offer ID
+REDACTED
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 11:16 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 11:16 AM
+Spidey BotAPP — 9/18/2026 8:19 PM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Unknown
+Proxy Details
+bart 3 | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-0145495-0931427](https://www.amazon.com/gp/your-account/order-details/?orderID=113-0145495-0931427)
+Mode
+normal
+Offer ID
+REDACTED
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Unknown
+Proxy Details
+bart 2 | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-3858577-3322654](https://www.amazon.com/gp/your-account/order-details/?orderID=113-3858577-3322654)
+Mode
+normal
+Offer ID
+REDACTED
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Unknown
+Proxy Details
+bart proxies | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-9317610-0290617](https://www.amazon.com/gp/your-account/order-details/?orderID=113-9317610-0290617)
+Mode
+normal
+Offer ID
+REDACTED
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+Spidey BotAPP — 9/18/2026 8:45 PM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Unknown
+Proxy Details
+bart proxies | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#111-9578072-9494653](https://www.amazon.com/gp/your-account/order-details/?orderID=111-9578072-9494653)
+Mode
+normal
+Offer ID
+REDACTED
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:45 PM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Unknown
+Proxy Details
+bart 2 | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-0858236-1787455](https://www.amazon.com/gp/your-account/order-details/?orderID=113-0858236-1787455)
+Mode
+normal
+Offer ID
+REDACTED
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:45 PM
+Penguin ShipAPP — 9/18/2026 9:58 PM
+ Order Shipped
+Philips Sonicare C2 Optimal Plaque Control Replacement Electric Toothbrush Head - HX9023/65 - White - 3pk
+Order `902003760823489` from Target has a shipping label
+Tracking #
+Pending
+Carrier
+Detecting...
+Account
+user@example.com
+Penguin Ship•9/18/2026 9:58 PM
+Spidey BotAPP — 9/19/2026 10:24 AM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$99.99
+Profile
+Unknown
+Proxy Details
+lavish - amazon | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#111-4880025-2400217](https://www.amazon.com/gp/your-account/order-details/?orderID=111-4880025-2400217)
+Mode
+normal
+Offer ID
+REDACTED
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/19/2026 10:24 AM
+Penguin ShipAPP — 9/19/2026 10:43 AM
+ New Order Detected
+Pokémon TCG: 30th
+from Amazon
+Order #
+`111-4880025-2400217`
+Retailer
+Amazon
+Total
+$337.26
+Order Date
+2026-09-19
+Qty
+3
+Account
+user@example.com
+Penguin Ship•9/19/2026 10:43 AM
+</script>
+
+<!-- "6.30 pkc orders.csv" reduced to the five columns the dashboard reads; profiles, emails and proxies dropped. The file has no dates, so 6/30/2026 (from the file name) is applied when it is loaded. -->
+<script type="text/plain" id="seed-csv">
+Site,Product,Quantity,Order Number,Price
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037856302,161.64
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037856302,53.88
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037790554,161.64
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037790554,53.88
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037776118,161.64
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037776118,53.88
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037730670,53.88
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037730670,161.64
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037528654,53.88
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037528654,161.64
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037513690,161.64
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037513690,53.88
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037486903,53.88
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037486903,161.64
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037400406,53.88
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037400406,161.64
+Pokemon Center US,(10-10425-120) Pokémon TCG: Mega Evolution-Pitch Black Booster Display Box (36 Packs),1,P0037336349,161.64
+Pokemon Center US,(10-10422-109) Pokémon TCG: Mega Evolution-Pitch Black Booster Bundle (6 Packs),2,P0037336349,53.88
+</script>
+
+<!-- Pokémon Center order confirmations read from Gmail (labels '30th PokemonCenter ETB' + 'pkc 30th anniv bundles'). Line items and prices as printed in the emails, pre-tax; dates are when each confirmation arrived. Names, addresses and logins deliberately left out. -->
+<script type="text/plain" id="seed-email">
+Site,Product,Quantity,Order Number,Price,Date
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038241587,119.98,2026-07-15T15:59:21Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038241587,14.99,2026-07-15T15:59:21Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038241587,14.99,2026-07-15T15:59:21Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038288155,119.98,2026-07-15T16:23:21Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038288155,14.99,2026-07-15T16:23:21Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038288155,14.99,2026-07-15T16:23:21Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038293495,119.98,2026-07-15T16:22:27Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038293495,14.99,2026-07-15T16:22:27Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038293495,14.99,2026-07-15T16:22:27Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038335192,119.98,2026-07-15T16:40:39Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038335192,14.99,2026-07-15T16:40:39Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038335192,14.99,2026-07-15T16:40:39Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038331260,119.98,2026-07-15T16:39:55Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038331260,14.99,2026-07-15T16:39:55Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038331260,14.99,2026-07-15T16:39:55Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038312305,119.98,2026-07-15T16:32:37Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038312305,14.99,2026-07-15T16:32:37Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038312305,14.99,2026-07-15T16:32:37Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038447999,119.98,2026-07-15T17:31:16Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038447999,14.99,2026-07-15T17:31:16Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038447999,14.99,2026-07-15T17:31:16Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038466185,119.98,2026-07-15T17:36:34Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038466185,14.99,2026-07-15T17:36:34Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038466185,14.99,2026-07-15T17:36:34Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038508266,119.98,2026-07-15T17:53:33Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038508266,14.99,2026-07-15T17:53:33Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038508266,14.99,2026-07-15T17:53:33Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038620443,119.98,2026-07-15T18:40:25Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038620443,14.99,2026-07-15T18:40:25Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038620443,14.99,2026-07-15T18:40:25Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038726459,119.98,2026-07-15T19:18:11Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038726459,14.99,2026-07-15T19:18:11Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038726459,14.99,2026-07-15T19:18:11Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038682878,119.98,2026-07-15T19:06:22Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038682878,14.99,2026-07-15T19:06:22Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038682878,14.99,2026-07-15T19:06:22Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038798527,119.98,2026-07-15T19:38:41Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038798527,14.99,2026-07-15T19:38:41Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038798527,14.99,2026-07-15T19:38:41Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Pokémon Center Elite Trainer Box,2,P0038818356,119.98,2026-07-15T19:45:19Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Lucario),1,P0038818356,14.99,2026-07-15T19:45:19Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Tech Sticker Collection (Alolan Exeggutor),1,P0038818356,14.99,2026-07-15T19:45:19Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040370056,80.82,2026-07-20T20:34:49Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040299306,80.82,2026-07-20T20:14:03Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040298782,80.82,2026-07-20T20:13:34Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040287570,80.82,2026-07-20T20:10:19Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040279567,80.82,2026-07-20T20:08:16Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040276148,80.82,2026-07-20T20:08:16Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040277902,80.82,2026-07-20T20:08:15Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040281559,80.82,2026-07-20T20:08:16Z
+Pokemon Center US,Pokémon TCG: 30th Celebration Booster Bundle (6 Packs),3,P0040075004,80.82,2026-07-20T19:03:18Z
+</script>
+
+<!-- Discord chat batch 2 (9/18-9/27), redacted: profiles genericized, accounts/proxies/emails/addresses replaced with placeholders; parser never reads those fields anyway. -->
+<script type="text/plain" id="seed-chat-2">
+1. Spidey BotAPP — 9/18/2026 12:57 AM
+[Shikari](https://shikari.tech/)
+Order Canceled: Item Demand
+[Pokémon Trading Card Game: First Partner Illustration Collection—Series 3](https://www.target.com/p/pok-233-mon-trading-card-game-first-partner-illustration-collection-8212-series-3/-/A-1011960739)
+Site
+Target
+Profile
+Profile 1
+Order ID
+912003780795880
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/18/2026 12:56 AM
+2. [Shikari](https://shikari.tech/)
+$35 Minimum Bypass Failed
+Pokémon Trading Card Game: First Partner Illustration Collection—Series 3 went out of stock at checkout — Target placed order 912003781541048 without it. Canceling filler and restarting.
+Site
+Target
+Profile
+Profile 2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/18/2026 12:56 AM
+3. Penguin ShipAPP — 9/18/2026 1:32 AM
+ New Order Detected
+Philips Sonicare C2 Optimal Plaque Control Replacement Electric Toothbrush Head - HX9023/65 - White - 3pk
+from Target
+Order #
+`902003760823489`
+Retailer
+Target
+Total
+$38.99
+Order Date
+2026-09-18
+Account
+user@example.com
+Penguin Ship•9/18/2026 1:32 AM
+4. Spidey BotAPP — 9/18/2026 10:40 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H78BB9TY
+eLOU%2FCpQCXAxvGI6TS1Kv0V%2FD%2FQgejV%2BzwyYLMZR6TXiqgQv9C7NPPMV7dWgo10P%2BVAXvk9TyafYUD3Q7gQ7t%2BJrzD11fWk8FSq5lHNe0%2FUcMVbaS8U715j9%2B8vBcAZFEUmELs18sT%2FLI%2FYooRgPLw%3D%3D
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 10:40 AM
+5. Spidey BotAPP — 9/18/2026 11:05 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H77VZBX4
+72BB5GnZztPYNiAy9LZzf3JF7vUPpx7vgcvOJgR2qr5isW2RdCcdK23pkaiaHHEy15tjOoCbGuqqEhtcLtrf6UVDBc%2FYGEKxj0nAqBu03ymuNvZg8gUOHquiWF5Slc6lWNAJh59uOFo649fGrybUcw%3D%3D
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 11:05 AM
+6. Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Tech Sticker Collection](https://www.amazon.com/dp/B0H77VZBX4)
+Price
+$26.99
+Profile
+Profile 3
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+2
+Order Number
+[#111-9127617-4942627](https://www.amazon.com/gp/your-account/order-details/?orderID=111-9127617-4942627)
+Mode
+normal
+Offer ID
+72BB5GnZztPYNiAy9LZzf3JF7vUPpx7vgcvOJgR2qr5isW2RdCcdK23pkaiaHHEy15tjOoCbGuqqEhtcLtrf6UVDBc%2FYGEKxj0nAqBu03ymuNvZg8gUOHquiWF5Slc6lWNAJh59uOFo649fGrybUcw%3D%3D
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 11:05 AM
+7. Spidey BotAPP — 9/18/2026 11:16 AM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Tech Sticker Collection](https://www.amazon.com/dp/B0H77VZBX4)
+Price
+$26.99
+Profile
+Profile 4
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+2
+Order Number
+[#113-3244424-0408263](https://www.amazon.com/gp/your-account/order-details/?orderID=113-3244424-0408263)
+Mode
+normal
+Offer ID
+5ltJp2j3HoB3Qh8XkVPrLTZtFsQv2O4KBvxNHlZ%2Fr1qVEnE8TwSNRiyWhEr3UvNerrJO6bUwDdis431DQHf2fqloA7v6J7OP9KlTYYHG%2Fdf7UMeIRByz5gL76EMjtXRtQ5rTxLmg4OlIp%2B1Gb%2F%2BUMg%3D%3D
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 11:16 AM
+8. Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 11:16 AM
+9. Spidey BotAPP — 9/18/2026 4:46 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H7818RCM
+5ovFv8jAGOfkE5myEjJmgEJejVyJU827jkzsOk9BqGSHZPwcBXj96BpJM2ZkKDjXBum3W2fD7DlzecsVv72iFz5QKJG2uJyIvJi%2BVZlQPAX7GXxtxZLi7W%2BQKAoH5Dh68wgINmcnL9z1UOeNN0xXDQ%3D%3D
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 4:46 PM
+10. Spidey BotAPP — 9/18/2026 5:49 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0G3GGVJD5
+U4QX0O0cNSyRIzacTd7aFP1EMiwL5fqKzsETZjaCKK1cZwwqEqsELF4PLmnrtzw2D%2BUkK%2Fb3Vc2x1ucglKUFvOU4m6GH7IYQ3udGXXUEBfoLfOgl2O%2FVGVIsG1CajGFN8sHgWZcLYTACfcrF7WL6Q6npf4IPchego2kizFSmuwNuxCj5ysEhtOPg4h3j15WF
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 5:49 PM
+11. Spidey BotAPP — 9/18/2026 6:50 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0GPY1XRKP
+UI2HGyo%2B%2B2TreIpQl4jL5dbVyDw1MVLwRGsMLpMhTzDAHEHkYTulOmt6ga%2Fu%2F0iq7WpkhVAXtM%2B52IuHsUR9Z3pCFxh6g2xqUFEOpdm0sHqDa21m4gAvMq3Z%2BoD9k5NkIqCLdIUkHp%2BXP5IgcSLtwA%3D%3D
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 6:50 PM
+12. Spidey BotAPP — 9/18/2026 8:19 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H783FY5Z
+VHtINUGO5du6TSYYeeT%2FrwJ%2F1YiLvFTI%2BiR2x9EuwMHNXtySRl%2BXkmB4swGqZcNEYZNSEV10tx27AJSzOXl7JhxopqgR3ZejjckqvptDPArs2uPWkmvizlF%2BKAqVpCnFCFUOKWsC7wA6bD5J2067Gw%3D%3D
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+13. Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Profile 5
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-0145495-0931427](https://www.amazon.com/gp/your-account/order-details/?orderID=113-0145495-0931427)
+Mode
+normal
+Offer ID
+VHtINUGO5du6TSYYeeT%2FrwJ%2F1YiLvFTI%2BiR2x9EuwMHNXtySRl%2BXkmB4swGqZcNEYZNSEV10tx27AJSzOXl7JhxopqgR3ZejjckqvptDPArs2uPWkmvizlF%2BKAqVpCnFCFUOKWsC7wA6bD5J2067Gw%3D%3D
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+14. Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+15. Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+16. Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Profile 6
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-3858577-3322654](https://www.amazon.com/gp/your-account/order-details/?orderID=113-3858577-3322654)
+Mode
+normal
+Offer ID
+VHtINUGO5du6TSYYeeT%2FrwJ%2F1YiLvFTI%2BiR2x9EuwMHNXtySRl%2BXkmB4swGqZcNEYZNSEV10tx27AJSzOXl7JhxopqgR3ZejjckqvptDPArs2uPWkmvizlF%2BKAqVpCnFCFUOKWsC7wA6bD5J2067Gw%3D%3D
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+17. Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Profile 7
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-9317610-0290617](https://www.amazon.com/gp/your-account/order-details/?orderID=113-9317610-0290617)
+Mode
+normal
+Offer ID
+VHtINUGO5du6TSYYeeT%2FrwJ%2F1YiLvFTI%2BiR2x9EuwMHNXtySRl%2BXkmB4swGqZcNEYZNSEV10tx27AJSzOXl7JhxopqgR3ZejjckqvptDPArs2uPWkmvizlF%2BKAqVpCnFCFUOKWsC7wA6bD5J2067Gw%3D%3D
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+18. Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:19 PM
+19. Spidey BotAPP — 9/18/2026 8:45 PM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Profile 8
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#111-9578072-9494653](https://www.amazon.com/gp/your-account/order-details/?orderID=111-9578072-9494653)
+Mode
+normal
+Offer ID
+%2Bt%2F71VFYChW2rzg%2FPJ1tPIfC7UKWGh6i2JFwjU15nl6BbwcqpJpcYbAyZgX%2FuG9e%2B9Tr%2FmnuMlwTHKlO3jv2OaTSDV3DmH2hlcLbRkAH8km1xNUXxh386ovmB8lORHHV24RXohakHRtru0RMGugBeg%3D%3D
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:45 PM
+20. Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$84.95
+Profile
+Profile 9
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-0858236-1787455](https://www.amazon.com/gp/your-account/order-details/?orderID=113-0858236-1787455)
+Mode
+normal
+Offer ID
+%2Bt%2F71VFYChW2rzg%2FPJ1tPIfC7UKWGh6i2JFwjU15nl6BbwcqpJpcYbAyZgX%2FuG9e%2B9Tr%2FmnuMlwTHKlO3jv2OaTSDV3DmH2hlcLbRkAH8km1xNUXxh386ovmB8lORHHV24RXohakHRtru0RMGugBeg%3D%3D
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:45 PM
+21. Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.83)•9/18/2026 8:45 PM
+22. Penguin ShipAPP — 9/18/2026 9:58 PM
+ Order Shipped
+Philips Sonicare C2 Optimal Plaque Control Replacement Electric Toothbrush Head - HX9023/65 - White - 3pk
+Order `902003760823489` from Target has a shipping label
+Tracking #
+Pending
+Carrier
+Detecting...
+Shipping To
+Jane Doe, 1 Example St, Town, Ca 90000, US
+Account
+user@example.com
+Penguin Ship•9/18/2026 9:58 PM
+23. Spidey BotAPP — 9/19/2026 6:07 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0DR3H6G51
+Zzn36eJucOidzf61vNjW03emS5kaN9ARvN5PVHJoTeETlcSj87cdIq5jcX0CFuUXnPc1y39AV72u%2BAoEBpHSbQjuNPLQ%2Fht1D1cXxmoScBRT%2Bpqeugk7NHuFiwIMc1dfgk9P0EAzd%2BCErV0IqVB8fI63Iwk%2Bo2vLflh6qIQNvqwmTbIoShKTYtxlfaxc%2BpvW
+Prism Technologies - 1.49.20 (1.0.83)•9/19/2026 6:07 AM
+24. Spidey BotAPP — 9/19/2026 10:24 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.83)•9/19/2026 10:24 AM
+25. Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$99.99
+Profile
+Profile 10
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#111-4880025-2400217](https://www.amazon.com/gp/your-account/order-details/?orderID=111-4880025-2400217)
+Mode
+normal
+Offer ID
+PpX8J%2BRPKIVRv5LegjbQaBhmb2jEsUQDscgXSE5HpZGf9G3r9%2BcCYzV%2Fw198cKfzwncHQbHp9%2B%2BfQWuf%2F5t%2FfFYYUX75pcDeBr6pUGLqqvc2rG4MFUNJHrGw15A0oMAr4AmqvztmSalv76e3gQrrnw%3D%3D
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.83)•9/19/2026 10:24 AM
+26. Penguin ShipAPP — 9/19/2026 10:43 AM
+ New Order Detected
+Pokémon TCG: 30th
+from Amazon
+Order #
+`111-4880025-2400217`
+Retailer
+Amazon
+Total
+$337.26
+Order Date
+2026-09-19
+Qty
+3
+Account
+user@example.com
+Penguin Ship•9/19/2026 10:43 AM
+27. Spidey BotAPP — 9/21/2026 8:27 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H78BB9TY
+tbjRe%2BQV7uxjZvIRO8NEsPJ1YwNqpIkEPvFh40knfRcQ3BhdFmZmD5UL9st8MilNurNEp0NZhXuypNQMYjYxAbZHmLCYqPskIG6XaYu68ztFcCjgLwxvk80dqVGDRuhu0U%2FLNUC4rWfve4XNIpQoZQ%3D%3D
+Prism Technologies - 1.49.20 (1.0.84)•9/21/2026 8:27 AM
+28. Spidey BotAPP — 9/21/2026 9:51 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0GPY1XRKP
+%2FYm%2BBkWmCos6SAA28%2BP6XGqAtojxS8Y9DevQegVtxGy%2BYZ%2FdSicwDBTdWfU8Sl7GcsN5N8pkCmp0xBQwU7R8PuUO%2BiAIbOJx02yG0dcn3saVS5uxPZo1j6dXhsXjA3aa47FfVOJ6ixfAzc4LT0JeLw%3D%3D
+Prism Technologies - 1.49.20 (1.0.84)•9/21/2026 9:51 AM
+29. Spidey BotAPP — 9/21/2026 10:28 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H77VZBX4
+1gVZeSruJiWNxOoJTLag5Jh8kFg%2F6rvJacdDw3TRDv%2F9PvmNjKhfLhma5FtpAJPNiPycJJRx2ZorEhSl2bWaei09MWf%2FQmH66Ml7nEfvyj%2BJnW5qK%2Fednrw1brzbDn6kJV7rYKKylZ4npP0dkXONaQ%3D%3D
+Prism Technologies - 1.49.20 (1.0.84)•9/21/2026 10:28 AM
+30. Spidey BotAPP — 9/21/2026 5:41 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H77VZBX4
+%2B4TMN8G%2Ble985r4CfXdkv5LRwxk15M48Joj0A8HRQ1Vd3YdqfN3FTNg8iPJ1SX2VdgRmxaj5ItmAirlJExOOrA61DSgs3EDkr8Fpp7soPn52so%2FwjtlCW7CZHFpuBxJwPqYxRoL2UcTQAf4bztpKSw%3D%3D
+Prism Technologies - 1.49.20 (1.0.85)•9/21/2026 5:41 PM
+31. Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H783FY5Z
+bhwBjNJvlSJ9DP66jIDgSSyN5F%2Bvk7qA%2F3dLGQXMTjCBbwIh0T%2BD%2Fj0pKnPeAgJEP%2F5iqaH52TVIxL2IWr%2Fx%2BcCuMU7v0Y0BnUwyZAZgqNL2%2F8qkWOIQtWSxYsNeLXAvDT7umQ3q9FSojuAUxE0qxQ%3D%3D
+Prism Technologies - 1.49.20 (1.0.85)•9/21/2026 5:42 PM
+32. Spidey BotAPP — 9/21/2026 8:13 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0GPY1XRKP
+ErKwfnxY%2FBhIQJJWDCi5FgEAMIjWtE2LyCccAe0QS990fUfm%2FBdjHW7V2Yt%2Bx%2BJYb2HdIqBfl2ZzWSe7TI17VI8Md08lypAuct4q109nChppgkgGoaElDr%2Bkcf1FnHbBfhHGBOjJACt1Plaru%2FQVNQ%3D%3D
+Prism Technologies - 1.49.20 (1.0.85)•9/21/2026 8:13 PM
+33. Spidey BotAPP — 9/21/2026 11:57 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.85)•9/21/2026 11:57 PM
+34. Spidey BotAPP — 9/22/2026 10:51 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H78BB9TY
+454E1K4pN9gN0%2BYUi4Cj0rxMAGvoHDwQ3OuKlk686V5nFTH%2FqTZibhBkIbX2%2BTniTWVGgaM2888SUA1as3XZi8pqEw6GPiLSQPZuzdNc9hxngfby5rWWLa4VUUvyBCLEHrKSVScUL4u6KEE%2BwWUsHQ%3D%3D
+Prism Technologies - 1.49.20 (1.0.85)•9/22/2026 10:51 AM
+35. Spidey BotAPP — 9/22/2026 1:33 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0G3GGVJD5
+dEOEXGGhdxftc7v4D7bo22RZgb0YsMd81k1diXcSL990yxXObvo%2BaeVYDJBBKAmhzhESTv8TZO3t9R%2BJXeZ6HHIsYAtjSthqWR%2BhyEsZ1xn8Z1g6lxcBQ%2FEvOSdwrtoFaWs0Lb7IAfgDqiwS25b1EY0Ne62IbB7SWe%2FT7B5ZSB6JCPmJaNZKKmnE6IBufTpX
+Prism Technologies - 1.49.20 (1.0.85)•9/22/2026 1:33 PM
+36. Spidey BotAPP — 9/22/2026 9:08 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H7F8BHC3
+oQ1RVQ6%2F2o1fTBFiID56HPhSLQKRimuNA%2BnLjdGn%2FPDpNARTHtlo8k5%2F91X%2FWtAjX%2FB1TzDDDvY3ugWp8BviToVpH1ImqGOoEw8vmjdRjcCkVP7c%2BMoail6jsI2UBZg9hi8p2G7fADqD3qezVOfTHw%3D%3D
+Prism Technologies - 1.49.20 (1.0.85)•9/22/2026 9:08 PM
+37. Refract Notification
+Site
+Amazon US
+Group
+amazon
+3DS Waiting
+Account user@example.com needs 3DS approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Prism Technologies - 1.49.20 (1.0.85)•9/22/2026 9:08 PM
+38. Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Mini Tin](https://www.amazon.com/dp/B0H7F8BHC3)
+Price
+$16.99
+Profile
+Profile 11
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-9193700-4646655](https://www.amazon.com/gp/your-account/order-details/?orderID=113-9193700-4646655)
+Mode
+normal
+Offer ID
+oQ1RVQ6%2F2o1fTBFiID56HPhSLQKRimuNA%2BnLjdGn%2FPDpNARTHtlo8k5%2F91X%2FWtAjX%2FB1TzDDDvY3ugWp8BviToVpH1ImqGOoEw8vmjdRjcCkVP7c%2BMoail6jsI2UBZg9hi8p2G7fADqD3qezVOfTHw%3D%3D
+Info (IMPORTANT!)
+3DS verification required - finish approval on Amazon (email/app) within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.85)•9/22/2026 9:08 PM
+39. Spidey BotAPP — 9/23/2026 12:50 AM
+[Shikari](https://shikari.tech/)
+Order Canceled: Item Demand
+[Pokémon Trading Card Game: 30th Celebration Elite Trainer Box](https://www.target.com/p/pok-233-mon-trading-card-game-30th-celebration-elite-trainer-box/-/A-1010892076)
+Site
+Target
+Profile
+Profile 12
+Order ID
+912003615547849
+Quantity
+2
+Account
+user@example.com:REDACTED
+Proxy
+0.0.0.0:0:REDACTED:REDACTED
+@shikaritech•9/23/2026 12:50 AM
+40. Spidey BotAPP — 9/23/2026 9:50 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.85)•9/23/2026 9:50 AM
+41. Spidey BotAPP — 9/23/2026 10:53 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.85)•9/23/2026 10:53 AM
+42. Spidey BotAPP — 9/24/2026 12:20 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Item B0H783FY5Z is over max price (47.00)
+This item has been added to a cooldown list because it was carted at 135.97, which is over the max price of 47.00. Tasks will not attempt this item again until it goes out of stock, a trusted cart price is back in range, or the cooldown expires. This notification is suppressed for 6 hours.
+Prism Technologies - 1.49.20 (1.0.85)•9/24/2026 12:20 AM
+43. Penguin ShipAPP — 9/24/2026 1:49 AM
+ New Order Detected
+Anti-Plaque Sonic Brush Heads - 6ct - up&up™
+from Target
+Order #
+`902003782029309`
+Retailer
+Target
+Total
+$69.20
+Order Date
+2026-09-24
+Qty
+2
+Account
+user@example.com
+Penguin Ship•9/24/2026 1:49 AM
+44. Spidey BotAPP — 9/24/2026 7:39 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Item B0H783FY5Z is over max price (47.00)
+This item has been added to a cooldown list because it was carted at 135.97, which is over the max price of 47.00. Tasks will not attempt this item again until it goes out of stock, a trusted cart price is back in range, or the cooldown expires. This notification is suppressed for 6 hours.
+Prism Technologies - 1.49.20 (1.0.85)•9/24/2026 7:39 AM
+45. Spidey BotAPP — 9/24/2026 10:07 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.91)•9/24/2026 10:07 AM
+46. Spidey BotAPP — 9/24/2026 12:19 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H783FY5Z
+s74J93L%2FUFmFc5hXQvmpgpo1qRzdqGKhobRSjbRDPTgqjVnO13rjPp0PMrz%2FX3d66db8cwu6u3bOf4uRPE%2F6V0WdrAIUpN3J4nlhW4nDoCUn6xhEcmPaFty9aQ0FFYhU6QUnhD6OXOV4NcAtivxKlQ%3D%3D
+Prism Technologies - 1.49.20 (1.0.91)•9/24/2026 12:19 PM
+47. Penguin ShipAPP — 9/24/2026 12:33 PM
+ Order Shipped
+Pokémon Trading Card Game: First Partner Illustration Collection—Series 3
+Order `102003383538500` from Target has a shipping label
+Tracking #
+`1ZWY0657YW05194122`
+Carrier
+UPS
+Shipping To
+Jane Doe, 1 Example St, Town, Ca 90000, US
+Track Package
+[View on UPS](https://www.ups.com/track?tracknum=1ZWY0657YW05194122)
+Account
+user@example.com
+Penguin Ship•9/24/2026 12:33 PM
+48. Spidey BotAPP — 9/24/2026 12:53 PM
+Successful Checkout | Amazon US
+Product
+[Pokémon TCG: 30th Celebration Booster Bundle](https://www.amazon.com/dp/B0H783FY5Z)
+Price
+$45
+Profile
+Profile 13
+Proxy Details
+redacted | 0.0.0.0:0:REDACTED:REDACTED
+Quantity
+3
+Order Number
+[#113-0258612-5230648](https://www.amazon.com/gp/your-account/order-details/?orderID=113-0258612-5230648)
+Mode
+normal
+Offer ID
+TEDKCUYXduR900UiwyjmznmY7MQVv0wfmsE%2F0nk4%2FR05em2VSDAxFbSEwe9wu4cHAv6k%2BAyERBk2C29JVn6QQw8PAbyfgITy00r%2BiKLSy57bZGoeLjJCUTDqbxwsDeo2ldKhfo3mpqT9JSqrggmu8A%3D%3D
+Info (IMPORTANT!)
+CVV verification required - enter the card security code on Amazon within ~5 minutes or the order will be canceled.
+Email
+user@example.com
+Prism Technologies - 1.49.20 (1.0.91)•9/24/2026 12:53 PM
+49. Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H7F8BHC3
+nJFodCCJbLRjuAMeVozz9yefj6ZyVDDwN7kNOX2228os7PBsVWoMmVXW7epoY6iy4VcKKunkffQFUQVGNAVzdJQg5Cs0R0LU8r%2FRNVUjEYq%2FdiUC1mZ1U4uHqkERVrKL2xRVbMIeKdPHXXzVNTzpxA%3D%3D
+Prism Technologies - 1.49.20 (1.0.91)•9/24/2026 12:55 PM
+50. Spidey BotAPP — 9/24/2026 2:53 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0GPY1XRKP
+Ychxyk19lhE%2FiNQm7Mvsq78wyHQl6cgE9Pg4XFG6LzweOI0El%2BtIECrr1nXz5VKHokxB1RT1JNlArsLJKx0qD0tipb%2F8rQKDlgM463P0arBx3E1vTgWsrkPQ18uNeC%2BISmHFfFvwYY%2BUy3%2F94%2FE3Iw%3D%3D
+Prism Technologies - 1.49.20 (1.0.91)•9/24/2026 2:53 PM
+51. Penguin ShipAPP — 9/24/2026 3:15 PM
+ On the Way
+Pokémon Trading Card Game: First Partner Illustration Collection—Series 3
+Order `102003383538500` from Target is on the move!
+Carrier
+UPS
+Tracking #
+`1ZWY0657YW05194122`
+Est. Delivery
+2026-09-30
+Shipping To
+Jane Doe, 1 Example St, Town, Ca 90000, US
+Track Package
+[View on UPS](https://www.ups.com/track?tracknum=1ZWY0657YW05194122)
+Account
+user@example.com
+Penguin Ship•9/24/2026 4:41 PM
+52. Spidey BotAPP — 9/25/2026 7:16 AM
+[Shikari](https://shikari.tech/)
+Bing Bong
+If you are reading this, your webhook is configured and working correctly
+@shikaritech•9/25/2026 7:16 AM
+53. Spidey BotAPP — 9/26/2026 1:33 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.97)•9/26/2026 1:33 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.97)•9/26/2026 1:33 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.97)•9/26/2026 1:33 PM
+54. Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.97)•9/26/2026 1:35 PM
+55. Refract Notification
+Site
+Amazon US
+Group
+amazon
+Invalid Account Session
+Your task for the account user@example.com has been stopped due to an invalid/expired session. Please relogin to your account.
+Prism Technologies - 1.49.20 (1.0.97)•9/26/2026 1:35 PM
+56. Spidey BotAPP — 9/26/2026 1:51 PM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H7F8BHC3
+y0nUpvDaEc%2Fx8T4za%2BYq%2FgYguAEzchxhSHWVDRSyxTrHogHIiQGVEyDNg5TkrfsSHfY6O1FOUeDh9yTosUNKbFw0rlXGl819SAitIDcBcrnOZEX803K0XTxxfgJm0jaQg1XSeIwBuYadVoblGs3mIg%3D%3D
+Prism Technologies - 1.49.20 (1.0.97)•9/26/2026 1:51 PM
+57. Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0H783FY5Z
+7wzrzXkycx1KzDJkKIl7p1jVTY9rNjlguv8PIsr9raQaLgMAJaefMyFqOh%2BwZnMfx9%2BTdtjzUAo3ZaTB06Mec9o30Kl0HN0Xy2Hx9rBSQRyPSnl9D%2BYWkgvZJTjrl7zgRq%2F3JgAI2AO0VL0qQJ7a5g%3D%3D
+Prism Technologies - 1.49.20 (1.0.97)•9/26/2026 1:53 PM
+58. Penguin ShipAPP — 9/26/2026 2:02 PM
+ Order Delivered
+Anti-Plaque Sonic Brush Heads - 6ct - up&up™
+from Target has been delivered!
+Order #
+`902003782029309`
+Status
+ Delivered
+Delivered To
+Jane Doe, 1 Example St, Town, Ca 90000, US
+Account
+user@example.com
+Penguin Ship•9/26/2026 2:02 PM
+59. Spidey BotAPP — Yesterday at 11:40 AM
+Refract Notification
+Site
+Amazon US
+Group
+amazon
+Found OfferID for ASIN B0DR3H6G51
+MQZJhrs0f7v9uQFWSUDif3yVrrlstnlpEew4eSBMtqFCYaESmFirXaN9DmPJW466gvBUXUgWvOeoSp0OM1n7wRWOwa7dMDmj18QT0s7N9Q05OOH%2B20WbJFqG8zJj2m%2FpBxyFpM%2BNsKDpbiGTstQRoe1KFzxcHMVia0PHCELmX%2B0kUPImXgvRhW3EyR53C%2Bib
+Prism Technologies - 1.49.20 (1.0.97)•Yesterday at 11:40 AM
+</script>
+
+<script>
+(() => {
+'use strict';
+
+/* ---------- helpers ---------- */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const usd0 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD', maximumFractionDigits:0});
+const usd2 = new Intl.NumberFormat('en-US', {style:'currency', currency:'USD'});
+const signed = (n, f = usd0) => (n < 0 ? '−' : '+') + f.format(Math.abs(n));
+const monthKey = ts => { const d = new Date(ts); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'); };
+const fmtMonth = k => { const [y, m] = k.split('-').map(Number); return new Date(y, m - 1, 1).toLocaleDateString('en-US', {month:'short', year:'numeric'}); };
+
+/* ---------- parsing ---------- */
+const FOOT = /[•·]\s*(\d{1,2}\/\d{1,2}\/\d{4}|Today|Yesterday)(?:\s+at)?\s+(\d{1,2}:\d{2}\s*[AP]M)\s*$/i;
+const HEADER = /\s[—–-]\s+(?:\d{1,2}\/\d{1,2}\/\d{4}|Today|Yesterday)\b/;
+const LABELS = new Set(['Site','Profile','Order ID','Quantity','Account','Proxy','Price','Order Number','Mode','Offer ID','Email','Order #','Retailer','Total','Order Date','Qty','Status','Carrier','Tracking #','Est. Delivery','Delivering To','Delivered To','Shipping To','Product','Group','Proxy Details','Info (IMPORTANT!)']);
+const PTITLE = /(New Order Detected|Order Cancell?ed|Order Delivered|Out for Delivery|Order Shipped)$/i;
+
+const mdText = s => String(s ?? '').replace(/\[([^\]]*)\]\([^)]*\)/g, '$1');
+const clean = s => mdText(s).replace(/[`~]/g, '').replace(/^#/, '').trim();
+const num = v => { const m = String(v ?? '').replace(/,/g, '').match(/\d+(?:\.\d+)?/); return m ? parseFloat(m[0]) : null; };
+const int = v => { const n = num(v); return n == null ? null : Math.round(n); };
+
+function parseStamp(day, time, now) {
+  let d;
+  if (/^today$/i.test(day)) d = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  else if (/^yesterday$/i.test(day)) d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+  else { const [m, dd, y] = day.split('/').map(Number); d = new Date(y, m - 1, dd); }
+  const t = time.match(/(\d{1,2}):(\d{2})\s*([AP])M/i);
+  let h = (+t[1]) % 12; if (/p/i.test(t[3])) h += 12;
+  d.setHours(h, +t[2], 0, 0);
+  return d.getTime();
+}
+
+/* Discord copy/paste has no reliable message separator, but every bot embed ends with a
+   "Name•date time" footer, so that line closes a message. */
+function splitBlocks(text, now) {
+  const blocks = []; let buf = [];
+  for (const raw of String(text).replace(/\r/g, '').split('\n')) {
+    const line = raw.trim();
+    const m = line.match(FOOT);
+    if (m) { blocks.push({lines: buf, ts: parseStamp(m[1], m[2], now)}); buf = []; }
+    else buf.push(line);
+  }
+  return blocks;
+}
+
+function readFields(lines) {
+  const f = {};
+  for (let i = 0; i < lines.length - 1; i++) if (LABELS.has(lines[i]) && !(lines[i] in f)) f[lines[i]] = lines[i + 1];
+  return f;
+}
+
+function productOf(lines, f) {
+  if (f.Product) return clean(f.Product);
+  const i = lines.findIndex(l => PTITLE.test(l));
+  if (i >= 0 && lines[i + 1]) return clean(lines[i + 1]);
+  const link = lines.find(l => /^\[.+\]\(https?:[^)]+\)$/.test(l) && !/shikari\.tech|fedex/i.test(l));
+  return link ? clean(link) : null;
+}
+
+/* returns an event, null (recognised but irrelevant) or undefined (not recognised) */
+function parseBlock(b) {
+  let lines = b.lines.map(l => l.trim()).filter(Boolean);
+  let h = -1; lines.forEach((l, i) => { if (HEADER.test(l)) h = i; });
+  if (h >= 0) lines = lines.slice(h + 1);
+  if (lines.length) lines[0] = lines[0].replace(/^\d+\.\s+/, '');
+  if (!lines.length) return null;
+  const t = lines.join('\n'), f = readFields(lines), ts = b.ts;
+  const product = productOf(lines, f);
+  const orderId = clean(f['Order ID'] || f['Order Number'] || f['Order #'] || (t.match(/Order\s+`([^`]+)`\s+from/i) || [])[1] || '') || null;
+  const retailer = clean(f.Retailer || (/Amazon US/i.test(t) && 'Amazon') || (t.match(/\bfrom\s+(.+?)\s+(?:was cancell?ed|has been|has a shipping|is on the truck)/i) || [])[1] || (t.match(/^from\s+(.+)$/im) || [])[1] || f.Site || '') || null;
+
+  if (/Minimum Bypass Failed/i.test(t)) return null;
+  if (/Successful Checkout/i.test(t))
+    return {ts, type:'order', retailer, orderId, product, qty:int(f.Quantity), price:num(f.Price), threeDS:/3DS verification required/i.test(t)};
+  if (/card was declined/i.test(t))
+    return {ts, type:'declined', retailer, product, qty:int(f.Quantity)};
+  if (/Order Cancell?ed/i.test(t))
+    return {ts, type:'cancel', retailer, orderId, product, qty:int(f.Quantity)};
+  if (/New Order Detected/i.test(t))
+    return {ts, type:'confirm', retailer, orderId, product, qty:int(f.Qty), total:num(f.Total)};
+  if (/Order Delivered|has been delivered/i.test(t))
+    return {ts, type:'delivered', retailer, orderId, product};
+  if (/Out for Delivery|is on the truck|Order Shipped|shipping label/i.test(t))
+    return {ts, type:'transit', retailer, orderId, product};
+  if (/Refract Notification|Found OfferID|3DS Waiting/i.test(t)) return null;
+  return undefined;
+}
+
+const withId = e => (e.id = [e.ts, e.type, e.orderId || '', e.product || ''].join('|'), e);
+
+function parseChat(text, now = new Date()) {
+  const events = []; let skipped = 0;
+  for (const b of splitBlocks(text, now)) {
+    const e = parseBlock(b);
+    if (e === undefined) skipped++;
+    else if (e) events.push(withId(e));
+  }
+  return {events, skipped};
+}
+
+/* ---------- CSV order exports (one row per line item, Price = line total) ---------- */
+const CSV_HEAD = /^\s*"?Site"?\s*,.*"?Order Number"?/i;
+
+function csvRows(text) {
+  const rows = []; let row = [], cur = '', q = false;
+  const end = () => { row.push(cur); cur = ''; if (row.some(x => x !== '')) rows.push(row); row = []; };
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+    else if (c === '"') q = true;
+    else if (c === ',') { row.push(cur); cur = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; end(); }
+    else cur += c;
+  }
+  end();
+  return rows;
+}
+
+/* The file has no date, so the caller supplies one. Only site, product, quantity, order number and
+   price are read: profile names, emails and proxies in the export are never looked at. */
+function parseCsv(text, ts) {
+  const rows = csvRows(String(text).replace(/^﻿/, ''));
+  const head = (rows.shift() || []).map(h => h.trim().toLowerCase());
+  const col = n => head.indexOf(n);
+  const [cSite, cProd, cQty, cNum, cPrice] = ['site', 'product', 'quantity', 'order number', 'price'].map(col);
+  const cDate = col('date');                                      // optional per-row order date (ISO)
+  if ([cProd, cQty, cNum, cPrice].some(i => i < 0)) return {events:[], skipped:rows.length};
+  const lines = new Map(); let skipped = 0;
+  for (const r of rows) {
+    const orderNo = (r[cNum] || '').trim(), product = (r[cProd] || '').replace(/^\s*\(\d[\d-]*\)\s*/, '').trim();
+    const qty = int(r[cQty]) || 1, total = num(r[cPrice]);
+    if (!orderNo || !product || total == null) { skipped++; continue; }
+    const id = orderNo + ' · ' + baseName(product);
+    const rowTs = cDate >= 0 ? Date.parse(r[cDate]) : NaN;
+    const l = lines.get(id) || {ts:isNaN(rowTs) ? ts : rowTs, type:'order', src:'csv', retailer:clean(cSite >= 0 ? r[cSite] : '').replace(/\s+US$/i, '') || 'Unknown',
+      orderId:id, ref:orderNo, product, qty:0, total:0, threeDS:false};
+    l.qty += qty; l.total += total; lines.set(id, l);
+  }
+  const events = [...lines.values()].map(l => { l.price = l.total / l.qty; delete l.total; return withId(l); });
+  return {events, skipped};
+}
+
+/* ---------- orders ---------- */
+const TCG = /pok[eé]mon|\btcg\b|trading card|elite trainer/i;
+
+function baseName(p) {
+  return String(p || 'Unknown item')
+    .replace(/\s*\([^)]*\)\s*/g, ' ')
+    .replace(/^\s*pok[eé]mon\s+(?:trading card game|tcg)\s*[:\-–—]?\s*/i, '')
+    .replace(/[-–—]\s*styles? may vary/i, '')
+    .replace(/[\s\-–—]+$/, '').replace(/\s+/g, ' ').trim();
+}
+const variantOf = p => { const m = String(p || '').match(/\(([^)]*)\)/); return m ? m[1].trim() : ''; };
+const keyOf = s => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase();
+
+function buildOrders(events) {
+  const map = new Map();
+  /* An order with several line items (CSV / email) is stored one line per product under
+     "<order number> · <product>". Shipping and delivery notices only know the order number, so they
+     are applied to every line of that order. */
+  const linesOf = new Map();
+  for (const e of events) if (e.type === 'order' && e.ref && e.ref !== e.orderId) (linesOf.get(e.ref) || linesOf.set(e.ref, new Set()).get(e.ref)).add(e.orderId);
+
+  for (const e of [...events].sort((a, b) => a.ts - b.ts)) {
+    if (!e.orderId) continue;
+    const fan = e.type !== 'order' && linesOf.has(e.orderId);
+    if (fan && e.type === 'confirm') continue;        // an order-level total says nothing about one line
+    for (const id of fan ? linesOf.get(e.orderId) : [e.orderId]) {
+      let o = map.get(id);
+      if (!o) { o = {id, retailer:null, product:null, pr:-1, qty:null, qtyConfirmed:false, unitPrice:null, total:null,
+                     threeDS:false, confirmed:false, canceled:false, delivered:false, transit:false, tsAny:e.ts, tsPlaced:null}; map.set(id, o); }
+      o.tsAny = Math.min(o.tsAny, e.ts);
+      if (e.type === 'order' || e.type === 'confirm') o.tsPlaced = Math.min(o.tsPlaced ?? e.ts, e.ts);
+      o.retailer = o.retailer || e.retailer;
+      const pr = e.type === 'order' ? 3 : (e.type === 'cancel' && e.qty) ? 2 : e.type === 'confirm' ? 1 : 0;
+      if (!fan && e.product && !/^unknown item$/i.test(e.product) && pr > o.pr) { o.product = e.product; o.pr = pr; }
+      if (e.type === 'order') { if (!o.qtyConfirmed && e.qty) o.qty = e.qty; o.unitPrice = e.price ?? o.unitPrice; o.threeDS = e.threeDS; o.ref = e.ref || o.ref; o.csv = e.src === 'csv'; }
+      else if (e.type === 'confirm') { o.confirmed = true; o.total = e.total ?? o.total; if (e.qty) { o.qty = e.qty; o.qtyConfirmed = true; } }
+      else if (e.type === 'cancel') { o.canceled = true; if (o.qty == null && !fan) o.qty = e.qty; }
+      else if (e.type === 'delivered') o.delivered = true;
+      else if (e.type === 'transit') o.transit = true;
+    }
+  }
+  for (const o of map.values()) o.ts = o.tsPlaced ?? o.tsAny;   // order date if known, else first sighting
+  return [...map.values()].map(o => {
+    const product = o.product || 'Unknown item';
+    const base = baseName(product);
+    return {...o, product, qty:o.qty || 1, retailer:o.retailer || 'Unknown', base, key:keyOf(base), variant:variantOf(product),
+      tcg:TCG.test(product), month:monthKey(o.ts), ref:o.ref || o.id,
+      status:o.canceled ? 'canceled' : o.delivered ? 'delivered' : o.transit ? 'transit' : (o.threeDS && !o.confirmed) ? '3ds' : o.csv ? 'placed' : 'processing'};
+  });
+}
+
+const explicitCost = o => o.total != null ? o.total : o.unitPrice != null ? o.unitPrice * o.qty : null;
+
+/* Attach a cost to every order. Where the chat shows no price, fall back to a per-unit price:
+   the one you typed, or the average seen for the same product elsewhere in the chat. */
+function applyCosts(orders, prices) {
+  const acc = {};
+  for (const o of orders) {
+    if (o.status === 'canceled' || !o.tcg) continue;
+    const c = o.unitPrice != null ? o.unitPrice * o.qty : o.total;
+    if (c == null) continue;
+    const a = acc[o.key] || (acc[o.key] = {c:0, u:0}); a.c += c; a.u += o.qty;
+  }
+  const derived = {}; for (const k in acc) derived[k] = acc[k].c / acc[k].u;
+  for (const o of orders) {
+    const ex = explicitCost(o), unit = prices[o.key]?.cost ?? derived[o.key] ?? null;
+    if (ex != null) { o.cost = ex; o.est = false; }
+    else if (unit != null) { o.cost = unit * o.qty; o.est = true; }
+    else { o.cost = null; o.est = false; }
+  }
+  return derived;
+}
+
+function summarize(list, prices) {
+  const tcg = list.filter(o => o.tcg), alive = list.filter(o => o.status !== 'canceled');
+  let spend = 0, est = 0, missing = 0;
+  for (const o of alive) { if (o.cost == null) missing++; else { spend += o.cost; if (o.est) est += o.cost; } }
+  const prod = new Map();
+  for (const o of alive.filter(o => o.tcg)) {
+    const p = prod.get(o.key) || {key:o.key, name:o.base, units:0, cost:0, missing:0, retailers:new Set()};
+    p.units += o.qty; p.retailers.add(o.retailer);
+    if (o.cost == null) p.missing++; else p.cost += o.cost;
+    prod.set(o.key, p);
+  }
+  let profit = 0, invested = 0, priced = 0;
+  for (const p of prod.values()) {
+    const m = prices[p.key]?.market;
+    if (m != null && p.missing === 0 && p.cost > 0) { p.profit = p.units * m - p.cost; p.roi = p.profit / p.cost * 100; profit += p.profit; invested += p.cost; priced++; }
+  }
+  /* a checkout is one order number; an order with several line items counts once */
+  const refs = new Set(tcg.map(o => o.ref)), liveRefs = new Set(tcg.filter(o => o.status !== 'canceled').map(o => o.ref));
+  const canceled = refs.size - liveRefs.size;
+  return {checkouts:refs.size, canceled, units:alive.filter(o => o.tcg).reduce((s, o) => s + o.qty, 0),
+          stick:refs.size ? liveRefs.size / refs.size * 100 : null,
+          spend, est, missing, prod:[...prod.values()], profit, invested, priced, roi:invested ? profit / invested * 100 : null};
+}
+
+globalThis.__spend = {parseChat, parseCsv, buildOrders, applyCosts, summarize};
+if (typeof document === 'undefined') return;
+
+/* ---------- state ---------- */
+const KEY = 'spend-dashboard-v1';
+const $ = s => document.querySelector(s);
+let state = {events:[], prices:{}, name:'My spend', month:'all', retailer:'all', pending:true, seeds:[]};
+
+function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && Array.isArray(s.events)) return s; } catch (e) {} return null; }
+function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+function merge(events) {
+  const have = new Set(state.events.map(e => e.id)); let added = 0;
+  for (const e of events) if (!have.has(e.id)) { have.add(e.id); state.events.push(e); added++; }
+  return added;
+}
+
+/* ---------- rendering ---------- */
+const CHIPS = [['delivered','Delivered','good'], ['transit','In transit','info'], ['processing','Processing','warn'], ['3ds','3DS pending','warn'], ['placed','Placed','neutral'], ['canceled','Canceled','bad']];
+const tile = (label, value, cls = '', sub = '') =>
+  `<div class="tile"><div class="tlabel">${label}</div><div class="tval ${cls}">${value}</div>${sub ? `<div class="tsub">${sub}</div>` : ''}</div>`;
+const stickCls = p => p == null ? '' : p >= 95 ? 'good' : p >= 80 ? 'warn' : 'bad';
+const SHOPS = ['Amazon', 'Target', 'Pokemon Center'];
+const rank = r => { const i = SHOPS.indexOf(r); return i < 0 ? SHOPS.length : i; };
+const shopName = r => r === 'Pokemon Center' ? 'Pokémon Center' : r;
+
+function render() {
+  let all = buildOrders(state.events).filter(o => o.tcg);   // TCG products only: filler items (toothbrush heads etc.) are ignored
+  if (!state.pending) all = all.filter(o => o.status !== '3ds');
+  const derived = applyCosts(all, state.prices);   // unit-price fallbacks come from every retailer
+  const retailers = [...new Set(all.map(o => o.retailer))].sort((a, b) => rank(a) - rank(b) || a.localeCompare(b));
+  if (state.retailer !== 'all' && !retailers.includes(state.retailer)) state.retailer = 'all';
+  const R = state.retailer === 'all' ? all : all.filter(o => o.retailer === state.retailer);
+  const months = [...new Set(R.map(o => o.month))].sort().reverse();
+  if (state.month !== 'all' && !months.includes(state.month)) state.month = 'all';
+  const L = state.month === 'all' ? R : R.filter(o => o.month === state.month);
+  const S = summarize(L, state.prices);
+
+  $('#name').value = state.name;
+  $('#pending').checked = state.pending;
+  $('#rtabs').innerHTML = '<span class="tlab">Store</span>' + ['all', ...retailers].map(k =>
+    `<button class="tab" data-r="${esc(k)}" aria-pressed="${state.retailer === k}">${k === 'all' ? 'All stores' : esc(shopName(k))}</button>`).join('');
+  $('#tabs').innerHTML = '<span class="tlab">Period</span>' + ['all', ...months].map(k =>
+    `<button class="tab" data-m="${k}" aria-pressed="${state.month === k}">${k === 'all' ? 'All time' : fmtMonth(k)}</button>`).join('');
+  $('#months-title').textContent = state.retailer === 'all' ? 'By month' : `By month · ${shopName(state.retailer)}`;
+
+  if (L.length) {
+    const d = x => new Date(x).toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+    const lo = Math.min(...L.map(o => o.ts)), hi = Math.max(...L.map(o => o.ts));
+    $('#range').textContent = `${d(lo)}${d(lo) === d(hi) ? '' : ' – ' + d(hi)} · ${new Set(L.map(o => o.ref)).size} orders`;
+  } else $('#range').textContent = 'No orders yet. Paste some chat to get started.';
+
+  const notes = [];
+  if (S.est) notes.push(`incl. ${usd0.format(S.est)} estimated`);
+  if (S.missing) notes.push(`${S.missing} order${S.missing > 1 ? 's' : ''} unpriced`);
+  $('#kpis').innerHTML =
+    tile('Total spent', usd0.format(S.spend), '', notes.join(' · ')) +
+    tile('Checkouts', S.checkouts) +
+    tile('Alive units', S.units) +
+    tile('Stick rate', S.stick == null ? '–' : Math.round(S.stick) + '%', stickCls(S.stick));
+
+  renderList(L);
+  renderProfit(S, derived);
+  renderMonths(R, months);
+  $('#foot').textContent = `${state.events.length} events parsed from your chat, stored only in this browser. Spend uses the price in the chat where there is one (Amazon price × qty, or the order total when a tracker reported it, tax included) and your per-unit estimate otherwise.`;
+}
+
+function renderList(L) {
+  const groups = new Map();
+  for (const o of L) {
+    const gk = o.retailer + '|' + o.key;
+    const g = groups.get(gk) || {retailer:o.retailer, name:o.base, units:0, orders:0, canceled:0, spend:0, missing:0, est:0, st:{}, variants:{}};
+    g.orders++;
+    g.st[o.status] = (g.st[o.status] || 0) + 1;
+    if (o.status === 'canceled') g.canceled++;
+    else {
+      g.units += o.qty;
+      if (o.cost == null) g.missing++; else { g.spend += o.cost; if (o.est) g.est += o.cost; }
+      if (o.variant) g.variants[o.variant] = (g.variants[o.variant] || 0) + o.qty;
+    }
+    groups.set(gk, g);
+  }
+  const rows = [...groups.values()].sort((a, b) => b.spend - a.spend || b.units - a.units);
+  $('#list').innerHTML = '<h2>Checked out</h2>' + (rows.length ? rows.map((g, i) => {
+    const stick = (g.orders - g.canceled) / g.orders * 100;
+    const chips = CHIPS.filter(([k]) => g.st[k]).map(([k, label, cls]) => `<span class="chip ${cls}">${g.st[k]} ${label}</span>`).join('');
+    const vars = Object.keys(g.variants).length > 1 ? `<div class="gvar">${Object.entries(g.variants).map(([v, n]) => `${esc(v)} ×${n}`).join(' · ')}</div>` : '';
+    const money = g.spend || !g.missing
+      ? `${usd2.format(g.spend)}${g.est || g.missing ? `<small>${g.est ? 'est. ' : ''}${g.missing ? g.missing + ' unpriced' : ''}</small>` : ''}`
+      : '<small>No price yet</small>';
+    return `<div class="grow"><div class="idx">${i + 1}</div><div class="gname-wrap">
+      <div class="gname" title="${esc(g.name)}">${esc(g.name)}</div>
+      <div class="gmeta">${esc(g.retailer)} · ${g.units} unit${g.units === 1 ? '' : 's'} · <span class="${stickCls(stick)}">${Math.round(stick)}% stick</span></div>
+      ${vars}<div class="chips">${chips}</div></div><div class="gspend num">${money}</div></div>`;
+  }).join('') : '<div class="empty">Nothing in this period.</div>');
+}
+
+function renderProfit(S, derived) {
+  const roi = S.roi == null ? '' : `<span class="roi">${signed(S.roi, {format: n => Math.round(n) + '%'})} ROI</span>`;
+  const pcls = S.profit < 0 ? 'bad' : 'good';
+  const rows = [...S.prod].sort((a, b) => (b.profit ?? -Infinity) - (a.profit ?? -Infinity) || b.units - a.units).map(p => {
+    const pr = state.prices[p.key] || {}, d = derived[p.key];
+    const val = p.profit != null
+      ? `<div class="pval num ${p.profit < 0 ? 'bad' : 'good'}">${signed(p.profit)}<small>${signed(p.roi, {format: n => Math.round(n) + '%'})}</small></div>`
+      : `<div class="pval muted">${p.missing ? 'Add retail price' : 'Add market price'}</div>`;
+    return `<div class="prow"><div style="min-width:0"><div class="pname" title="${esc(p.name)}">${esc(p.name)}</div>
+      <div class="pmeta"><span>${p.units} unit${p.units === 1 ? '' : 's'}</span>
+      <label>Retail $<input class="pin" data-key="${esc(p.key)}" data-f="cost" inputmode="decimal" value="${pr.cost ?? ''}" placeholder="${d != null ? d.toFixed(2) : '0.00'}" aria-label="Retail price per unit for ${esc(p.name)}">/unit</label>
+      <label>Market $<input class="pin" data-key="${esc(p.key)}" data-f="market" inputmode="decimal" value="${pr.market ?? ''}" placeholder="0.00" aria-label="Market price per unit for ${esc(p.name)}">/unit</label></div></div>${val}</div>`;
+  }).join('');
+  $('#profit').innerHTML = `<h2>Potential profit</h2>
+    <div class="pbig"><span class="v ${S.priced ? pcls : ''}">${S.priced ? signed(S.profit) : '–'}</span>${roi}</div>
+    <div class="psub">${S.priced} of ${S.prod.length} products priced. Enter a market price (e.g. from TCGplayer) for each product. Retail defaults to the average price seen in the chat; type over it to change it.</div>
+    ${rows || '<div class="empty">No products in this period.</div>'}`;
+}
+
+function renderMonths(all, months) {   // `all` = orders for the selected store
+  const line = (label, key, list) => {
+    const s = summarize(list, state.prices);
+    return `<tr data-m="${key}" class="${state.month === key ? 'sel' : ''}"><td>${label}</td><td>${s.checkouts}</td><td>${s.units}</td><td>${usd0.format(s.spend)}</td>
+      <td class="${stickCls(s.stick)}">${s.stick == null ? '–' : Math.round(s.stick) + '%'}</td><td class="${s.profit < 0 ? 'bad' : s.priced ? 'good' : ''}">${s.priced ? signed(s.profit) : '–'}</td></tr>`;
+  };
+  $('#months').innerHTML = `<table><thead><tr><th>Period</th><th>Checkouts</th><th>Units</th><th>Spent</th><th>Stick</th><th>Profit</th></tr></thead><tbody>
+    ${line('All time', 'all', all)}${months.map(m => line(fmtMonth(m), m, all.filter(o => o.month === m))).join('')}</tbody></table>`;
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e => {
+  const r = e.target.closest('[data-r]'), t = e.target.closest('[data-m]');
+  if (r) { state.retailer = r.dataset.r; save(); render(); }
+  else if (t) { state.month = t.dataset.m; save(); render(); }
+});
+$('#name').addEventListener('input', e => { state.name = e.target.value; save(); });
+$('#pending').addEventListener('change', e => { state.pending = e.target.checked; save(); render(); });
+$('#profit').addEventListener('change', e => {
+  const i = e.target.closest('.pin'); if (!i) return;
+  const v = i.value.replace(/[$,\s]/g, ''), n = v === '' ? null : parseFloat(v);
+  const p = state.prices[i.dataset.key] || (state.prices[i.dataset.key] = {});
+  if (n == null || isNaN(n)) delete p[i.dataset.f]; else p[i.dataset.f] = n;
+  save(); render();
+});
+const dlg = $('#dlg');
+const iso = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+const csvStamp = () => { const v = $('#csv-date').value; if (!v) return Date.now(); const [y, m, d] = v.split('-').map(Number); return new Date(y, m - 1, d, 12).getTime(); };
+let csvText = '';
+
+$('#btn-paste').addEventListener('click', () => { $('#msg').textContent = ''; if (!$('#csv-date').value) $('#csv-date').value = iso(new Date()); dlg.showModal(); $('#paste').focus(); });
+$('#dlg-close').addEventListener('click', () => dlg.close());
+$('#csv-file').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  csvText = await f.text();
+  $('#csv-name').textContent = f.name;
+  const m = f.name.match(/(\d{1,2})[.\-_](\d{1,2})/);            // "6.30 pkc orders.csv" -> June 30
+  if (m) {
+    const now = new Date(); let d = new Date(now.getFullYear(), +m[1] - 1, +m[2]);
+    if (d > now) d = new Date(now.getFullYear() - 1, +m[1] - 1, +m[2]);
+    $('#csv-date').value = iso(d);
+  }
+  $('#msg').textContent = 'CSV loaded. Check the order date, then press Add.';
+});
+$('#dlg-add').addEventListener('click', () => {
+  let chat = $('#paste').value;
+  const csvs = csvText ? [csvText] : [];
+  if (CSV_HEAD.test(chat)) { csvs.push(chat); chat = ''; }
+  const found = []; let skipped = 0;
+  const c = parseChat(chat); found.push(...c.events); skipped += c.skipped;
+  for (const t of csvs) { const r = parseCsv(t, csvStamp()); found.push(...r.events); skipped += r.skipped; }
+  const added = merge(found);
+  $('#msg').textContent = found.length || skipped
+    ? `Found ${found.length} entries: ${added} new, ${found.length - added} already in the dashboard.${skipped ? ` ${skipped} not recognised.` : ''}`
+    : 'Nothing recognised. Chat messages need their footer line (the "Name•date time" line); CSVs need Site, Product, Quantity, Order Number and Price columns.';
+  if (added) { $('#paste').value = ''; csvText = ''; $('#csv-name').textContent = ''; $('#csv-file').value = ''; save(); render(); }
+});
+$('#btn-clear').addEventListener('click', () => {
+  if (!confirm('Remove all parsed orders and saved prices from this browser?')) return;
+  state = {events:[], prices:{}, name:state.name, month:'all', retailer:'all', pending:state.pending, seeds:SEEDS.map(s => s.id)}; save(); render();
+});
+
+/* ---------- boot ---------- */
+/* Data bundled with this file. Each seed is merged once, so a copy that already has saved data
+   (and saved prices) picks up new seeds without losing anything. */
+const SEEDS = [
+  {id:'chat-1',       run: () => parseChat($('#sample').textContent).events},
+  {id:'pkc-csv-6-30', run: () => parseCsv($('#seed-csv').textContent, new Date(2026, 5, 30, 12).getTime()).events},
+  {id:'email-pkc-7',   run: () => parseCsv($('#seed-email').textContent, Date.now()).events},
+  {id:'chat-2',         run: () => parseChat($('#seed-chat-2').textContent, new Date(2026, 8, 28)).events},
+];
+const stored = load();
+if (stored) state = {...state, ...stored, seeds:stored.seeds || ['chat-1']};
+for (const s of SEEDS) if (!state.seeds.includes(s.id)) { merge(s.run()); state.seeds.push(s.id); }
+save();
+render();
+})();
+</script>
+</body>
+</html>
