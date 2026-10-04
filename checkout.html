@@ -65,7 +65,12 @@
         </div>
       </div>
     </div>
-    <div class="form-field" id="addressField">
+    <div class="form-field" id="stateField" style="display:none;">
+      <label for="shipState">Ship-to state</label>
+      <select id="shipState" name="State">
+        <option value="">Select your state</option>
+      </select>
+    </div>    <div class="form-field" id="addressField">
       <label for="custAddress">Shipping address</label>
       <input id="custAddress" name="address" type="text" placeholder="Street, City, State, ZIP" autocomplete="street-address">
     </div>
@@ -78,6 +83,7 @@
     <input type="hidden" name="Order Summary" id="orderSummaryField">
     <input type="hidden" name="Order Total" id="orderTotalField">
     <input type="hidden" name="Shipping" id="shippingField">
+    <input type="hidden" name="Sales Tax" id="taxField">
     <input type="hidden" name="_subject" value="New order request — Premium Acrylics 415">
 
     <script>
@@ -96,6 +102,7 @@
           notes.ship.style.display = shipRadio.checked ? 'block' : 'none';
           notes.pickup.style.display = pickupRadio.checked ? 'block' : 'none';
           addressField.style.display = shipRadio.checked ? '' : 'none';
+          document.getElementById('stateField').style.display = pickupRadio.checked ? 'none' : '';
           if (!shipRadio.checked) addressInput.value = '';
         }
         [labelRadio, shipRadio, pickupRadio].forEach(r => r.addEventListener('change', updateDeliveryUI));
@@ -127,6 +134,7 @@
 <script src="/js/products.js"></script>
 <script src="/js/checkout.js"></script>
 <script src="/js/partials.js"></script>
+<script src="/js/tax.js"></script>
 <script src="/js/shipping.js"></script>
 <script src="/js/order.js"></script>
 <script src="/js/square-checkout.js"></script>

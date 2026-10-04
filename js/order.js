@@ -50,6 +50,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
       <div class="cart-subtotal-row"><span>Items</span><span>${Products.formatPrice(subtotal)}</span></div>
       <div class="cart-subtotal-row" style="margin-top:6px;"><span id="shipRowLabel">Shipping</span><span id="shipRowAmount"></span></div>
+      <div class="cart-subtotal-row" id="taxRow" style="margin-top:6px;display:none;"><span id="taxRowLabel">Sales tax</span><span id="taxRowAmount"></span></div>
       <div class="cart-subtotal-row" style="margin-top:10px;font-weight:700;"><span>Total</span><span id="orderTotalAmount"></span></div>
     </div>
     <p class="cart-note" id="shipRowNote" style="text-align:left;margin-top:10px;"></p>
@@ -72,22 +73,45 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     labelRadio.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
+  const stateSelect = document.getElementById('shipState');
+  Object.entries(Tax.states).forEach(([code, name]) => stateSelect.insertAdjacentHTML('beforeend', `<option value="${code}">${name}</option>`));
+
   const currentDelivery = () => pickupRadio.checked ? 'pickup' : labelRadio.checked ? 'ship-label' : 'ship';
+  const currentState = () => stateSelect.value;
   const shippingFee = () => currentDelivery() === 'ship' && shipQuote.ok ? shipQuote.fee : 0;
+  // Sales tax (rate + rules in js/tax.js): items only; pick-up and California addresses.
+  const taxPercent = () => Tax.rate(currentDelivery(), currentState());
+  const taxAmount = () => Tax.cents(subtotal, currentDelivery(), currentState()) / 100;
 
   function updateTotals() {
     const d = currentDelivery();
+    stateSelect.required = d !== 'pickup';
     document.getElementById('shipRowLabel').textContent = d === 'ship' ? 'Shipping' : d === 'ship-label' ? 'Shipping (your own label)' : 'Local pick-up';
     document.getElementById('shipRowAmount').textContent = d === 'ship' ? Products.formatPrice(shippingFee()) : d === 'pickup' ? 'Free' : '$0.00';
-    document.getElementById('orderTotalAmount').textContent = Products.formatPrice(subtotal + shippingFee());
-    document.getElementById('shipRowNote').textContent = d === 'ship'
+
+    const pct = taxPercent();
+    document.getElementById('taxRow').style.display = pct > 0 ? '' : 'none';
+    if (pct > 0) {
+      document.getElementById('taxRowLabel').textContent = `Sales tax (${pct}%)`;
+      document.getElementById('taxRowAmount').textContent = Products.formatPrice(taxAmount());
+    }
+    document.getElementById('orderTotalAmount').textContent = Products.formatPrice(subtotal + shippingFee() + taxAmount());
+
+    let note = d === 'ship'
       ? `Shipping is based on your order's weight (${shipWeightText}) and is paid with your order.`
       : d === 'ship-label' ? 'You buy the label yourself, so we charge nothing for shipping. See the box size and weight in that option.'
       : 'Pick-up is free.';
+    if (Tax.percent != null) {
+      note += d === 'pickup' ? ' Sales tax applies to pick-up orders.'
+        : !currentState() ? ' Choose your state to see sales tax (charged on California addresses).'
+        : pct > 0 ? ' Sales tax is charged on orders shipped to California.'
+        : ' No sales tax on orders shipped outside California.';
+    }
+    document.getElementById('shipRowNote').textContent = note;
   }
   [pickupRadio, shipRadio, labelRadio].forEach(r => r.addEventListener('change', updateTotals));
+  stateSelect.addEventListener('change', updateTotals);
   updateTotals();
-
   // Box size + estimated weights to use when buying a label (the "send my own label" option).
   const labelDetails = document.getElementById('labelDetails');
   if (labelDetails) {
@@ -134,7 +158,8 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
       : delivery === 'ship-label' ? 'Shipping: customer will send their own label'
       : 'Local pick-up (no shipping)';
     document.getElementById('orderSummaryField').value = `${orderSummaryText}\n${shippingText}`;
-    document.getElementById('orderTotalField').value = Products.formatPrice(subtotal + shippingFee());
+    document.getElementById('orderTotalField').value = Products.formatPrice(subtotal + shippingFee() + taxAmount());
+    document.getElementById('taxField').value = taxPercent() > 0 ? `${taxPercent()}% = ${Products.formatPrice(taxAmount())}` : 'none';
     document.getElementById('shippingField').value = shippingText;
 
     submitBtn.disabled = true;

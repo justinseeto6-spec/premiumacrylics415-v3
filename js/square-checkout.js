@@ -29,6 +29,16 @@ const SQUARE_TEST_MODE = new URLSearchParams(window.location.search).get('square
 
     const delivery = document.getElementById('deliveryPickup').checked ? 'pickup'
       : document.getElementById('deliveryLabel').checked ? 'ship-label' : 'ship';
+    // Shipped orders need the destination state (sales tax depends on it).
+    const shipState = document.getElementById('shipState').value;
+    if (delivery !== 'pickup' && !shipState) {
+      const msg = 'Please choose your state under Delivery method.';
+      noteEl.textContent = msg;
+      noteEl.style.color = 'var(--accent)';
+      if (window.showToast) showToast(msg);
+      document.getElementById('shipState').focus();
+      return;
+    }
     const original = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'Taking you to Square…';
@@ -37,7 +47,7 @@ const SQUARE_TEST_MODE = new URLSearchParams(window.location.search).get('square
       const res = await fetch('/api/create-checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, delivery })
+        body: JSON.stringify({ items, delivery, shipState })
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || !data.url) throw new Error(data.error || 'We couldn\'t start the payment. Please try again or text us at 650-248-2473.');

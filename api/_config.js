@@ -2,8 +2,6 @@
 
 module.exports = {
   // Where Square sends customers after they pay.
-  siteUrl: 'https://www.premiumacrylics415.com',
-
-  // Sales tax percent added to the order (e.g. 8.625), or null to add no tax.
-  taxPercent: null
+  // (The sales tax rate lives in js/tax.js, shipping prices in js/shipping.js.)
+  siteUrl: 'https://www.premiumacrylics415.com'
 };

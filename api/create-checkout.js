@@ -1,6 +1,6 @@
 /* Premium Acrylics 415 - creates a Square payment page for the customer's whole cart.
  *
- * POST /api/create-checkout   { items: [{ id, qty }], delivery: "pickup" | "ship-label" | "ship" }
+ * POST /api/create-checkout   { items: [{ id, qty }], delivery: "pickup" | "ship-label" | "ship", shipState: "CA" (2-letter, required unless pickup) }
  *   -> { url }  the Square-hosted checkout page to send the customer to.
  *
  * Prices are always recalculated here from data/products.json - nothing the browser
@@ -17,6 +17,7 @@ const fs = require('fs');
 const path = require('path');
 const Products = require('../js/products.js');
 const Shipping = require('../js/shipping.js');
+const Tax = require('../js/tax.js');
 const config = require('./_config.js');
 
 const SQUARE_VERSION = '2025-01-23';
@@ -55,6 +56,11 @@ module.exports = async (req, res) => {
   const delivery = body.delivery;
   if (!Object.prototype.hasOwnProperty.call(DELIVERY_NOTES, delivery)) {
     return fail(res, 400, 'Please refresh the page and choose how you\'d like to receive your order.');
+  }
+  // Orders we ship (our label or theirs) need the destination state: tax depends on it.
+  const shipState = typeof body.shipState === 'string' ? body.shipState.toUpperCase() : '';
+  if (delivery !== 'pickup' && !Object.prototype.hasOwnProperty.call(Tax.states, shipState)) {
+    return fail(res, 400, 'Please choose your state under Delivery method.');
   }
   const rawItems = Array.isArray(body.items) ? body.items : [];
   if (!rawItems.length || rawItems.length > 50) return fail(res, 400, 'Your cart is empty.');
@@ -104,8 +110,10 @@ module.exports = async (req, res) => {
   }));
 
   const order = { location_id: locationId, line_items: lineItems };
-  if (config.taxPercent != null) {
-    order.taxes = [{ uid: 'sales-tax', name: 'Sales tax', percentage: String(config.taxPercent), scope: 'ORDER' }];
+  // Sales tax on the items (rate and rules in js/tax.js): pick-up and California addresses only.
+  const taxPercent = Tax.rate(delivery, shipState);
+  if (taxPercent > 0) {
+    order.taxes = [{ uid: 'sales-tax', name: 'Sales tax', percentage: String(taxPercent), scope: 'ORDER' }];
   }
 
   const checkoutOptions = {
@@ -122,9 +130,9 @@ module.exports = async (req, res) => {
     idempotency_key: crypto.randomUUID(),
     order,
     checkout_options: checkoutOptions,
-    payment_note: shipQuote
+    payment_note: (shipQuote
       ? `${DELIVERY_NOTES[delivery]} - $${shipQuote.fee.toFixed(2)} for about ${(shipQuote.weightOz / 16).toFixed(1)} lb`
-      : DELIVERY_NOTES[delivery]
+      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`)
   };
 
   // ---- ask Square for the payment page ----
@@ -144,7 +152,10 @@ module.exports = async (req, res) => {
       console.error('Square error', squareRes.status, JSON.stringify(data.errors || data));
       return fail(res, 502, 'We couldn\'t start the payment. Please try again or text us at 650-248-2473.');
     }
-    return res.status(200).json({ url });
+    // The total Square calculated (items + shipping + tax), so it can be checked against ours.
+    const sqOrder = data.related_resources && data.related_resources.orders && data.related_resources.orders[0];
+    const money = m => (m && typeof m.amount === 'number') ? m.amount / 100 : null;
+    return res.status(200).json({ url, total: sqOrder ? money(sqOrder.total_money) : null, tax: sqOrder ? money(sqOrder.total_tax_money) : null });
   } catch (err) {
     console.error('Square request failed', err);
     return fail(res, 502, 'We couldn\'t reach the payment service. Please try again or text us at 650-248-2473.');
