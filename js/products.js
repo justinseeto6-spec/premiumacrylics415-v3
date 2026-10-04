@@ -141,7 +141,6 @@ const Products = {
   },
 
   statusBadge(p) {
-    if (p.status === 'preorder') return { label: 'PRE-ORDER', bg: 'var(--accent)', fg: 'var(--accent-text)' };
     if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
     if (this.isSoldOut(p)) return { label: 'SOLD OUT', bg: 'var(--text-faint)', fg: '#fff' };
     return null;
@@ -164,7 +163,7 @@ const Products = {
             <span class="price">${this.formatPrice(p.price)}</span>
             ${this.dealLabel(p) ? `<span class="price-compare" style="text-decoration:none;color:var(--accent);">${this.dealLabel(p)}</span>` : ''}
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
-            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (!this.isSoldOut(p) ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${p.status === 'preorder' ? 'Pre-Order' : 'Add to Cart'}</button>` : '')}
+            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (!this.isSoldOut(p) ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">Add to Cart</button>` : '')}
           </div>
         </div>
       </a>

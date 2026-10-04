@@ -28,7 +28,7 @@ const SQUARE_TEST_MODE = new URLSearchParams(window.location.search).get('square
     if (!items.length) return;
 
     const delivery = document.getElementById('deliveryPickup').checked ? 'pickup'
-      : document.getElementById('deliveryLabel').checked ? 'ship-label' : 'ship-invoice';
+      : document.getElementById('deliveryLabel').checked ? 'ship-label' : 'ship';
     const original = btn.textContent;
     btn.disabled = true;
     btn.textContent = 'Taking you to Square…';

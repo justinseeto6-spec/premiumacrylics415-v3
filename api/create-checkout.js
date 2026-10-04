@@ -1,6 +1,6 @@
 /* Premium Acrylics 415 - creates a Square payment page for the customer's whole cart.
  *
- * POST /api/create-checkout   { items: [{ id, qty }], delivery: "pickup" | "ship-label" | "ship-invoice" }
+ * POST /api/create-checkout   { items: [{ id, qty }], delivery: "pickup" | "ship-label" | "ship" }
  *   -> { url }  the Square-hosted checkout page to send the customer to.
  *
  * Prices are always recalculated here from data/products.json - nothing the browser
@@ -16,18 +16,19 @@ const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 const Products = require('../js/products.js');
+const Shipping = require('../js/shipping.js');
 const config = require('./_config.js');
 
 const SQUARE_VERSION = '2025-01-23';
-// How each delivery choice is handled. None of them charge shipping in this payment:
-//   pickup        - customer collects in person
-//   ship-label    - customer buys their own label (e.g. Pirate Ship) and sends it to us
-//   ship-invoice  - we send a second Square invoice for shipping after this payment
-// The note is saved on the Square payment so you can see which one the customer picked.
+// How each delivery choice is handled. The note is saved on the Square payment so you can
+// see which one the customer picked.
+//   pickup      - customer collects in person (no shipping)
+//   ship-label  - customer buys their own label (e.g. Pirate Ship) and sends it to us (no shipping charge)
+//   ship        - we ship it; flat-rate shipping is charged in this same payment (prices in js/shipping.js)
 const DELIVERY_NOTES = {
   'pickup': 'Local pick-up - 1158 Mission Rd, South San Francisco, CA 94080',
   'ship-label': 'SHIP - customer will send their own shipping label (Pirate Ship)',
-  'ship-invoice': 'SHIP - send customer a second invoice for shipping'
+  'ship': 'SHIP - we ship it, shipping charged in this payment'
 };
 
 const toCents = dollars => Math.round(dollars * 100);
@@ -85,6 +86,15 @@ module.exports = async (req, res) => {
   }
   const { lines } = Products.cartTotals(catalog, items);
 
+  // Shipping is priced here from the cart weight (never from anything the browser sends).
+  let shipQuote = null;
+  if (delivery === 'ship') {
+    shipQuote = Shipping.quote(lines);
+    if (!shipQuote.ok) {
+      return fail(res, 400, 'We can\'t price shipping for this order online. Please text us at 650-248-2473 for a shipping quote, or choose pick-up.');
+    }
+  }
+
   // Square line items need a whole-cent price per unit, but bulk deals (e.g. 2 for $55)
   // don't always divide evenly - so each cart line is one Square line at its full total.
   const lineItems = lines.map(l => ({
@@ -100,17 +110,21 @@ module.exports = async (req, res) => {
 
   const checkoutOptions = {
     redirect_url: `${config.siteUrl}/thank-you.html`,
-    // We only need an address from customers we're invoicing shipping to.
-    ask_for_shipping_address: delivery === 'ship-invoice',
+    // We only need an address when we're the ones shipping.
+    ask_for_shipping_address: delivery === 'ship',
     allow_tipping: false
   };
+  if (shipQuote) {
+    checkoutOptions.shipping_fee = { name: 'Shipping', charge: { amount: toCents(shipQuote.fee), currency: 'USD' } };
+  }
 
-  // Shipping is never charged in this payment - see DELIVERY_NOTES.
   const payload = {
     idempotency_key: crypto.randomUUID(),
     order,
     checkout_options: checkoutOptions,
-    payment_note: DELIVERY_NOTES[delivery]
+    payment_note: shipQuote
+      ? `${DELIVERY_NOTES[delivery]} - $${shipQuote.fee.toFixed(2)} for about ${(shipQuote.weightOz / 16).toFixed(1)} lb`
+      : DELIVERY_NOTES[delivery]
   };
 
   // ---- ask Square for the payment page ----

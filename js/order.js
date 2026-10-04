@@ -47,13 +47,46 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   summaryEl.innerHTML = `
     <h3 style="margin-top:0;">Your cart</h3>
     ${rows}
-    <div class="cart-subtotal-row" style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
-      <span>Estimated total</span>
-      <span>${Products.formatPrice(subtotal)}</span>
+    <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+      <div class="cart-subtotal-row"><span>Items</span><span>${Products.formatPrice(subtotal)}</span></div>
+      <div class="cart-subtotal-row" style="margin-top:6px;"><span id="shipRowLabel">Shipping</span><span id="shipRowAmount"></span></div>
+      <div class="cart-subtotal-row" style="margin-top:10px;font-weight:700;"><span>Total</span><span id="orderTotalAmount"></span></div>
     </div>
-    <p class="cart-note" style="text-align:left;margin-top:10px;">Shipping isn't included in this total. Pick how you'd like to handle it under Delivery method below.</p>
+    <p class="cart-note" id="shipRowNote" style="text-align:left;margin-top:10px;"></p>
   `;
+  // ---- Delivery choice + shipping price (prices live in js/shipping.js) ----
+  const pickupRadio = document.getElementById('deliveryPickup');
+  const shipRadio = document.getElementById('deliveryShip');
+  const labelRadio = document.getElementById('deliveryLabel');
+  const shipQuote = Shipping.quote(cartLines);
+  const shipWeightText = shipQuote.ok ? `about ${Products.formatWeight(shipQuote.weightOz)}` : '';
 
+  if (shipQuote.ok) {
+    document.getElementById('shipOptionText').innerHTML = `Ship to me &mdash; ${Products.formatPrice(shipQuote.fee)} shipping (flat rate, ${shipWeightText})`;
+  } else {
+    // Too heavy (or a product has no weight): can't be priced online.
+    document.getElementById('shipOptionText').innerHTML = `Ship to me &mdash; text us at ${Shipping.contactPhone} for a shipping quote`;
+    shipRadio.disabled = true;
+    shipRadio.closest('.delivery-option').style.opacity = '0.45';
+    labelRadio.checked = true;
+    labelRadio.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  const currentDelivery = () => pickupRadio.checked ? 'pickup' : labelRadio.checked ? 'ship-label' : 'ship';
+  const shippingFee = () => currentDelivery() === 'ship' && shipQuote.ok ? shipQuote.fee : 0;
+
+  function updateTotals() {
+    const d = currentDelivery();
+    document.getElementById('shipRowLabel').textContent = d === 'ship' ? 'Shipping' : d === 'ship-label' ? 'Shipping (your own label)' : 'Local pick-up';
+    document.getElementById('shipRowAmount').textContent = d === 'ship' ? Products.formatPrice(shippingFee()) : d === 'pickup' ? 'Free' : '$0.00';
+    document.getElementById('orderTotalAmount').textContent = Products.formatPrice(subtotal + shippingFee());
+    document.getElementById('shipRowNote').textContent = d === 'ship'
+      ? `Shipping is based on your order's weight (${shipWeightText}) and is paid with your order.`
+      : d === 'ship-label' ? 'You buy the label yourself, so we charge nothing for shipping. See the box size and weight in that option.'
+      : 'Pick-up is free.';
+  }
+  [pickupRadio, shipRadio, labelRadio].forEach(r => r.addEventListener('change', updateTotals));
+  updateTotals();
 
   // Box size + estimated weights to use when buying a label (the "send my own label" option).
   const labelDetails = document.getElementById('labelDetails');
@@ -75,7 +108,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   // when one is in the cart the shipping options are turned off and pick-up is selected.
   const pickupOnlyNames = cartLines.filter(l => l.product.pickupOnly).map(l => l.product.name);
   if (pickupOnlyNames.length) {
-    ['deliveryLabel', 'deliveryInvoice'].forEach(id => {
+    ['deliveryLabel', 'deliveryShip'].forEach(id => {
       const r = document.getElementById(id);
       r.disabled = true;
       r.closest('.delivery-option').style.opacity = '0.45';
@@ -96,8 +129,13 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
       return;
     }
 
-    document.getElementById('orderSummaryField').value = orderSummaryText;
-    document.getElementById('orderTotalField').value = Products.formatPrice(subtotal);
+    const delivery = currentDelivery();
+    const shippingText = delivery === 'ship' ? `Shipping (flat rate, ${shipWeightText}): ${Products.formatPrice(shippingFee())}`
+      : delivery === 'ship-label' ? 'Shipping: customer will send their own label'
+      : 'Local pick-up (no shipping)';
+    document.getElementById('orderSummaryField').value = `${orderSummaryText}\n${shippingText}`;
+    document.getElementById('orderTotalField').value = Products.formatPrice(subtotal + shippingFee());
+    document.getElementById('shippingField').value = shippingText;
 
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submitting…';

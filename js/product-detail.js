@@ -38,16 +38,15 @@
 
   const onSale = product.compareAtPrice && product.compareAtPrice > product.price;
   const images = (product.images && product.images.length) ? product.images : [product.image];
-  const isPreorder = product.status === 'preorder';
   const isSpecialOrder = product.status === 'special-order';
   // Optional "stock" in data/products.json = units available. The cart can't hold more than that.
   const stock = typeof product.stock === 'number' ? product.stock : null;
   const soldOut = Products.isSoldOut(product);
-  const stockLabel = isPreorder
-    ? 'Pre-Order &mdash; ships mid-to-late October'
-    : isSpecialOrder
+  // A sold-out product can carry an optional "restock" note, e.g. "mid to late October".
+  const soldOutLabel = product.restock ? `Sold out &mdash; restock estimated ${product.restock}` : 'Sold out';
+  const stockLabel = isSpecialOrder
     ? 'Special Order Only &mdash; contact us to order'
-    : (soldOut ? 'Sold out' : (stock !== null ? `${stock} available` : 'In stock, ready to ship'));
+    : (soldOut ? soldOutLabel : (stock !== null ? `${stock} available` : 'In stock, ready to ship'));
 
   root.innerHTML = `
     <div class="pdp">
@@ -113,14 +112,14 @@
             <a class="btn btn-secondary" href="sms:6502482473" style="text-decoration:none;">Text 650-248-2473</a>
           ` : `
             <button class="btn btn-primary" id="addToCartBtn" ${soldOut ? 'disabled' : ''}>
-              ${soldOut ? 'Sold Out' : (isPreorder ? 'Pre-Order Now' : 'Add to Cart')}
+              ${soldOut ? 'Sold Out' : 'Add to Cart'}
             </button>
             <button class="btn btn-secondary" id="pdpCheckoutBtn" ${soldOut ? 'disabled' : ''}>Order Now</button>
           `}
         </div>
         ${product.paymentLink && !soldOut ? `
           <div class="pdp-actions" style="margin-top:10px;">
-            <a class="btn btn-primary" href="${product.paymentLink}" target="_blank" rel="noopener" style="text-decoration:none;">${isPreorder ? 'Pre-Order &amp; Pay with Square' : 'Pay Now with Square'}</a>
+            <a class="btn btn-primary" href="${product.paymentLink}" target="_blank" rel="noopener" style="text-decoration:none;">Pay Now with Square</a>
           </div>
         ` : ''}
       </div>
@@ -154,12 +153,10 @@
     const out = soldOut || left <= 0;
     addBtn.disabled = out;
     checkoutBtn.disabled = out;
-    addBtn.textContent = out ? 'Sold Out' : (isPreorder ? 'Pre-Order Now' : 'Add to Cart');
-    if (!isPreorder) {
-      stockText.innerHTML = soldOut ? 'Sold out'
-        : out ? `Sold out &mdash; all ${stock} are in your cart`
-        : (stock !== null ? `${left} available` : stockLabel);
-    }
+    addBtn.textContent = out ? 'Sold Out' : 'Add to Cart';
+    stockText.innerHTML = soldOut ? soldOutLabel
+      : out ? `Sold out &mdash; all ${stock} are in your cart`
+      : (stock !== null ? `${left} available` : stockLabel);
     qtyInput.value = out ? 1 : wantedQty();
   }
 
