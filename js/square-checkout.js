@@ -2,9 +2,9 @@
  * Sends the cart to /api/create-checkout, then redirects to the Square payment page it returns.
  * The cart is cleared on /thank-you.html once the customer has actually paid. */
 
-// Keep false until Square is set up and tested (see SQUARE-SETUP.md), then change to true.
-// While false, the "Pay Now with Square" button stays hidden and customers use the order-request form.
-const SQUARE_ENABLED = false;
+// true = the "Pay Now with Square" button shows for every customer (Square is set up and tested).
+// Set to false to hide it again; customers can still use the order-request form.
+const SQUARE_ENABLED = true;
 
 // Private test switch: opening /checkout.html?square=test shows the button to you only,
 // so you can try Square (in sandbox, with fake money) before customers can see it.
@@ -19,6 +19,9 @@ const SQUARE_TEST_MODE = new URLSearchParams(window.location.search).get('square
   const submitBtn = document.getElementById('submitOrderBtn');
   submitBtn.classList.remove('btn-primary');
   submitBtn.classList.add('btn-secondary');
+  submitBtn.style.border = '1px solid var(--accent)';
+  submitBtn.style.background = 'transparent';
+  submitBtn.style.color = 'var(--accent)';
 
   btn.addEventListener('click', async () => {
     const items = Cart.read();

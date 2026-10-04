@@ -116,7 +116,7 @@
   {
     "id": "151-prismatic-booster-bundle",
     "weightOz": 32,
-    "name": "151 & Prismatic Evolutions Booster Bundle Display (6-Pack)",
+    "name": "151 & Prismatic Evolutions Booster Bundle Display Case (fits 6-pack bundle)",
     "category": "pokemon",
     "price": 10.5,
     "mixMatch": { "group": "booster-bundle-6pack", "minQty": 6, "price": 9.5 },
@@ -214,7 +214,7 @@
     "id": "sealed-booster-box-6ct",
     "weightOz": 48,
     "pickupOnly": true,
-    "name": "Sealed Booster Box Display Case (6-Count)",
+    "name": "Sealed Booster Box Display Case (fits sealed 6-count box)",
     "category": "pokemon",
     "price": 30,
     "compareAtPrice": null,
