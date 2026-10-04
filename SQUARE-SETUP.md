@@ -24,6 +24,8 @@ New/changed files: `api/`, `vercel.json`, `thank-you.html`, `checkout.html`, `js
 After changing environment variables, redeploy so they take effect.
 
 ## 4. Test with fake money (SQUARE_ENVIRONMENT = sandbox)
+The Square button is hidden from customers. To see it yourself, add an item to your cart and open
+`https://www.premiumacrylics415.com/checkout.html?square=test` (the `?square=test` part shows it to you only).
 Add an item, choose "Local pick-up", click **Pay Now with Square**, and pay with Square's test card
 `4111 1111 1111 1111` (any future expiry, any CVV, any ZIP). You should land on the thank-you page.
 

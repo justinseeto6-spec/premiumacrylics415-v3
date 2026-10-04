@@ -6,10 +6,14 @@
 // While false, the "Pay Now with Square" button stays hidden and customers use the order-request form.
 const SQUARE_ENABLED = false;
 
+// Private test switch: opening /checkout.html?square=test shows the button to you only,
+// so you can try Square (in sandbox, with fake money) before customers can see it.
+const SQUARE_TEST_MODE = new URLSearchParams(window.location.search).get('square') === 'test';
+
 (() => {
   const btn = document.getElementById('squarePayBtn');
   const noteEl = document.getElementById('squareNote');
-  if (!btn || !SQUARE_ENABLED) return;
+  if (!btn || !(SQUARE_ENABLED || SQUARE_TEST_MODE)) return;
 
   document.getElementById('squareBlock').hidden = false;
   const submitBtn = document.getElementById('submitOrderBtn');
