@@ -770,8 +770,9 @@ button { font-family: inherit; cursor: pointer; }
 .delivery-options { display: flex; flex-direction: column; gap: 10px; }
 .delivery-option {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -782,6 +783,7 @@ button { font-family: inherit; cursor: pointer; }
 }
 .delivery-option:has(input:checked) { border-color: var(--accent); }
 .delivery-option input { width: auto; }
+.delivery-row { display: flex; align-items: center; gap: 10px; cursor: pointer; margin: 0; }
 
 /* ---------- Checkout success/cancel ---------- */
 .status-page {

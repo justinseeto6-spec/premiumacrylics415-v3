@@ -78,12 +78,12 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     ['deliveryLabel', 'deliveryInvoice'].forEach(id => {
       const r = document.getElementById(id);
       r.disabled = true;
-      r.closest('label').style.opacity = '0.45';
+      r.closest('.delivery-option').style.opacity = '0.45';
     });
     const pickupRadio = document.getElementById('deliveryPickup');
     pickupRadio.checked = true;
     pickupRadio.dispatchEvent(new Event('change'));
-    document.getElementById('labelNote').insertAdjacentHTML('beforebegin',
+    document.querySelector('.delivery-options').insertAdjacentHTML('beforebegin',
       `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">Local pick-up only: ${pickupOnlyNames.join(', ')} can't be shipped. Shipping options are off while it's in your cart.</p>`);
   }
   const orderSummaryText = lines.join('\n');

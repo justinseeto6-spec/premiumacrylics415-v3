@@ -42,22 +42,28 @@
     <div class="form-field">
       <label>Delivery method</label>
       <div class="delivery-options">
-        <label class="delivery-option">
-          <input type="radio" name="deliveryMethod" value="Ship - customer will send their own shipping label (Pirate Ship)" id="deliveryLabel">
-          <span>Ship &mdash; I'll send you my own shipping label</span>
-        </label>
-        <label class="delivery-option">
-          <input type="radio" name="deliveryMethod" value="Ship - send a second invoice for shipping (Square)" id="deliveryInvoice" checked>
-          <span>Ship &mdash; send me a second invoice for shipping</span>
-        </label>
-        <label class="delivery-option">
-          <input type="radio" name="deliveryMethod" value="Local pick-up — 1158 Mission Rd, South San Francisco, CA 94080" id="deliveryPickup">
-          <span>Local pick-up — South San Francisco</span>
-        </label>
+        <div class="delivery-option">
+          <label class="delivery-row">
+            <input type="radio" name="deliveryMethod" value="Ship - customer will send their own shipping label (Pirate Ship)" id="deliveryLabel">
+            <span>Ship &mdash; I'll send you my own shipping label</span>
+          </label>
+          <div class="cart-note" id="labelNote" style="text-align:left;margin:10px 0 0 28px;display:none;">Make a free account at <a href="https://www.pirateship.com" target="_blank" rel="noopener" style="color:var(--accent);">Pirate Ship</a> to buy a shipping label at up to 60% off carrier rates, then text the label to <strong>650-248-2473</strong> or email it to <a href="mailto:support@premiumacrylics.mozmail.com" style="color:var(--accent);">support@premiumacrylics.mozmail.com</a> after you order. We'll pack your order and ship it with your label.<div id="labelDetails" style="margin-top:10px;color:var(--text, #e6e8ee);"></div></div>
+        </div>
+        <div class="delivery-option">
+          <label class="delivery-row">
+            <input type="radio" name="deliveryMethod" value="Ship - send a second invoice for shipping (Square)" id="deliveryInvoice" checked>
+            <span>Ship &mdash; send me a second invoice for shipping</span>
+          </label>
+          <p class="cart-note" id="invoiceNote" style="text-align:left;margin:10px 0 0 28px;display:none;">After you order, we'll send you a second invoice through Square for shipping, charged at cost with no markup. We ship as soon as it's paid.</p>
+        </div>
+        <div class="delivery-option">
+          <label class="delivery-row">
+            <input type="radio" name="deliveryMethod" value="Local pick-up — 1158 Mission Rd, South San Francisco, CA 94080" id="deliveryPickup">
+            <span>Local pick-up — South San Francisco</span>
+          </label>
+          <p class="cart-note" id="pickupNote" style="text-align:left;margin:10px 0 0 28px;display:none;">Pick up in person at <strong>1158 Mission Rd, South San Francisco, CA 94080</strong>. Text <strong>650-248-2473</strong> to coordinate your pick-up time. No shipping charge.</p>
+        </div>
       </div>
-      <div class="cart-note" id="labelNote" style="text-align:left;margin-top:8px;display:none;">Make a free account at <a href="https://www.pirateship.com" target="_blank" rel="noopener" style="color:var(--accent);">Pirate Ship</a> to buy a shipping label at up to 60% off carrier rates, then text the label to <strong>650-248-2473</strong> after you order. We'll pack your order and ship it with your label.<div id="labelDetails" style="margin-top:10px;color:var(--text, #e6e8ee);"></div></div>
-      <p class="cart-note" id="invoiceNote" style="text-align:left;margin-top:8px;display:none;">After you order, we'll send you a second invoice through Square for shipping, charged at cost with no markup. We ship as soon as it's paid.</p>
-      <p class="cart-note" id="pickupNote" style="text-align:left;margin-top:8px;display:none;">Pick up in person at <strong>1158 Mission Rd, South San Francisco, CA 94080</strong>. We'll text you when your order is ready — no shipping charge.</p>
     </div>
     <div class="form-field" id="addressField">
       <label for="custAddress">Shipping address</label>
@@ -92,6 +98,12 @@
           if (!invoiceRadio.checked) addressInput.value = '';
         }
         [labelRadio, invoiceRadio, pickupRadio].forEach(r => r.addEventListener('change', updateDeliveryUI));
+        document.querySelectorAll('.delivery-option').forEach(box => box.addEventListener('click', e => {
+          const radio = box.querySelector('input');
+          if (e.target.closest('a') || radio.disabled || radio.checked) return;
+          radio.checked = true;
+          radio.dispatchEvent(new Event('change', { bubbles: true }));
+        }));
         updateDeliveryUI();
       })();
     </script>
