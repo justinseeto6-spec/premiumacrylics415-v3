@@ -44,18 +44,24 @@
       <label>Delivery method</label>
       <div class="delivery-options">
         <label class="delivery-option">
-          <input type="radio" name="deliveryMethod" value="Ship to me" id="deliveryShip" checked>
-          <span>Ship to me</span>
+          <input type="radio" name="deliveryMethod" value="Ship - customer will send their own shipping label (Pirate Ship)" id="deliveryLabel">
+          <span>Ship &mdash; I'll send you my own shipping label</span>
+        </label>
+        <label class="delivery-option">
+          <input type="radio" name="deliveryMethod" value="Ship - send a second invoice for shipping (Square)" id="deliveryInvoice" checked>
+          <span>Ship &mdash; send me a second invoice for shipping</span>
         </label>
         <label class="delivery-option">
           <input type="radio" name="deliveryMethod" value="Local pick-up — 1158 Mission Rd, South San Francisco, CA 94080" id="deliveryPickup">
           <span>Local pick-up — South San Francisco</span>
         </label>
       </div>
+      <div class="cart-note" id="labelNote" style="text-align:left;margin-top:8px;display:none;">Make a free account at <a href="https://www.pirateship.com" target="_blank" rel="noopener" style="color:var(--accent);">Pirate Ship</a> to buy a shipping label at up to 60% off carrier rates, then text the label to <strong>650-248-2473</strong> after you order. We'll pack your order and ship it with your label.<div id="labelDetails" style="margin-top:10px;color:var(--text, #e6e8ee);"></div></div>
+      <p class="cart-note" id="invoiceNote" style="text-align:left;margin-top:8px;display:none;">After you order, we'll send you a second invoice through Square for shipping, charged at cost with no markup. We ship as soon as it's paid.</p>
       <p class="cart-note" id="pickupNote" style="text-align:left;margin-top:8px;display:none;">Pick up in person at <strong>1158 Mission Rd, South San Francisco, CA 94080</strong>. We'll text you when your order is ready — no shipping charge.</p>
     </div>
     <div class="form-field" id="addressField">
-      <label for="custAddress">Shipping address (optional — we'll confirm with you either way)</label>
+      <label for="custAddress">Shipping address</label>
       <input id="custAddress" name="address" type="text" placeholder="Street, City, State, ZIP" autocomplete="street-address">
     </div>
     <div class="form-field">
@@ -70,23 +76,33 @@
 
     <script>
       (() => {
-        const shipRadio = document.getElementById('deliveryShip');
+        const labelRadio = document.getElementById('deliveryLabel');
+        const invoiceRadio = document.getElementById('deliveryInvoice');
         const pickupRadio = document.getElementById('deliveryPickup');
-        const pickupNote = document.getElementById('pickupNote');
+        const notes = { label: document.getElementById('labelNote'), invoice: document.getElementById('invoiceNote'), pickup: document.getElementById('pickupNote') };
         const addressField = document.getElementById('addressField');
         const addressInput = document.getElementById('custAddress');
 
+        // A shipping address is only asked for when we send a shipping invoice;
+        // pick-up needs none, and a label the customer buys already has the address on it.
         function updateDeliveryUI() {
-          const isPickup = pickupRadio.checked;
-          pickupNote.style.display = isPickup ? 'block' : 'none';
-          addressField.style.display = isPickup ? 'none' : '';
-          if (isPickup) addressInput.value = '';
+          notes.label.style.display = labelRadio.checked ? 'block' : 'none';
+          notes.invoice.style.display = invoiceRadio.checked ? 'block' : 'none';
+          notes.pickup.style.display = pickupRadio.checked ? 'block' : 'none';
+          addressField.style.display = invoiceRadio.checked ? '' : 'none';
+          if (!invoiceRadio.checked) addressInput.value = '';
         }
-        shipRadio.addEventListener('change', updateDeliveryUI);
-        pickupRadio.addEventListener('change', updateDeliveryUI);
+        [labelRadio, invoiceRadio, pickupRadio].forEach(r => r.addEventListener('change', updateDeliveryUI));
         updateDeliveryUI();
       })();
     </script>
+
+    <!-- Square pay button: hidden until SQUARE_ENABLED is set to true in js/square-checkout.js -->
+    <div id="squareBlock" hidden>
+      <button type="button" class="btn btn-primary btn-block" id="squarePayBtn">Pay Now with Square</button>
+      <p class="cart-note" id="squareNote">Secure card payment through Square. You'll be sent back here when it's done.</p>
+      <p class="cart-note" style="margin:18px 0 10px;">&mdash; or, if you'd rather we follow up with you first &mdash;</p>
+    </div>
 
     <button type="submit" class="btn btn-primary btn-block" id="submitOrderBtn">Submit Order Request</button>
     <p class="cart-note" id="orderFormNote">We'll text you a payment link and confirm your order — most requests are handled same day. We're online 7 days a week, 9am&ndash;6pm PST, and text replies are usually instant.</p>
@@ -100,5 +116,6 @@
 <script src="/js/checkout.js"></script>
 <script src="/js/partials.js"></script>
 <script src="/js/order.js"></script>
+<script src="/js/square-checkout.js"></script>
 </body>
 </html>

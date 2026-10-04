@@ -40,11 +40,14 @@
   const images = (product.images && product.images.length) ? product.images : [product.image];
   const isPreorder = product.status === 'preorder';
   const isSpecialOrder = product.status === 'special-order';
+  // Optional "stock" in data/products.json = units available. The cart can't hold more than that.
+  const stock = typeof product.stock === 'number' ? product.stock : null;
+  const soldOut = Products.isSoldOut(product);
   const stockLabel = isPreorder
     ? 'Pre-Order &mdash; ships mid-to-late October'
     : isSpecialOrder
     ? 'Special Order Only &mdash; contact us to order'
-    : (product.inStock ? 'In stock, ready to ship' : 'Currently out of stock');
+    : (soldOut ? 'Sold out' : (stock !== null ? `${stock} available` : 'In stock, ready to ship'));
 
   root.innerHTML = `
     <div class="pdp">
@@ -69,7 +72,7 @@
           ${product.name}
         </div>
         <h1>${product.name}</h1>
-        <div class="stock-pill"><span class="dot"></span> ${stockLabel}</div>
+        <div class="stock-pill"><span class="dot"></span> <span id="stockText">${stockLabel}</span></div>
         <div class="pdp-price-row">
           <span class="pdp-price">${Products.formatPrice(product.price)}</span>
           ${onSale ? `<span class="price-compare">${Products.formatPrice(product.compareAtPrice)}</span>` : ''}
@@ -92,7 +95,7 @@
         })() : ''}
         <p class="pdp-desc">${product.description}</p>
         <ul class="spec-list">
-          ${(product.specs || []).map(s => `<li>${s}</li>`).join('')}
+          ${(product.specs || []).concat(typeof product.weightOz === 'number' ? [`Est. shipping weight: ${Products.formatWeight(product.weightOz)}`] : []).concat(product.pickupOnly ? ['Local pick-up only &mdash; this item can\'t be shipped'] : []).map(s => `<li>${s}</li>`).join('')}
         </ul>
         ${isSpecialOrder ? '' : `
         <div class="qty-row">
@@ -109,12 +112,17 @@
             <a class="btn btn-primary" href="/contact.html" style="text-decoration:none;">Contact Us to Order</a>
             <a class="btn btn-secondary" href="sms:6502482473" style="text-decoration:none;">Text 650-248-2473</a>
           ` : `
-            <button class="btn btn-primary" id="addToCartBtn" ${product.inStock ? '' : 'disabled'}>
-              ${product.inStock ? (isPreorder ? 'Pre-Order Now' : 'Add to Cart') : 'Out of Stock'}
+            <button class="btn btn-primary" id="addToCartBtn" ${soldOut ? 'disabled' : ''}>
+              ${soldOut ? 'Sold Out' : (isPreorder ? 'Pre-Order Now' : 'Add to Cart')}
             </button>
-            <button class="btn btn-secondary" id="pdpCheckoutBtn" ${product.inStock ? '' : 'disabled'}>Order Now</button>
+            <button class="btn btn-secondary" id="pdpCheckoutBtn" ${soldOut ? 'disabled' : ''}>Order Now</button>
           `}
         </div>
+        ${product.paymentLink && !soldOut ? `
+          <div class="pdp-actions" style="margin-top:10px;">
+            <a class="btn btn-primary" href="${product.paymentLink}" target="_blank" rel="noopener" style="text-decoration:none;">${isPreorder ? 'Pre-Order &amp; Pay with Square' : 'Pay Now with Square'}</a>
+          </div>
+        ` : ''}
       </div>
     </div>
   `;
@@ -131,24 +139,51 @@
   });
 
   const qtyInput = document.getElementById('qtyInput');
+  const addBtn = document.getElementById('addToCartBtn');
+  const checkoutBtn = document.getElementById('pdpCheckoutBtn');
+  const stockText = document.getElementById('stockText');
+
+  // Quantity picked on the page, never more than what's still available.
+  const wantedQty = () => Math.min(Math.max(1, parseInt(qtyInput.value || '1', 10) || 1), Math.max(1, Cart.remaining(product.id)));
+
+  // Re-syncs the stock label, buttons and quantity box with what's already in the cart.
+  // Once every available unit is in the cart, this visitor sees the item as sold out.
+  function refreshStock() {
+    if (isSpecialOrder || !addBtn) return;
+    const left = Cart.remaining(product.id);
+    const out = soldOut || left <= 0;
+    addBtn.disabled = out;
+    checkoutBtn.disabled = out;
+    addBtn.textContent = out ? 'Sold Out' : (isPreorder ? 'Pre-Order Now' : 'Add to Cart');
+    if (!isPreorder) {
+      stockText.innerHTML = soldOut ? 'Sold out'
+        : out ? `Sold out &mdash; all ${stock} are in your cart`
+        : (stock !== null ? `${left} available` : stockLabel);
+    }
+    qtyInput.value = out ? 1 : wantedQty();
+  }
+
   document.getElementById('qtyInc')?.addEventListener('click', () => {
-    qtyInput.value = Math.max(1, parseInt(qtyInput.value || '1', 10) + 1);
+    qtyInput.value = Math.min(Math.max(1, parseInt(qtyInput.value || '1', 10) + 1), Math.max(1, Cart.remaining(product.id)));
   });
   document.getElementById('qtyDec')?.addEventListener('click', () => {
     qtyInput.value = Math.max(1, parseInt(qtyInput.value || '1', 10) - 1);
   });
+  qtyInput?.addEventListener('change', () => { qtyInput.value = wantedQty(); });
 
-  document.getElementById('addToCartBtn')?.addEventListener('click', () => {
-    const qty = Math.max(1, parseInt(qtyInput.value || '1', 10));
-    Cart.add(product.id, qty);
-    showToast(`Added ${qty} × ${product.name} to cart`);
+  addBtn?.addEventListener('click', () => {
+    const added = Cart.add(product.id, wantedQty());
+    if (added) showToast(`Added ${added} × ${product.name} to cart`);
+    refreshStock();
   });
 
-  document.getElementById('pdpCheckoutBtn')?.addEventListener('click', () => {
-    const qty = Math.max(1, parseInt(qtyInput.value || '1', 10));
-    Cart.add(product.id, qty);
+  checkoutBtn?.addEventListener('click', () => {
+    Cart.add(product.id, wantedQty());
     goToCheckout();
   });
+
+  Cart.onChange(refreshStock);
+  refreshStock();
 
   // Related products
   const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);

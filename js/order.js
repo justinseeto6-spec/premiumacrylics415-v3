@@ -51,9 +51,41 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
       <span>Estimated total</span>
       <span>${Products.formatPrice(subtotal)}</span>
     </div>
-    <p class="cart-note" style="text-align:left;margin-top:10px;">Shipping isn't included in this estimate — we'll confirm the final total (including shipping) with you directly before charging anything.</p>
+    <p class="cart-note" style="text-align:left;margin-top:10px;">Shipping isn't included in this total. Pick how you'd like to handle it under Delivery method below.</p>
   `;
 
+
+  // Box size + estimated weights to use when buying a label (the "send my own label" option).
+  const labelDetails = document.getElementById('labelDetails');
+  if (labelDetails) {
+    const allKnown = cartLines.every(l => typeof l.product.weightOz === 'number');
+    const rows = allKnown ? cartLines.map(l => `<li>${l.qty} &times; ${l.product.name} &mdash; about ${Products.formatWeight(l.product.weightOz)} each</li>`).join('') : '';
+    const totalOz = allKnown ? cartLines.reduce((s, l) => s + l.product.weightOz * l.qty, 0) : 0;
+    labelDetails.innerHTML = `
+      <strong>Package size for your label:</strong> 16 &times; 12 &times; 12 in (our medium box &mdash; most orders ship in this).
+      ${allKnown ? `
+        <br><strong>Estimated weight:</strong> about ${Products.formatWeight(totalOz)} total for your order.
+        <ul style="margin:6px 0 0 18px;padding:0;">${rows}</ul>
+      ` : `<br><strong>Weight:</strong> text us at 650-248-2473 and we'll tell you what to enter.`}
+      <br>Have a large order? Text us first and we'll confirm the box size.
+    `;
+  }
+
+  // A pick-up-only product (data/products.json: "pickupOnly": true) can't be shipped, so
+  // when one is in the cart the shipping options are turned off and pick-up is selected.
+  const pickupOnlyNames = cartLines.filter(l => l.product.pickupOnly).map(l => l.product.name);
+  if (pickupOnlyNames.length) {
+    ['deliveryLabel', 'deliveryInvoice'].forEach(id => {
+      const r = document.getElementById(id);
+      r.disabled = true;
+      r.closest('label').style.opacity = '0.45';
+    });
+    const pickupRadio = document.getElementById('deliveryPickup');
+    pickupRadio.checked = true;
+    pickupRadio.dispatchEvent(new Event('change'));
+    document.getElementById('labelNote').insertAdjacentHTML('beforebegin',
+      `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">Local pick-up only: ${pickupOnlyNames.join(', ')} can't be shipped. Shipping options are off while it's in your cart.</p>`);
+  }
   const orderSummaryText = lines.join('\n');
 
   form.addEventListener('submit', async (e) => {

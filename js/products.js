@@ -7,12 +7,31 @@ const Products = {
     if (this._cache) return this._cache;
     const res = await fetch('/data/products.json');
     this._cache = await res.json();
+    // Optional "stock" per product caps how many a customer can add to the cart.
+    this._cache.forEach(p => {
+      if (typeof p.stock === 'number') Cart.limits[p.id] = p.stock;
+    });
+    Cart.enforceLimits();
     return this._cache;
+  },
+
+  // Sold out = marked inStock:false, or an optional "stock" count of 0.
+  isSoldOut(p) {
+    return p.inStock === false || (typeof p.stock === 'number' && p.stock <= 0);
   },
 
   async byId(id) {
     const products = await this.all();
     return products.find(p => p.id === id);
+  },
+
+  // Ounces -> "1 lb 4 oz" (used for the optional "weightOz" on each product).
+  formatWeight(oz) {
+    const total = Math.round(oz * 10) / 10;
+    const lb = Math.floor(total / 16);
+    const rest = Math.round((total - lb * 16) * 10) / 10;
+    if (!lb) return `${rest} oz`;
+    return rest ? `${lb} lb ${rest} oz` : `${lb} lb`;
   },
 
   formatPrice(n) {
@@ -124,6 +143,7 @@ const Products = {
   statusBadge(p) {
     if (p.status === 'preorder') return { label: 'PRE-ORDER', bg: 'var(--accent)', fg: 'var(--accent-text)' };
     if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
+    if (this.isSoldOut(p)) return { label: 'SOLD OUT', bg: 'var(--text-faint)', fg: '#fff' };
     return null;
   },
 
@@ -144,7 +164,7 @@ const Products = {
             <span class="price">${this.formatPrice(p.price)}</span>
             ${this.dealLabel(p) ? `<span class="price-compare" style="text-decoration:none;color:var(--accent);">${this.dealLabel(p)}</span>` : ''}
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
-            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (p.inStock !== false ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${p.status === 'preorder' ? 'Pre-Order' : 'Add to Cart'}</button>` : '')}
+            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (!this.isSoldOut(p) ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${p.status === 'preorder' ? 'Pre-Order' : 'Add to Cart'}</button>` : '')}
           </div>
         </div>
       </a>
@@ -162,9 +182,11 @@ const Products = {
         e.preventDefault();
         e.stopPropagation();
         const id = decodeURIComponent(btn.dataset.addId);
-        Cart.add(id, 1);
+        const added = Cart.add(id, 1);
         this.byId(id).then(p => {
-          if (window.showToast) showToast(`Added ${p ? p.name : 'item'} to cart`);
+          if (!window.showToast) return;
+          const name = p ? p.name : 'item';
+          showToast(added ? `Added ${name} to cart` : `All available ${name} are already in your cart`);
         });
       });
     });
@@ -178,4 +200,7 @@ const Products = {
   }
 };
 
-window.Products = Products;
+// Browser: global. Node (api/create-checkout.js): require()'d so the server prices
+// carts with exactly the same logic the site shows (bulk tiers, mix & match).
+if (typeof window !== 'undefined') window.Products = Products;
+if (typeof module !== 'undefined' && module.exports) module.exports = Products;

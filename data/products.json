@@ -1,6 +1,32 @@
 [
   {
+    "id": "eevee-and-friends-gift-box",
+    "weightOz": 64,
+    "pickupOnly": true,
+    "name": "Eevee & Friends Gift Box with Acrylic Display Case (Chinese Exclusive)",
+    "category": "pokemon",
+    "price": 380,
+    "compareAtPrice": null,
+    "image": "/images/eevee-and-friends-gift-box.jpg",
+    "images": [
+      "/images/eevee-and-friends-gift-box.jpg"
+    ],
+    "shortDescription": "Chinese-exclusive Eevee & Friends Gift Box, sold with a crystal-clear acrylic display case. Local pick-up only in South SF.",
+    "description": "The Chinese-exclusive Eevee & Friends Gift Box, sold together with a precision-fit, crystal-clear acrylic display case so it arrives shelf-ready. The acrylic case keeps this hard-to-find gift box protected from dust, sun fade, and shelf wear while it stays on full display. This item is local pick-up only in South San Francisco and can't be shipped — text us at 650-248-2473 to arrange it.",
+    "specs": [
+      "Includes: Eevee & Friends Gift Box (Chinese exclusive) + acrylic display case",
+      "Local pick-up only: South San Francisco (not available for shipping)",
+      "Material: 5mm + 8mm premium cast acrylic",
+      "Finish: Crystal clear",
+      "Assembly: No Assembly Required"
+    ],
+    "inStock": true,
+    "stock": 2,
+    "featured": false
+  },
+  {
     "id": "30th-anniversary-upc",
+    "weightOz": 80,
     "name": "30th Anniversary UPC Display Case",
     "category": "pokemon",
     "price": 30,
@@ -25,6 +51,7 @@
   },
   {
     "id": "pokemon-center-30th-etb",
+    "weightOz": 56,
     "name": "Pok\u00e9mon Center 30th Anniversary ETB Case",
     "category": "pokemon",
     "price": 14.5,
@@ -50,6 +77,7 @@
   },
   {
     "id": "25th-anniversary-upc",
+    "weightOz": 80,
     "name": "25th Anniversary UPC Display Case",
     "category": "pokemon",
     "price": 27,
@@ -68,6 +96,7 @@
   },
   {
     "id": "prismatic-evolutions-figure-collection",
+    "weightOz": 64,
     "name": "Prismatic Evolutions Figure Collection Case",
     "category": "pokemon",
     "price": 15,
@@ -86,6 +115,7 @@
   },
   {
     "id": "151-prismatic-booster-bundle",
+    "weightOz": 32,
     "name": "151 & Prismatic Evolutions Booster Bundle Display (6-Pack)",
     "category": "pokemon",
     "price": 10.5,
@@ -105,6 +135,7 @@
   },
   {
     "id": "japanese-regional-boxes-display",
+    "weightOz": 64,
     "name": "Japanese Regional Boxes Display Case",
     "category": "pokemon",
     "price": 16,
@@ -123,6 +154,7 @@
   },
   {
     "id": "mega-charizard-ex-upc",
+    "weightOz": 80,
     "name": "Mega Charizard EX UPC Display Case",
     "category": "pokemon",
     "price": 30,
@@ -141,6 +173,7 @@
   },
   {
     "id": "ascended-heros-booster-bundle",
+    "weightOz": 32,
     "name": "Ascended Heroes Booster Bundle Display",
     "category": "pokemon",
     "price": 10.5,
@@ -160,6 +193,7 @@
   },
   {
     "id": "sword-shield-upc",
+    "weightOz": 80,
     "name": "Sword & Shield UPC Display Case",
     "category": "pokemon",
     "price": 27,
@@ -178,6 +212,8 @@
   },
   {
     "id": "sealed-booster-box-6ct",
+    "weightOz": 48,
+    "pickupOnly": true,
     "name": "Sealed Booster Box Display Case (6-Count)",
     "category": "pokemon",
     "price": 30,
@@ -196,6 +232,7 @@
   },
   {
     "id": "sealed-booster-bundle-display",
+    "weightOz": 32,
     "name": "Sealed Booster Bundle Display Case (Premium)",
     "category": "pokemon",
     "price": 30,
@@ -214,6 +251,7 @@
   },
   {
     "id": "team-rocket-moltres-upc",
+    "weightOz": 80,
     "name": "Team Rocket's Moltres ex UPC Display Case",
     "category": "pokemon",
     "price": 27,
@@ -232,6 +270,7 @@
   },
   {
     "id": "costco-151-five-pack-tin",
+    "weightOz": 64,
     "name": "Costco 151 Five-Pack Tin Display Case",
     "category": "pokemon",
     "price": 25,
@@ -250,6 +289,7 @@
   },
   {
     "id": "mini-tin-ascended-heros",
+    "weightOz": 32,
     "name": "Mini Tin Display Case \u2014 Ascended Heroes",
     "category": "pokemon",
     "price": 18,
@@ -268,6 +308,7 @@
   },
   {
     "id": "one-piece-tin-display-vol1-2",
+    "weightOz": 64,
     "name": "One Piece Tin Display Case (Vol. 1\u20132)",
     "category": "one-piece",
     "price": 25,
@@ -286,6 +327,7 @@
   },
   {
     "id": "one-piece-booster-box-op05-op16",
+    "weightOz": 48,
     "name": "One Piece Booster Box Display Case (OP-05 to OP-16)",
     "category": "one-piece",
     "price": 14,
@@ -304,6 +346,7 @@
   },
   {
     "id": "dark-sylveon-25th",
+    "weightOz": 64,
     "name": "Dark Sylveon 25th Anniversary Display Case",
     "category": "pokemon",
     "price": 25,
@@ -324,6 +367,7 @@
   },
   {
     "id": "pokemon-151-upc",
+    "weightOz": 80,
     "name": "Pok\u00e9mon 151 UPC Display Case",
     "category": "pokemon",
     "price": 27,
@@ -342,6 +386,7 @@
   },
   {
     "id": "prismatic-evolutions-super-premium",
+    "weightOz": 80,
     "name": "Prismatic Evolutions Super Premium Collection Case",
     "category": "pokemon",
     "price": 27,
@@ -360,6 +405,7 @@
   },
   {
     "id": "pokemon-booster-box-standard",
+    "weightOz": 48,
     "name": "Pok\u00e9mon Booster Box Display Case (Standard)",
     "category": "pokemon",
     "price": 12.5,
@@ -378,6 +424,7 @@
   },
   {
     "id": "elite-trainer-box-standard",
+    "weightOz": 56,
     "name": "Elite Trainer Box Display Case (Standard)",
     "category": "pokemon",
     "price": 13.5,
@@ -396,6 +443,7 @@
   },
   {
     "id": "one-piece-2nd-anniversary-set-english",
+    "weightOz": 64,
     "name": "One Piece 2nd Anniversary Set (English)",
     "category": "one-piece",
     "price": 16,
@@ -414,6 +462,7 @@
   },
   {
     "id": "30th-anniversary-sylveon-ex-box",
+    "weightOz": 64,
     "name": "Pok\u00e9mon Center 30th Anniversary Sylveon ex Box",
     "category": "pokemon",
     "price": 18,
@@ -434,6 +483,7 @@
   },
   {
     "id": "crown-zenith-etb-plus",
+    "weightOz": 56,
     "name": "Crown Zenith Pok\u00e9mon Center ETB Plus Case",
     "category": "pokemon",
     "price": 16,
