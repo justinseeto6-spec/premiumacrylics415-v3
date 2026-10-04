@@ -95,7 +95,7 @@
         })() : ''}
         <p class="pdp-desc">${product.description}</p>
         <ul class="spec-list">
-          ${(product.specs || []).concat(typeof product.weightOz === 'number' ? [`Est. shipping weight: ${Products.formatWeight(product.weightOz)}`] : []).concat(product.pickupOnly ? ['Local pick-up only &mdash; this item can\'t be shipped'] : []).map(s => `<li>${s}</li>`).join('')}
+          ${(product.specs || []).concat(typeof product.weightOz === 'number' && !product.pickupOnly ? [`Est. shipping weight: ${Products.formatWeight(product.weightOz)}`] : []).concat(product.pickupOnly ? ['Local pick-up only &mdash; this item can\'t be shipped'] : []).map(s => `<li>${s}</li>`).join('')}
         </ul>
         ${isSpecialOrder ? '' : `
         <div class="qty-row">
