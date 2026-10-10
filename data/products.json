@@ -321,6 +321,35 @@
     "featured": false
   },
   {
+    "id": "30th-anniversary-mini-tin-display",
+    "weightOz": 32,
+    "stock": 11,
+    "name": "30th Anniversary Mini Tin Display Case",
+    "category": "pokemon",
+    "price": 18,
+    "compareAtPrice": null,
+    "image": "/images/30th-anniversary-mini-tin-1.jpg",
+    "images": [
+      "/images/30th-anniversary-mini-tin-1.jpg",
+      "/images/30th-anniversary-mini-tin-2.jpg",
+      "/images/30th-anniversary-mini-tin-3.jpg",
+      "/images/30th-anniversary-mini-tin-4.jpg",
+      "/images/30th-anniversary-mini-tin-5.jpg",
+      "/images/30th-anniversary-mini-tin-6.jpg",
+      "/images/30th-anniversary-mini-tin-7.jpg"
+    ],
+    "shortDescription": "Crystal-clear case for the Pokémon 30th Celebration Mini Tin Display box.",
+    "description": "A precisely sized, crystal-clear acrylic case for the Pokémon 30th Celebration Mini Tin Display box. It keeps the sealed display protected from dust, sun fade, and shelf wear while the artwork stays fully visible from every side.",
+    "specs": [
+      "Fits: Pokémon 30th Celebration Mini Tin Display box",
+      "Material: 5mm + 8mm premium cast acrylic",
+      "Finish: Crystal clear",
+      "Assembly: No Assembly Required"
+    ],
+    "inStock": true,
+    "featured": false
+  },
+  {
     "id": "one-piece-tin-display-vol1-2",
     "weightOz": 64,
     "name": "One Piece Tin Display Case (Vol. 1\u20132)",
