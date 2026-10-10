@@ -1,27 +1,22 @@
 /* Premium Acrylics 415 - sales tax settings and rules.
  *
- * THIS IS THE ONLY PLACE THE TAX RATE LIVES. The checkout page shows the tax and the
- * payment function (api/create-checkout.js) charges it, both from this same file.
+ * THIS IS THE ONLY PLACE TAX RATES LIVE. The checkout page shows the tax and the payment
+ * function (api/create-checkout.js) charges it, both from this same file.
  *
- * `percent` is the California sales tax rate for your pick-up address (1158 Mission Rd,
- * South San Francisco). Get the official number from the CDTFA "find a sales tax rate"
- * lookup (cdtfa.ca.gov) and enter it as a plain number, e.g. 9.875 for 9.875%.
- * While it is `null`, NO sales tax is charged.
+ * Tax follows the BUYER'S STATE: list a state and its rate in `rates` below (percent, e.g.
+ * 9.875 for 9.875%). A state that is NOT listed is charged no tax. Local pick-up orders
+ * use the rate of `homeState` (your South San Francisco pick-up address).
  *
- * Who is taxed (California's general rule - confirm with your accountant):
- *   - Local pick-up orders                         -> taxed
- *   - Orders shipped to a California address       -> taxed
- *   - Orders shipped to any other state            -> not taxed
- * Tax is charged on the items only. Shipping is not taxed here (see js/shipping.js) -
- * ask your accountant whether any part of the shipping fee should be.
+ *   rates: { CA: 9.875, TX: 8.25 }
  *
- * Note: California district taxes depend on the customer's address, so one rate is an
- * approximation for California-bound shipments. Your accountant can tell you if you
- * need the exact destination rate.
+ * Only list states where you are registered to collect and remit sales tax (ask your
+ * accountant). Rates differ inside a state by city/county/district, so a single rate per
+ * state is an approximation; California in particular mixes seller-location and
+ * destination district rates. Tax is charged on the items only, not on shipping.
  */
-
 const Tax = {
-  percent: null,
+  // State code -> tax percent. Empty until you give me the rates. Example: { CA: 9.875 }
+  rates: {},
   homeState: 'CA',
 
   // US states (+ DC) for the "ship-to state" choice at checkout.
@@ -38,12 +33,15 @@ const Tax = {
     WV: 'West Virginia', WI: 'Wisconsin', WY: 'Wyoming'
   },
 
-  // Percent charged for this delivery choice ("pickup" | "ship" | "ship-label") and ship-to
-  // state (2-letter code). 0 means no tax.
+  // True once at least one state has a rate.
+  enabled() { return Object.keys(this.rates).length > 0; },
+
+  // Percent charged for this delivery choice ("pickup" | "ship" | "ship-label") and the buyer's
+  // 2-letter state. Pick-up uses the home state's rate. 0 means no tax.
   rate(delivery, state) {
-    if (this.percent == null) return 0;
-    if (delivery === 'pickup') return this.percent;
-    return state === this.homeState ? this.percent : 0;
+    const code = delivery === 'pickup' ? this.homeState : state;
+    const r = this.rates[code];
+    return typeof r === 'number' && r > 0 ? r : 0;
   },
 
   // Tax in whole cents on an items subtotal given in dollars.

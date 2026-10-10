@@ -110,7 +110,7 @@ module.exports = async (req, res) => {
   }));
 
   const order = { location_id: locationId, line_items: lineItems };
-  // Sales tax on the items (rate and rules in js/tax.js): pick-up and California addresses only.
+  // Sales tax on the items (rates and rules in js/tax.js): rate follows the buyer's state (pick-up = home state).
   const taxPercent = Tax.rate(delivery, shipState);
   if (taxPercent > 0) {
     order.taxes = [{ uid: 'sales-tax', name: 'Sales tax', percentage: String(taxPercent), scope: 'ORDER' }];

@@ -79,7 +79,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   const currentDelivery = () => pickupRadio.checked ? 'pickup' : labelRadio.checked ? 'ship-label' : 'ship';
   const currentState = () => stateSelect.value;
   const shippingFee = () => currentDelivery() === 'ship' && shipQuote.ok ? shipQuote.fee : 0;
-  // Sales tax (rate + rules in js/tax.js): items only; pick-up and California addresses.
+  // Sales tax (rates + rules in js/tax.js): items only, rate follows the buyer's state (pick-up = home state).
   const taxPercent = () => Tax.rate(currentDelivery(), currentState());
   const taxAmount = () => Tax.cents(subtotal, currentDelivery(), currentState()) / 100;
 
@@ -101,11 +101,11 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
       ? `Shipping is based on your order's weight (${shipWeightText}) and is paid with your order.`
       : d === 'ship-label' ? 'You buy the label yourself, so we charge nothing for shipping. See the box size and weight in that option.'
       : 'Pick-up is free.';
-    if (Tax.percent != null) {
-      note += d === 'pickup' ? ' Sales tax applies to pick-up orders.'
-        : !currentState() ? ' Choose your state to see sales tax (charged on California addresses).'
-        : pct > 0 ? ' Sales tax is charged on orders shipped to California.'
-        : ' No sales tax on orders shipped outside California.';
+    if (Tax.enabled()) {
+      note += d === 'pickup' ? (pct > 0 ? ' Sales tax applies to pick-up orders.' : '')
+        : !currentState() ? ' Choose your state to see the sales tax for your order.'
+        : pct > 0 ? ` Sales tax is based on your state (${Tax.states[currentState()]}).`
+        : ` No sales tax is charged for ${Tax.states[currentState()]}.`;
     }
     document.getElementById('shipRowNote').textContent = note;
   }
