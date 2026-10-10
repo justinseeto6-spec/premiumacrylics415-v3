@@ -9,8 +9,13 @@
  * the customer is told to text for a quote.
  *
  * Prices = the average real label cost for each kind of order (Pirate Ship shipments,
- * Jul-Oct 2026: about $8.50 / $13.50 / $21.50 / $24) plus a ~15% cushion for carrier
- * adjustments and far-away orders, rounded to the nearest quarter. Review them every few
+ * Jul-Oct 2026) plus a cushion for carrier adjustments and far-away orders:
+ *   up to 4 lb   avg ~$8.50   -> $9.75  (+15%)
+ *   4-6 lb       avg ~$13.50  -> $15.50 (+15%)
+ *   6-12 lb      2 UPCs ship mostly by UPS: avg $22.95, high $28.57 -> $28 (raised Oct 2026
+ *                so 2-UPC orders do not eat into profit)
+ *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $34
+ * A heavier band should never cost less than a lighter one. Review the prices every few
  * months against your Pirate Ship costs.
  */
 
@@ -18,8 +23,8 @@ const Shipping = {
   bands: [
     { maxLb: 4, price: 9.75 },    // 1 ETB, 1 booster bundle, 1 tin
     { maxLb: 6, price: 15.5 },   // 1 UPC, 2 ETBs
-    { maxLb: 12, price: 24.75 },  // 2 UPCs, 3 ETBs
-    { maxLb: 20, price: 27.5 }     // 5 ETBs, 3+ UPCs
+    { maxLb: 12, price: 28 },     // 2 UPCs, 3 ETBs
+    { maxLb: 20, price: 34 }       // 5 ETBs, 3-4 UPCs
   ],
 
   // Ships to US addresses only.
