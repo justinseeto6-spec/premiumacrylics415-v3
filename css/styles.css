@@ -156,6 +156,30 @@ button { font-family: inherit; cursor: pointer; }
   height: 38px;
 }
 
+/* ---------- Soft-launch banner (dismissible; see wireSoftLaunch in js/partials.js) ---------- */
+.softlaunch {
+  position: relative;
+  background: var(--accent);
+  color: var(--accent-text, #06202b);
+  text-align: center;
+  font-size: 0.86rem;
+  padding: 9px 44px 9px 14px;
+}
+.softlaunch a { color: inherit; font-weight: 700; text-decoration: underline; }
+.softlaunch button {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
 /* ---------- Announcement bar ---------- */
 .announce {
   background: linear-gradient(90deg, #0b3a4a, #113a2e);

@@ -27,6 +27,7 @@
   {
     "id": "30th-anniversary-upc",
     "weightOz": 80,
+    "stock": 20,
     "name": "30th Anniversary UPC Display Case",
     "category": "pokemon",
     "price": 30,
@@ -79,6 +80,7 @@
   {
     "id": "25th-anniversary-upc",
     "weightOz": 80,
+    "stock": 15,
     "name": "25th Anniversary UPC Display Case",
     "category": "pokemon",
     "price": 27,
@@ -98,6 +100,7 @@
   {
     "id": "prismatic-evolutions-figure-collection",
     "weightOz": 64,
+    "stock": 30,
     "name": "Prismatic Evolutions Figure Collection Case",
     "category": "pokemon",
     "price": 15,
@@ -117,6 +120,7 @@
   {
     "id": "151-prismatic-booster-bundle",
     "weightOz": 32,
+    "stock": 3,
     "name": "151 & Prismatic Evolutions Booster Bundle Display Case (fits 6-pack bundle)",
     "category": "pokemon",
     "price": 10.5,
@@ -137,6 +141,7 @@
   {
     "id": "japanese-regional-boxes-display",
     "weightOz": 64,
+    "stock": 0,
     "name": "Japanese Regional Boxes Display Case",
     "category": "pokemon",
     "price": 16,
@@ -156,6 +161,7 @@
   {
     "id": "mega-charizard-ex-upc",
     "weightOz": 80,
+    "stock": 10,
     "name": "Mega Charizard EX UPC Display Case",
     "category": "pokemon",
     "price": 30,
@@ -175,6 +181,7 @@
   {
     "id": "ascended-heros-booster-bundle",
     "weightOz": 32,
+    "stock": 40,
     "name": "Ascended Heroes Booster Bundle Display",
     "category": "pokemon",
     "price": 10.5,
@@ -195,6 +202,7 @@
   {
     "id": "sword-shield-upc",
     "weightOz": 80,
+    "stock": 16,
     "name": "Sword & Shield UPC Display Case",
     "category": "pokemon",
     "price": 27,
@@ -214,6 +222,7 @@
   {
     "id": "sealed-booster-box-6ct",
     "weightOz": 48,
+    "stock": 0,
     "pickupOnly": true,
     "name": "Sealed Booster Box Display Case (fits sealed 6-count box)",
     "category": "pokemon",
@@ -234,7 +243,8 @@
   {
     "id": "sealed-booster-bundle-display",
     "weightOz": 32,
-    "name": "Sealed Booster Bundle Display Case (Premium)",
+    "stock": 5,
+    "name": "Sealed Booster Bundle Display Case",
     "category": "pokemon",
     "price": 30,
     "compareAtPrice": null,
@@ -253,6 +263,7 @@
   {
     "id": "team-rocket-moltres-upc",
     "weightOz": 80,
+    "stock": 12,
     "name": "Team Rocket's Moltres ex UPC Display Case",
     "category": "pokemon",
     "price": 27,
@@ -272,6 +283,7 @@
   {
     "id": "costco-151-five-pack-tin",
     "weightOz": 64,
+    "stock": 0,
     "name": "Costco 151 Five-Pack Tin Display Case",
     "category": "pokemon",
     "price": 25,
@@ -291,6 +303,7 @@
   {
     "id": "mini-tin-ascended-heros",
     "weightOz": 32,
+    "stock": 11,
     "name": "Mini Tin Display Case \u2014 Ascended Heroes",
     "category": "pokemon",
     "price": 18,

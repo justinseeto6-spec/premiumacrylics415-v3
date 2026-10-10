@@ -16,6 +16,7 @@ async function loadPartials() {
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
   highlightActiveNav();
+  wireSoftLaunch();
   wireMobileNav();
   wireCartDrawer();
   renderCartDrawer(Cart.read());
@@ -24,6 +25,24 @@ async function loadPartials() {
   Cart.onChange(items => {
     renderCartDrawer(items);
     updateCartBadge();
+  });
+}
+
+// Soft-launch banner. Set SOFT_LAUNCH_BANNER to false to remove it everywhere. A visitor who
+// closes it won't see it again on this browser; change SOFT_LAUNCH_VERSION to show it to everyone again.
+const SOFT_LAUNCH_BANNER = true;
+const SOFT_LAUNCH_VERSION = 'v1';
+
+function wireSoftLaunch() {
+  const bar = document.getElementById('softLaunch');
+  if (!bar) return;
+  const key = 'pa415_softlaunch_' + SOFT_LAUNCH_VERSION;
+  let dismissed = false;
+  try { dismissed = localStorage.getItem(key) === '1'; } catch (e) { /* storage blocked: just show it */ }
+  if (!SOFT_LAUNCH_BANNER || dismissed) { bar.remove(); return; }
+  document.getElementById('softLaunchClose')?.addEventListener('click', () => {
+    bar.remove();
+    try { localStorage.setItem(key, '1'); } catch (e) { /* ignore */ }
   });
 }
 
