@@ -95,10 +95,10 @@ module.exports = async (req, res) => {
     }
     const inStock = Products.stockOf(p);
     if (p.stockGroup && inStock !== null && groupQty[p.stockGroup] > inStock) {
-      return fail(res, 400, `Only ${inStock} of these are available in total (they share one stock), and your order has ${groupQty[p.stockGroup]}.`);
+      return fail(res, 400, `We don't have that many of these in stock. Please lower the quantity or text us at 650-248-2473.`);
     }
     if (!p.stockGroup && inStock !== null && it.qty > inStock) {
-      return fail(res, 400, `Only ${inStock} of ${p.name} available.`);
+      return fail(res, 400, `We don't have that many ${p.name} in stock. Please lower the quantity or text us at 650-248-2473.`);
     }
   }
   const { lines } = Products.cartTotals(catalog, items);

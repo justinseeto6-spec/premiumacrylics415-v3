@@ -46,7 +46,7 @@
   const soldOutLabel = product.restock ? `Sold out &mdash; restock estimated ${product.restock}` : 'Sold out';
   const stockLabel = isSpecialOrder
     ? 'Special Order Only &mdash; contact us to order'
-    : (soldOut ? soldOutLabel : (stock !== null ? `${stock} available` : 'In stock, ready to ship'));
+    : (soldOut ? soldOutLabel : (Products.isLowStock(product) ? 'Low stock' : 'In stock, ready to ship'));
 
   root.innerHTML = `
     <div class="pdp">
@@ -154,9 +154,10 @@
     addBtn.disabled = out;
     checkoutBtn.disabled = out;
     addBtn.textContent = out ? 'Sold Out' : 'Add to Cart';
+    // Customers never see exact stock numbers: "Low stock" under 10, otherwise "In stock".
     stockText.innerHTML = soldOut ? soldOutLabel
-      : out ? `Sold out &mdash; all ${stock} are in your cart`
-      : (stock !== null ? `${left} available` : stockLabel);
+      : out ? 'Sold out &mdash; every available unit is in your cart'
+      : stockLabel;
     qtyInput.value = out ? 1 : wantedQty();
   }
 

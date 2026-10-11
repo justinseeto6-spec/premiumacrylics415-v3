@@ -32,6 +32,14 @@ const Products = {
     return typeof p.stock === 'number' ? p.stock : null;
   },
 
+  // Stock below this many units shows "Low stock" to customers. Exact numbers are never shown.
+  LOW_STOCK_UNDER: 10,
+
+  isLowStock(p) {
+    const s = this.stockOf(p);
+    return p.inStock !== false && s !== null && s > 0 && s < this.LOW_STOCK_UNDER;
+  },
+
   // Sold out = marked inStock:false, or a stock count (own or shared) of 0.
   isSoldOut(p) {
     const s = this.stockOf(p);
@@ -161,6 +169,7 @@ const Products = {
   statusBadge(p) {
     if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
     if (this.isSoldOut(p)) return { label: 'SOLD OUT', bg: 'var(--text-faint)', fg: '#fff' };
+    if (this.isLowStock(p)) return { label: 'LOW STOCK', bg: '#f5a524', fg: '#201400' };
     return null;
   },
 
