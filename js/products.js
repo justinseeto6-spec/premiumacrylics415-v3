@@ -76,6 +76,14 @@ const Products = {
     };
   },
 
+  // Items subtotal that is ELIGIBLE for the order discount: every cart line except products
+  // flagged "noDiscount": true in products.json (e.g. the Eevee gift box). Only eligible
+  // items count toward the tiers and only they are discounted.
+  eligibleSubtotal(lines) {
+    const cents = lines.reduce((s, l) => s + (l.product.noDiscount ? 0 : Math.round(l.lineTotal * 100)), 0);
+    return cents / 100;
+  },
+
   // Ounces -> "1 lb 4 oz" (used for the optional "weightOz" on each product).
   formatWeight(oz) {
     const total = Math.round(oz * 10) / 10;

@@ -180,6 +180,15 @@ button { font-family: inherit; cursor: pointer; }
   padding: 4px 8px;
 }
 
+/* Phones: keep the two top bars short so they do not eat the screen. */
+.sl-short, .ann-short { display: none; }
+@media (max-width: 600px) {
+  .sl-long, .ann-long, .ann-phone { display: none; }
+  .sl-short, .ann-short { display: inline; }
+  body .softlaunch { font-size: 0.8rem; padding: 7px 38px 7px 10px; }
+  body .announce { font-size: 0.74rem; letter-spacing: 0; padding: 6px 8px; }
+}
+
 /* ---------- Announcement bar ---------- */
 .announce {
   background: linear-gradient(90deg, #0b3a4a, #113a2e);

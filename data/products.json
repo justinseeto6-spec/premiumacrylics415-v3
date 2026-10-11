@@ -3,6 +3,7 @@
     "id": "eevee-and-friends-gift-box",
     "weightOz": 64,
     "pickupOnly": true,
+    "noDiscount": true,
     "name": "Eevee & Friends Gift Box with Acrylic Display Case (Chinese Exclusive)",
     "category": "pokemon",
     "price": 380,

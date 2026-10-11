@@ -83,7 +83,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   // Sales tax (rates + rules in js/tax.js): items only, rate follows the buyer's state (pick-up = home state).
   const taxPercent = () => Tax.rate(currentDelivery(), currentState());
   // Spend-more-save-more discount (tiers in js/products.js): off the items, before tax; shipping isn't discounted.
-  const discount = Products.discountFor(subtotal);
+  const discount = Products.discountFor(Products.eligibleSubtotal(cartLines));
   const taxAmount = () => Tax.cents(subtotal - discount.amount, currentDelivery(), currentState()) / 100;
 
   function updateTotals() {

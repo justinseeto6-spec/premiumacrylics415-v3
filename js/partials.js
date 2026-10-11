@@ -137,7 +137,7 @@ async function renderCartDrawer(items) {
   // Spend-more-save-more: tell the customer what they have earned and what is next.
   const discountNote = document.getElementById('cartDiscountNote');
   if (discountNote) {
-    const dsc = Products.discountFor(subtotal);
+    const dsc = Products.discountFor(Products.eligibleSubtotal(lines));
     const parts = [];
     if (dsc.percent > 0) parts.push(`${dsc.percent}% off your items (-${Products.formatPrice(dsc.amount)}) is applied at checkout.`);
     if (dsc.next) parts.push(`Add ${Products.formatPrice(dsc.next.toGo)} more to save ${dsc.next.percent}%.`);

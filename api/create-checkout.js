@@ -102,8 +102,9 @@ module.exports = async (req, res) => {
     }
   }
   const { lines, subtotal } = Products.cartTotals(catalog, items);
-  // Automatic spend-more-save-more discount (tiers in js/products.js), on the items subtotal.
-  const discount = Products.discountFor(subtotal);
+  // Automatic spend-more-save-more discount (tiers in js/products.js). Only ELIGIBLE items count
+  // toward the tiers and get the discount - products flagged "noDiscount" (the Eevee box) don't.
+  const discount = Products.discountFor(Products.eligibleSubtotal(lines));
 
   // Shipping is priced here from the cart weight (never from anything the browser sends).
   let shipQuote = null;
@@ -116,16 +117,21 @@ module.exports = async (req, res) => {
 
   // Square line items need a whole-cent price per unit, but bulk deals (e.g. 2 for $55)
   // don't always divide evenly - so each cart line is one Square line at its full total.
-  const lineItems = lines.map(l => ({
-    name: l.qty > 1 ? `${l.product.name} × ${l.qty}` : l.product.name,
-    quantity: '1',
-    base_price_money: { amount: toCents(l.lineTotal), currency: 'USD' }
-  }));
+  const lineItems = lines.map((l, i) => {
+    const li = {
+      name: l.qty > 1 ? `${l.product.name} × ${l.qty}` : l.product.name,
+      quantity: '1',
+      base_price_money: { amount: toCents(l.lineTotal), currency: 'USD' }
+    };
+    // The order discount is attached only to eligible lines.
+    if (discount.percent > 0 && !l.product.noDiscount) li.applied_discounts = [{ uid: `line-discount-${i}`, discount_uid: 'order-discount' }];
+    return li;
+  });
 
   const order = { location_id: locationId, line_items: lineItems };
   if (discount.percent > 0) {
     // Square takes this off the items before it figures sales tax.
-    order.discounts = [{ uid: 'order-discount', name: `Order discount (${discount.percent}% off)`, percentage: String(discount.percent), scope: 'ORDER' }];
+    order.discounts = [{ uid: 'order-discount', name: `Order discount (${discount.percent}% off)`, percentage: String(discount.percent), scope: 'LINE_ITEM' }];
   }
   // Sales tax on the items (rates and rules in js/tax.js): rate follows the buyer's state (pick-up = home state).
   const taxPercent = Tax.rate(delivery, shipState);
