@@ -137,12 +137,26 @@ async function renderCartDrawer(items) {
   // Spend-more-save-more: tell the customer what they have earned and what is next.
   const discountNote = document.getElementById('cartDiscountNote');
   if (discountNote) {
-    const dsc = Products.discountFor(Products.eligibleSubtotal(lines));
+    const dsc = Products.discountForLines(lines);
     const parts = [];
     if (dsc.percent > 0) parts.push(`${dsc.percent}% off your items (-${Products.formatPrice(dsc.amount)}) is applied at checkout.`);
     if (dsc.next) parts.push(`Add ${Products.formatPrice(dsc.next.toGo)} more to save ${dsc.next.percent}%.`);
     discountNote.textContent = parts.join(' ');
     discountNote.style.display = parts.length ? '' : 'none';
+
+    // Grand-opening gift: only mentioned while it is still available.
+    Products.promoStatus().then(s => {
+      const promo = Products.promo;
+      if (!s.available || !promo.active) return;
+      const giftProduct = products.find(p => p.id === promo.giftProductId);
+      if (!giftProduct) return;
+      const elig = Products.eligibleSubtotal(lines);
+      parts.push(elig >= promo.minSpend
+        ? `A free ${giftProduct.name} (${promo.title}) is added at checkout.`
+        : `Spend ${Products.formatPrice(Math.round((promo.minSpend - elig) * 100) / 100)} more for a free ${giftProduct.name} (${promo.title}).`);
+      discountNote.textContent = parts.join(' ');
+      discountNote.style.display = '';
+    });
   }
 
   container.querySelectorAll('.cart-item').forEach(row => {

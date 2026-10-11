@@ -50,6 +50,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
       <div class="cart-subtotal-row"><span>Items</span><span>${Products.formatPrice(subtotal)}</span></div>
       <div class="cart-subtotal-row" id="discountRow" style="margin-top:6px;display:none;color:var(--accent);"><span id="discountRowLabel">Order discount</span><span id="discountRowAmount"></span></div>
+      <div class="cart-subtotal-row" id="giftRow" style="margin-top:6px;display:none;color:var(--accent);"><span id="giftRowLabel">Free gift</span><span>$0.00</span></div>
       <div class="cart-subtotal-row" style="margin-top:6px;"><span id="shipRowLabel">Shipping</span><span id="shipRowAmount"></span></div>
       <div class="cart-subtotal-row" id="taxRow" style="margin-top:6px;display:none;"><span id="taxRowLabel">Sales tax</span><span id="taxRowAmount"></span></div>
       <div class="cart-subtotal-row" style="margin-top:10px;font-weight:700;"><span>Total</span><span id="orderTotalAmount"></span></div>
@@ -83,7 +84,15 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   // Sales tax (rates + rules in js/tax.js): items only, rate follows the buyer's state (pick-up = home state).
   const taxPercent = () => Tax.rate(currentDelivery(), currentState());
   // Spend-more-save-more discount (tiers in js/products.js): off the items, before tax; shipping isn't discounted.
-  const discount = Products.discountFor(Products.eligibleSubtotal(cartLines));
+  const discount = Products.discountForLines(cartLines);
+
+  // Grand-opening gift (settings in Products.promo): shown only while /api/promo-status says it is
+  // still available. The real count is checked again by Square when the customer pays.
+  const promo = Products.promo;
+  const giftProduct = products.find(p => p.id === promo.giftProductId);
+  const eligibleNow = Products.eligibleSubtotal(cartLines);
+  const promoQualifies = promo.active && eligibleNow >= promo.minSpend;
+  let promoAvailable = false;
   const taxAmount = () => Tax.cents(subtotal - discount.amount, currentDelivery(), currentState()) / 100;
 
   function updateTotals() {
@@ -105,7 +114,12 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     }
     document.getElementById('orderTotalAmount').textContent = Products.formatPrice(subtotal - discount.amount + shippingFee() + taxAmount());
 
-    let note = discount.next ? `Add ${Products.formatPrice(discount.next.toGo)} more to save ${discount.next.percent}% on your items. ` : '';
+    const showGift = promoAvailable && promoQualifies && !!giftProduct;
+    document.getElementById('giftRow').style.display = showGift ? '' : 'none';
+    if (showGift) document.getElementById('giftRowLabel').textContent = `Free gift (${promo.title}): ${giftProduct.name}`;
+
+    let note = (promoAvailable && !promoQualifies && giftProduct) ? `Spend ${Products.formatPrice(Math.round((promo.minSpend - eligibleNow) * 100) / 100)} more to get a free ${giftProduct.name} (${promo.title}, while available). ` : '';
+    note += discount.next ? `Add ${Products.formatPrice(discount.next.toGo)} more to save ${discount.next.percent}% on your items. ` : '';
     note += d === 'ship'
       ? `Shipping is based on your order's weight (${shipWeightText}) and is paid with your order.`
       : d === 'ship-label' ? 'You buy the label yourself, so we charge nothing for shipping. See the box size and weight in that option.'
@@ -121,6 +135,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   [pickupRadio, shipRadio, labelRadio].forEach(r => r.addEventListener('change', updateTotals));
   stateSelect.addEventListener('change', updateTotals);
   updateTotals();
+  Products.promoStatus().then(s => { promoAvailable = !!s.available; updateTotals(); });
   // Box size + estimated weights to use when buying a label (the "send my own label" option).
   const labelDetails = document.getElementById('labelDetails');
   if (labelDetails) {
@@ -163,11 +178,12 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     }
 
     const delivery = currentDelivery();
+    const giftText = (promoAvailable && promoQualifies && giftProduct) ? `\nFREE GIFT (${promo.title}, while available): ${giftProduct.name}` : '';
     const discountText = discount.percent > 0 ? `\nOrder discount (${discount.percent}% off): -${Products.formatPrice(discount.amount)}` : '';
     const shippingText = delivery === 'ship' ? `Shipping (flat rate, ${shipWeightText}): ${Products.formatPrice(shippingFee())}`
       : delivery === 'ship-label' ? 'Shipping: customer will send their own label'
       : 'Local pick-up (no shipping)';
-    document.getElementById('orderSummaryField').value = `${orderSummaryText}${discountText}\n${shippingText}`;
+    document.getElementById('orderSummaryField').value = `${orderSummaryText}${giftText}${discountText}\n${shippingText}`;
     document.getElementById('orderTotalField').value = Products.formatPrice(subtotal - discount.amount + shippingFee() + taxAmount());
     document.getElementById('taxField').value = taxPercent() > 0 ? `${taxPercent()}% = ${Products.formatPrice(taxAmount())}` : 'none';
     document.getElementById('shippingField').value = shippingText;

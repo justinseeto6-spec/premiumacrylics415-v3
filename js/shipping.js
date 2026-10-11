@@ -15,6 +15,10 @@
  *   6-12 lb      2 UPCs ship mostly by UPS: avg $22.95, high $28.57 -> $28 (raised Oct 2026
  *                so 2-UPC orders do not eat into profit)
  *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $34
+ *   20-25 lb     ESTIMATE $42, 25-30 lb ESTIMATE $48 (about $1 more per extra lb; added Oct 2026,
+ *                no real labels this heavy yet - compare against Pirate Ship and adjust)
+ *   30-40 lb     $65, from a real label: 8 UPCs (~40 lb) CA -> Massachusetts, UPS Ground, $63.35.
+ *                Far zones cost this much; near zones cost less, so nearby buyers pay a bit extra.
  * A heavier band should never cost less than a lighter one. Review the prices every few
  * months against your Pirate Ship costs.
  */
@@ -24,7 +28,10 @@ const Shipping = {
     { maxLb: 4, price: 9.75 },    // 1 ETB, 1 booster bundle, 1 tin
     { maxLb: 6, price: 15.5 },   // 1 UPC, 2 ETBs
     { maxLb: 12, price: 28 },     // 2 UPCs, 3 ETBs
-    { maxLb: 20, price: 34 }       // 5 ETBs, 3-4 UPCs
+    { maxLb: 20, price: 34 },      // 5 ETBs, 3-4 UPCs
+    { maxLb: 25, price: 42 },      // 4-5 UPCs  (estimate - no real labels this heavy yet)
+    { maxLb: 30, price: 48 },      // 5-6 UPCs  (estimate - no real labels this heavy yet)
+    { maxLb: 40, price: 65 }       // 7-8 UPCs  (real: 8 UPCs to MA by UPS Ground cost $63.35)
   ],
 
   // Ships to US addresses only.

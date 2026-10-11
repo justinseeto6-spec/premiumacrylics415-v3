@@ -47,7 +47,10 @@ const Tax = {
 
   // Tax in whole cents on an items subtotal given in dollars.
   cents(itemsDollars, delivery, state) {
-    return Math.round(itemsDollars * this.rate(delivery, state));  // dollars * percent = cents
+    // Rounded the way Square does it: an exact half-cent goes to the even cent.
+    const num = Math.round(itemsDollars * 100) * Math.round(this.rate(delivery, state) * 1000);
+    const q = Math.floor(num / 100000), twice = (num - q * 100000) * 2;
+    return twice > 100000 ? q + 1 : (twice < 100000 ? q : (q % 2 === 0 ? q : q + 1));
   }
 };
 

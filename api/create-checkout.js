@@ -18,6 +18,7 @@ const path = require('path');
 const Products = require('../js/products.js');
 const Shipping = require('../js/shipping.js');
 const Tax = require('../js/tax.js');
+const PromoCounter = require('./_promo.js');
 const config = require('./_config.js');
 
 const SQUARE_VERSION = '2025-01-23';
@@ -104,7 +105,23 @@ module.exports = async (req, res) => {
   const { lines, subtotal } = Products.cartTotals(catalog, items);
   // Automatic spend-more-save-more discount (tiers in js/products.js). Only ELIGIBLE items count
   // toward the tiers and get the discount - products flagged "noDiscount" (the Eevee box) don't.
-  const discount = Products.discountFor(Products.eligibleSubtotal(lines));
+  const discount = Products.discountForLines(lines);
+
+  // Grand-opening gift (settings in Products.promo): a free item on a qualifying order, but only
+  // while Square's count of PAID promo orders is still under the limit (see api/_promo.js).
+  const promo = Products.promo;
+  let gift = null;
+  let promoResult = 'not-qualified';
+  if (promo && promo.active && Products.eligibleSubtotal(lines) >= promo.minSpend) {
+    const giftProduct = catalog.find(p => p.id === promo.giftProductId);
+    if (!giftProduct) {
+      promoResult = 'no-gift-product';
+    } else {
+      const st = await PromoCounter.status();
+      promoResult = st.available ? 'gift-added' : st.reason;
+      if (st.available) gift = giftProduct;
+    }
+  }
 
   // Shipping is priced here from the cart weight (never from anything the browser sends).
   let shipQuote = null;
@@ -127,8 +144,11 @@ module.exports = async (req, res) => {
     if (discount.percent > 0 && !l.product.noDiscount) li.applied_discounts = [{ uid: `line-discount-${i}`, discount_uid: 'order-discount' }];
     return li;
   });
+  // The free gift is a $0 line. Its order carries the promo tag so Square can count it later.
+  if (gift) lineItems.push({ name: `FREE GIFT: ${gift.name} (${promo.title})`, quantity: '1', base_price_money: { amount: 0, currency: 'USD' } });
 
   const order = { location_id: locationId, line_items: lineItems };
+  if (gift) order.metadata = { promo: promo.tag };
   if (discount.percent > 0) {
     // Square takes this off the items before it figures sales tax.
     order.discounts = [{ uid: 'order-discount', name: `Order discount (${discount.percent}% off)`, percentage: String(discount.percent), scope: 'LINE_ITEM' }];
@@ -155,7 +175,7 @@ module.exports = async (req, res) => {
     checkout_options: checkoutOptions,
     payment_note: (shipQuote
       ? `${DELIVERY_NOTES[delivery]} - $${shipQuote.fee.toFixed(2)} for about ${(shipQuote.weightOz / 16).toFixed(1)} lb`
-      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`) + (discount.percent > 0 ? ` | ${discount.percent}% order discount` : '')
+      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`) + (discount.percent > 0 ? ` | ${discount.percent}% order discount` : '') + (gift ? ` | ${promo.title} gift: ${gift.name}` : '')
   };
 
   // ---- ask Square for the payment page ----
@@ -178,7 +198,7 @@ module.exports = async (req, res) => {
     // The total Square calculated (items + shipping + tax), so it can be checked against ours.
     const sqOrder = data.related_resources && data.related_resources.orders && data.related_resources.orders[0];
     const money = m => (m && typeof m.amount === 'number') ? m.amount / 100 : null;
-    return res.status(200).json({ url, total: sqOrder ? money(sqOrder.total_money) : null, tax: sqOrder ? money(sqOrder.total_tax_money) : null });
+    return res.status(200).json({ url, total: sqOrder ? money(sqOrder.total_money) : null, tax: sqOrder ? money(sqOrder.total_tax_money) : null, promo: promoResult });
   } catch (err) {
     console.error('Square request failed', err);
     return fail(res, 502, 'We couldn\'t reach the payment service. Please try again or text us at 650-248-2473.');

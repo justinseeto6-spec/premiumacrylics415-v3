@@ -67,13 +67,61 @@ const Products = {
     let tier = null;
     for (const t of tiers) if (itemsDollars >= t.minSpend - 1e-9) tier = t;
     const next = tiers.find(t => itemsDollars < t.minSpend - 1e-9) || null;
-    const cents = tier ? Math.round(itemsDollars * tier.percent) : 0;   // dollars * percent = cents
+    const cents = tier ? this.percentOfCents(Math.round(itemsDollars * 100), tier.percent) : 0;
     return {
       percent: tier ? tier.percent : 0,
       cents,
       amount: cents / 100,
       next: next ? { minSpend: next.minSpend, percent: next.percent, toGo: Math.round((next.minSpend - itemsDollars) * 100) / 100 } : null
     };
+  },
+
+  // ---- Grand-opening promo: "first 5 orders over $75 get a free ETB case" ----
+  // EDIT HERE. The gift is added automatically to a qualifying order only while fewer than
+  // `limit` promo orders have been PAID. Square keeps the count (api/_promo.js asks Square),
+  // so there is nothing to update by hand. To end the promo early, set active to false.
+  //   minSpend       counted on discount-eligible items, BEFORE the 10%/15% discount
+  //   giftProductId  the free item (its weight is not added to shipping - you absorb it)
+  //   startsAt       Square orders created before this are not searched
+  promo: {
+    active: true,
+    tag: 'grand-opening',
+    title: 'Grand opening',
+    minSpend: 75,
+    giftProductId: 'elite-trainer-box-standard',
+    limit: 5,
+    startsAt: '2026-10-10T00:00:00-07:00'
+  },
+
+  _promo: null,
+  // Is the promo still available? (asks /api/promo-status once per page; never shows a count)
+  promoStatus() {
+    if (!this._promo) {
+      this._promo = fetch('/api/promo-status').then(r => (r.ok ? r.json() : { available: false })).catch(() => ({ available: false }));
+    }
+    return this._promo;
+  },
+
+  // percent of an amount in cents, rounded to a whole cent the way Square does it:
+  // an exact half-cent goes to the EVEN cent (so 37.525 -> 37.52 and 24.375 -> 24.38).
+  percentOfCents(cents, percent) {
+    const num = cents * Math.round(percent * 1000);          // percent in thousandths
+    const q = Math.floor(num / 100000);
+    const twiceRemainder = (num - q * 100000) * 2;
+    if (twiceRemainder > 100000) return q + 1;
+    if (twiceRemainder < 100000) return q;
+    return q % 2 === 0 ? q : q + 1;
+  },
+
+  // Order discount for a cart (lines from cartTotals). Square rounds the discount on each
+  // eligible line separately, so we do the same to match it to the cent.
+  discountForLines(lines) {
+    const d = this.discountFor(this.eligibleSubtotal(lines));
+    if (d.percent > 0) {
+      d.cents = lines.filter(l => !l.product.noDiscount).reduce((s, l) => s + this.percentOfCents(Math.round(l.lineTotal * 100), d.percent), 0);
+      d.amount = d.cents / 100;
+    }
+    return d;
   },
 
   // Items subtotal that is ELIGIBLE for the order discount: every cart line except products
