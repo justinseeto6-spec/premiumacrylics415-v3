@@ -49,6 +49,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     ${rows}
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
       <div class="cart-subtotal-row"><span>Items</span><span>${Products.formatPrice(subtotal)}</span></div>
+      <div class="cart-subtotal-row" id="discountRow" style="margin-top:6px;display:none;color:var(--accent);"><span id="discountRowLabel">Order discount</span><span id="discountRowAmount"></span></div>
       <div class="cart-subtotal-row" style="margin-top:6px;"><span id="shipRowLabel">Shipping</span><span id="shipRowAmount"></span></div>
       <div class="cart-subtotal-row" id="taxRow" style="margin-top:6px;display:none;"><span id="taxRowLabel">Sales tax</span><span id="taxRowAmount"></span></div>
       <div class="cart-subtotal-row" style="margin-top:10px;font-weight:700;"><span>Total</span><span id="orderTotalAmount"></span></div>
@@ -81,7 +82,9 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   const shippingFee = () => currentDelivery() === 'ship' && shipQuote.ok ? shipQuote.fee : 0;
   // Sales tax (rates + rules in js/tax.js): items only, rate follows the buyer's state (pick-up = home state).
   const taxPercent = () => Tax.rate(currentDelivery(), currentState());
-  const taxAmount = () => Tax.cents(subtotal, currentDelivery(), currentState()) / 100;
+  // Spend-more-save-more discount (tiers in js/products.js): off the items, before tax; shipping isn't discounted.
+  const discount = Products.discountFor(subtotal);
+  const taxAmount = () => Tax.cents(subtotal - discount.amount, currentDelivery(), currentState()) / 100;
 
   function updateTotals() {
     const d = currentDelivery();
@@ -95,9 +98,15 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
       document.getElementById('taxRowLabel').textContent = `Sales tax (${pct}%)`;
       document.getElementById('taxRowAmount').textContent = Products.formatPrice(taxAmount());
     }
-    document.getElementById('orderTotalAmount').textContent = Products.formatPrice(subtotal + shippingFee() + taxAmount());
+    document.getElementById('discountRow').style.display = discount.percent > 0 ? '' : 'none';
+    if (discount.percent > 0) {
+      document.getElementById('discountRowLabel').textContent = `Order discount (${discount.percent}% off)`;
+      document.getElementById('discountRowAmount').textContent = '-' + Products.formatPrice(discount.amount);
+    }
+    document.getElementById('orderTotalAmount').textContent = Products.formatPrice(subtotal - discount.amount + shippingFee() + taxAmount());
 
-    let note = d === 'ship'
+    let note = discount.next ? `Add ${Products.formatPrice(discount.next.toGo)} more to save ${discount.next.percent}% on your items. ` : '';
+    note += d === 'ship'
       ? `Shipping is based on your order's weight (${shipWeightText}) and is paid with your order.`
       : d === 'ship-label' ? 'You buy the label yourself, so we charge nothing for shipping. See the box size and weight in that option.'
       : 'Pick-up is free.';
@@ -154,11 +163,12 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     }
 
     const delivery = currentDelivery();
+    const discountText = discount.percent > 0 ? `\nOrder discount (${discount.percent}% off): -${Products.formatPrice(discount.amount)}` : '';
     const shippingText = delivery === 'ship' ? `Shipping (flat rate, ${shipWeightText}): ${Products.formatPrice(shippingFee())}`
       : delivery === 'ship-label' ? 'Shipping: customer will send their own label'
       : 'Local pick-up (no shipping)';
-    document.getElementById('orderSummaryField').value = `${orderSummaryText}\n${shippingText}`;
-    document.getElementById('orderTotalField').value = Products.formatPrice(subtotal + shippingFee() + taxAmount());
+    document.getElementById('orderSummaryField').value = `${orderSummaryText}${discountText}\n${shippingText}`;
+    document.getElementById('orderTotalField').value = Products.formatPrice(subtotal - discount.amount + shippingFee() + taxAmount());
     document.getElementById('taxField').value = taxPercent() > 0 ? `${taxPercent()}% = ${Products.formatPrice(taxAmount())}` : 'none';
     document.getElementById('shippingField').value = shippingText;
 

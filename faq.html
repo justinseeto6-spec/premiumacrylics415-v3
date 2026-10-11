@@ -35,6 +35,9 @@
       <div class="faq-answer"><p>In-stock orders ship within 24 hours, excluding Sundays. Custom orders may take longer — we'll confirm a timeline with you before starting.</p></div>
     </div>
     <div class="faq-item">
+      <div class="faq-question"><span>Do you offer discounts?</span><span class="chev">&#9662;</span></div>
+      <div class="faq-answer"><p>Yes. Our discount is automatic, with no code needed: <span id="faqDiscountTiers">bigger orders save more</span>. It comes off your items (not shipping) and also stacks with our bulk prices.</p></div>
+    </div>    <div class="faq-item">
       <div class="faq-question"><span>Do you accept returns or exchanges?</span><span class="chev">▾</span></div>
       <div class="faq-answer"><p>Yes — see our full <a href="/shipping-returns.html" style="color:var(--accent);">Shipping &amp; Returns</a> page for details. If something arrives damaged or isn't right, message us and we'll make it right.</p></div>
     </div>
@@ -55,6 +58,12 @@
 <script src="/js/products.js"></script>
 <script src="/js/checkout.js"></script>
 <script src="/js/partials.js"></script>
+<script>
+  (() => {
+    const el = document.getElementById('faqDiscountTiers');
+    if (el && window.Products) el.textContent = Products.discountTiers.map(t => `spend $${t.minSpend} or more and save ${t.percent}%`).join('; ');
+  })();
+</script>
 <script>
   document.querySelectorAll('.faq-question').forEach(q => {
     q.addEventListener('click', () => q.parentElement.classList.toggle('open'));

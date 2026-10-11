@@ -134,6 +134,17 @@ async function renderCartDrawer(items) {
   container.innerHTML = rows;
   if (subtotalEl) subtotalEl.textContent = Products.formatPrice(subtotal);
 
+  // Spend-more-save-more: tell the customer what they have earned and what is next.
+  const discountNote = document.getElementById('cartDiscountNote');
+  if (discountNote) {
+    const dsc = Products.discountFor(subtotal);
+    const parts = [];
+    if (dsc.percent > 0) parts.push(`${dsc.percent}% off your items (-${Products.formatPrice(dsc.amount)}) is applied at checkout.`);
+    if (dsc.next) parts.push(`Add ${Products.formatPrice(dsc.next.toGo)} more to save ${dsc.next.percent}%.`);
+    discountNote.textContent = parts.join(' ');
+    discountNote.style.display = parts.length ? '' : 'none';
+  }
+
   container.querySelectorAll('.cart-item').forEach(row => {
     const id = row.dataset.id;
     const item = items.find(i => i.id === id);

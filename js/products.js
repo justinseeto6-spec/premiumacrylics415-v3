@@ -51,6 +51,31 @@ const Products = {
     return products.find(p => p.id === id);
   },
 
+  // ---- Spend more, save more (automatic order discount) ----
+  // EDIT THE TIERS HERE: the highest tier whose minSpend is reached applies. The discount
+  // comes off the ITEMS subtotal, after bulk / mix-and-match prices (so it stacks with
+  // them). Shipping is never discounted, and sales tax is charged on the discounted amount.
+  discountTiers: [
+    { minSpend: 100, percent: 10 },
+    { minSpend: 150, percent: 15 }
+  ],
+
+  // itemsDollars = cart items subtotal. Returns the discount that applies and, if there is a
+  // higher tier, how much more the customer must spend to reach it.
+  discountFor(itemsDollars) {
+    const tiers = this.discountTiers.slice().sort((a, b) => a.minSpend - b.minSpend);
+    let tier = null;
+    for (const t of tiers) if (itemsDollars >= t.minSpend - 1e-9) tier = t;
+    const next = tiers.find(t => itemsDollars < t.minSpend - 1e-9) || null;
+    const cents = tier ? Math.round(itemsDollars * tier.percent) : 0;   // dollars * percent = cents
+    return {
+      percent: tier ? tier.percent : 0,
+      cents,
+      amount: cents / 100,
+      next: next ? { minSpend: next.minSpend, percent: next.percent, toGo: Math.round((next.minSpend - itemsDollars) * 100) / 100 } : null
+    };
+  },
+
   // Ounces -> "1 lb 4 oz" (used for the optional "weightOz" on each product).
   formatWeight(oz) {
     const total = Math.round(oz * 10) / 10;

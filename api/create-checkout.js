@@ -101,7 +101,9 @@ module.exports = async (req, res) => {
       return fail(res, 400, `We don't have that many ${p.name} in stock. Please lower the quantity or text us at 650-248-2473.`);
     }
   }
-  const { lines } = Products.cartTotals(catalog, items);
+  const { lines, subtotal } = Products.cartTotals(catalog, items);
+  // Automatic spend-more-save-more discount (tiers in js/products.js), on the items subtotal.
+  const discount = Products.discountFor(subtotal);
 
   // Shipping is priced here from the cart weight (never from anything the browser sends).
   let shipQuote = null;
@@ -121,6 +123,10 @@ module.exports = async (req, res) => {
   }));
 
   const order = { location_id: locationId, line_items: lineItems };
+  if (discount.percent > 0) {
+    // Square takes this off the items before it figures sales tax.
+    order.discounts = [{ uid: 'order-discount', name: `Order discount (${discount.percent}% off)`, percentage: String(discount.percent), scope: 'ORDER' }];
+  }
   // Sales tax on the items (rates and rules in js/tax.js): rate follows the buyer's state (pick-up = home state).
   const taxPercent = Tax.rate(delivery, shipState);
   if (taxPercent > 0) {
@@ -143,7 +149,7 @@ module.exports = async (req, res) => {
     checkout_options: checkoutOptions,
     payment_note: (shipQuote
       ? `${DELIVERY_NOTES[delivery]} - $${shipQuote.fee.toFixed(2)} for about ${(shipQuote.weightOz / 16).toFixed(1)} lb`
-      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`)
+      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`) + (discount.percent > 0 ? ` | ${discount.percent}% order discount` : '')
   };
 
   // ---- ask Square for the payment page ----
