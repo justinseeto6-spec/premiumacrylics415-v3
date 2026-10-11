@@ -56,6 +56,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
       <div class="cart-subtotal-row" style="margin-top:10px;font-weight:700;"><span>Total</span><span id="orderTotalAmount"></span></div>
     </div>
     <p class="cart-note" id="shipRowNote" style="text-align:left;margin-top:10px;"></p>
+    <p class="cart-note" id="labelHint" style="text-align:left;margin-top:6px;display:none;">Shipping too high? <a href="#deliveryLabel" id="labelHintLink" style="color:var(--accent);">Send your own shipping label instead</a> — Pirate Ship members save up to 60%.</p>
   `;
   // ---- Delivery choice + shipping price (prices live in js/shipping.js) ----
   const pickupRadio = document.getElementById('deliveryPickup');
@@ -65,7 +66,9 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   const shipWeightText = shipQuote.ok ? `about ${Products.formatWeight(shipQuote.weightOz)}` : '';
 
   if (shipQuote.ok) {
-    document.getElementById('shipOptionText').innerHTML = `Ship to me &mdash; ${Products.formatPrice(shipQuote.fee)} shipping (flat rate, ${shipWeightText})`;
+    document.getElementById('shipOptionText').innerHTML = shipQuote.fee === 0
+      ? 'Ship to me &mdash; shipping included'
+      : `Ship to me &mdash; ${Products.formatPrice(shipQuote.fee)} shipping (flat rate, ${shipWeightText})`;
   } else {
     // Too heavy (or a product has no weight): can't be priced online.
     document.getElementById('shipOptionText').innerHTML = `Ship to me &mdash; text us at ${Shipping.contactPhone} for a shipping quote`;
@@ -99,7 +102,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     const d = currentDelivery();
     stateSelect.required = d !== 'pickup';
     document.getElementById('shipRowLabel').textContent = d === 'ship' ? 'Shipping' : d === 'ship-label' ? 'Shipping (your own label)' : 'Local pick-up';
-    document.getElementById('shipRowAmount').textContent = d === 'ship' ? Products.formatPrice(shippingFee()) : d === 'pickup' ? 'Free' : '$0.00';
+    document.getElementById('shipRowAmount').textContent = d === 'ship' ? (shippingFee() === 0 ? 'Included' : Products.formatPrice(shippingFee())) : d === 'pickup' ? 'Free' : '$0.00';
 
     const pct = taxPercent();
     document.getElementById('taxRow').style.display = pct > 0 ? '' : 'none';
@@ -131,9 +134,16 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
         : ` No sales tax is charged for ${Tax.states[currentState()]}.`;
     }
     document.getElementById('shipRowNote').textContent = note;
+    document.getElementById('labelHint').style.display = (d === 'ship' && !labelRadio.disabled) ? '' : 'none';
   }
   [pickupRadio, shipRadio, labelRadio].forEach(r => r.addEventListener('change', updateTotals));
   stateSelect.addEventListener('change', updateTotals);
+  document.getElementById('labelHintLink').addEventListener('click', e => {
+    e.preventDefault();
+    const box = labelRadio.closest('.delivery-option');
+    box.click();
+    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
   updateTotals();
   Products.promoStatus().then(s => { promoAvailable = !!s.available; updateTotals(); });
   // Box size + estimated weights to use when buying a label (the "send my own label" option).
@@ -155,7 +165,8 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   // A pick-up-only product (data/products.json: "pickupOnly": true) can't be shipped, so
   // when one is in the cart the shipping options are turned off and pick-up is selected.
   const pickupOnlyNames = cartLines.filter(l => l.product.pickupOnly).map(l => l.product.name);
-  if (pickupOnlyNames.length) {
+  const shipIncludedNames = cartLines.filter(l => l.product.shippingIncluded).map(l => l.product.name);
+  if (pickupOnlyNames.length && !shipIncludedNames.length) {
     ['deliveryLabel', 'deliveryShip'].forEach(id => {
       const r = document.getElementById(id);
       r.disabled = true;
@@ -166,6 +177,30 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     pickupRadio.dispatchEvent(new Event('change'));
     document.querySelector('.delivery-options').insertAdjacentHTML('beforebegin',
       `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">Local pick-up only: ${pickupOnlyNames.join(', ')} can't be shipped. Shipping options are off while it's in your cart.</p>`);
+  }
+  // A shipping-included product (products.json: "shippingIncluded": true, e.g. the UPC 2-pack) has
+  // its shipping built into the price, so it can only be SHIPPED: pick-up and own-label are turned
+  // off while one is in the cart. If that can't work (pick-up-only item in the cart, or too heavy
+  // to price), say so and block checkout instead of letting the customer pay for a bad order.
+  if (shipIncludedNames.length) {
+    const block = (msg) => {
+      document.querySelector('.delivery-options').insertAdjacentHTML('beforebegin',
+        `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">${msg}</p>`);
+      ['squarePayBtn', 'submitOrderBtn'].forEach(id => { const b = document.getElementById(id); if (b) b.disabled = true; });
+    };
+    if (pickupOnlyNames.length) {
+      block(`${pickupOnlyNames.join(', ')} is pick-up only, but ${shipIncludedNames.join(', ')} ships only. Please order them separately.`);
+    } else if (!shipQuote.ok) {
+      block(`This order is too heavy to price online. Text us at ${Shipping.contactPhone} for a shipping quote.`);
+    } else {
+      pickupRadio.disabled = true; labelRadio.disabled = true;
+      pickupRadio.closest('.delivery-option').style.opacity = '0.45';
+      labelRadio.closest('.delivery-option').style.opacity = '0.45';
+      shipRadio.checked = true;
+      shipRadio.dispatchEvent(new Event('change', { bubbles: true }));
+      document.querySelector('.delivery-options').insertAdjacentHTML('beforebegin',
+        `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">${shipIncludedNames.join(', ')} has shipping included, so it ships only. For pick-up or your own shipping label, choose the regular UPC case instead.</p>`);
+    }
   }
   const orderSummaryText = lines.join('\n');
 

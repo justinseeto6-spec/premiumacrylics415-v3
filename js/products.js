@@ -55,6 +55,9 @@ const Products = {
   // EDIT THE TIERS HERE: the highest tier whose minSpend is reached applies. The discount
   // comes off the ITEMS subtotal, after bulk / mix-and-match prices (so it stacks with
   // them). Shipping is never discounted, and sales tax is charged on the discounted amount.
+  // Master switch. false = no spend-more-save-more discount anywhere (checkout, cart, Square, FAQ).
+  // Paused 2026-10-11 while prices are set to beat eBay. Set to true to turn the tiers back on.
+  discountsActive: false,
   discountTiers: [
     { minSpend: 100, percent: 10 },
     { minSpend: 150, percent: 15 }
@@ -63,7 +66,7 @@ const Products = {
   // itemsDollars = cart items subtotal. Returns the discount that applies and, if there is a
   // higher tier, how much more the customer must spend to reach it.
   discountFor(itemsDollars) {
-    const tiers = this.discountTiers.slice().sort((a, b) => a.minSpend - b.minSpend);
+    const tiers = this.discountsActive ? this.discountTiers.slice().sort((a, b) => a.minSpend - b.minSpend) : [];
     let tier = null;
     for (const t of tiers) if (itemsDollars >= t.minSpend - 1e-9) tier = t;
     const next = tiers.find(t => itemsDollars < t.minSpend - 1e-9) || null;

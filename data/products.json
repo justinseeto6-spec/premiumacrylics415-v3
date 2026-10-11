@@ -52,6 +52,34 @@
     "featured": true
   },
   {
+    "id": "30th-anniversary-upc-2pack",
+    "weightOz": 160,
+    "stock": 5,
+    "noDiscount": true,
+    "shippingIncluded": true,
+    "name": "30th Anniversary UPC 2-Pack (Shipping Included)",
+    "category": "pokemon",
+    "price": 67,
+    "compareAtPrice": null,
+    "image": "/images/30th-anniversary-upc-3.jpg",
+    "images": [
+      "/images/30th-anniversary-upc-3.jpg",
+      "/images/30th-anniversary-upc-1.jpg",
+      "/images/30th-anniversary-upc-2.jpg"
+    ],
+    "shortDescription": "Two crystal-clear cases for the Pokémon 30th Anniversary Ultra Premium Collection, with shipping already included.",
+    "description": "Two precision-fit, crystal-clear acrylic display cases for the Pokémon 30th Anniversary Ultra Premium Collection, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
+    "specs": [
+      "Includes: 2 acrylic display cases for the Pokémon 30th Anniversary UPC",
+      "Shipping included (US addresses). This offer ships only; for pick-up or your own shipping label, choose the regular 30th Anniversary UPC case",
+      "Material: 5mm + 8mm premium cast acrylic",
+      "Finish: Crystal clear, scratch-resistant",
+      "Assembly: No Assembly Required"
+    ],
+    "inStock": true,
+    "featured": false
+  },
+  {
     "id": "pokemon-center-30th-etb",
     "weightOz": 56,
     "stock": 0,
@@ -201,6 +229,29 @@
     "featured": false
   },
   {
+    "id": "ascended-heros-booster-bundle-3pack",
+    "weightOz": 96,
+    "stock": 10,
+    "noDiscount": true,
+    "shippingIncluded": true,
+    "name": "Ascended Heroes Booster Bundle Display 3-Pack (Shipping Included)",
+    "category": "pokemon",
+    "price": 38.99,
+    "compareAtPrice": null,
+    "image": "/images/ascended-heros-booster-bundle.jpg",
+    "shortDescription": "Three crystal-clear cases for Ascended Heroes booster bundles, with shipping already included.",
+    "description": "Three precision-fit, crystal-clear acrylic display cases for Ascended Heroes booster bundles, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
+    "specs": [
+      "Includes: 3 acrylic display cases for Ascended Heroes booster bundles",
+      "Shipping included (US addresses). This offer ships only; for pick-up or your own shipping label, choose the regular Ascended Heroes booster bundle case",
+      "Material: 5mm + 8mm premium cast acrylic",
+      "Finish: Crystal clear",
+      "Assembly: No Assembly Required"
+    ],
+    "inStock": true,
+    "featured": false
+  },
+  {
     "id": "sword-shield-upc",
     "weightOz": 80,
     "stock": 16,
@@ -247,7 +298,7 @@
     "stock": 5,
     "name": "Sealed Booster Bundle Display Case",
     "category": "pokemon",
-    "price": 30,
+    "price": 27,
     "compareAtPrice": null,
     "image": "/images/sealed-booster-bundle-display.jpg",
     "shortDescription": "Premium display case for a sealed booster bundle.",

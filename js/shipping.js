@@ -11,7 +11,8 @@
  * Prices = the average real label cost for each kind of order (Pirate Ship shipments,
  * Jul-Oct 2026) plus a cushion for carrier adjustments and far-away orders:
  *   up to 4 lb   avg ~$8.50   -> $9.75  (+15%)
- *   4-6 lb       avg ~$13.50  -> $15.50 (+15%)
+ *   4-6 lb       avg ~$13.50  -> $13.50 (no cushion; was $15.50 until 2026-10-11, lowered so a single UPC
+ *                ships for less than the same case on eBay)
  *   6-12 lb      2 UPCs ship mostly by UPS: avg $22.95, high $28.57 -> $28 (raised Oct 2026
  *                so 2-UPC orders do not eat into profit)
  *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $34
@@ -26,7 +27,7 @@
 const Shipping = {
   bands: [
     { maxLb: 4, price: 9.75 },    // 1 ETB, 1 booster bundle, 1 tin
-    { maxLb: 6, price: 15.5 },   // 1 UPC, 2 ETBs
+    { maxLb: 6, price: 13.5 },   // 1 UPC (lowered from $15.50 on 2026-10-11 to beat eBay)
     { maxLb: 12, price: 28 },     // 2 UPCs, 3 ETBs
     { maxLb: 20, price: 34 },      // 5 ETBs, 3-4 UPCs
     { maxLb: 25, price: 42 },      // 4-5 UPCs  (estimate - no real labels this heavy yet)
@@ -44,19 +45,31 @@ const Shipping = {
     return lo === null ? `Up to ${hi} lb` : `${lo + 0.1} to ${hi} lb`;
   },
 
+  // Price for a total weight in ounces, or null if it is heavier than the last band.
+  feeForOz(oz) {
+    if (oz <= 0) return { fee: 0, bandIndex: -1 };
+    const bandIndex = this.bands.findIndex(b => oz / 16 <= b.maxLb + 1e-9);
+    return bandIndex === -1 ? null : { fee: this.bands[bandIndex].price, bandIndex };
+  },
+
   // lines: [{ product, qty }] (from Products.cartTotals). Returns
   //   { ok: true, fee, weightOz, bandIndex }          - priced
   //   { ok: false, reason: 'heavy' | 'noweight', ... } - can't be priced online
+  // Products flagged "shippingIncluded" already have shipping built into their price, so the
+  // customer only pays the EXTRA shipping their other items add (total weight price minus the
+  // price of the shipping-included weight). A cart of only shipping-included items ships free.
   quote(lines) {
-    let weightOz = 0;
+    let weightOz = 0, includedOz = 0;
     for (const l of lines) {
       if (typeof l.product.weightOz !== 'number') return { ok: false, reason: 'noweight' };
       weightOz += l.product.weightOz * l.qty;
+      if (l.product.shippingIncluded) includedOz += l.product.weightOz * l.qty;
     }
-    const lb = weightOz / 16;
-    const bandIndex = this.bands.findIndex(b => lb <= b.maxLb + 1e-9);
-    if (bandIndex === -1) return { ok: false, reason: 'heavy', weightOz };
-    return { ok: true, fee: this.bands[bandIndex].price, weightOz, bandIndex };
+    const total = this.feeForOz(weightOz);
+    if (!total) return { ok: false, reason: 'heavy', weightOz };
+    const included = this.feeForOz(includedOz);
+    const fee = Math.max(0, Math.round((total.fee - (included ? included.fee : 0)) * 100) / 100);
+    return { ok: true, fee, weightOz, bandIndex: total.bandIndex, includedOz };
   }
 };
 

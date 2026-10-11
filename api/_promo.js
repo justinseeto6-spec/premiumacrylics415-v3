@@ -13,6 +13,7 @@
 const Products = require('../js/products.js');
 
 const SQUARE_VERSION = '2025-01-23';
+const GIFT_LINE_PREFIX = 'FREE GIFT:';   // must match the name api/create-checkout.js gives the gift line
 
 function squareHost() {
   return process.env.SQUARE_ENVIRONMENT === 'production' ? 'https://connect.squareup.com' : 'https://connect.squareupsandbox.com';
@@ -46,7 +47,13 @@ async function countPromoOrders() {
     });
     const data = await res.json().catch(() => ({}));
     if (!res.ok) throw new Error(`Square order search failed (${res.status}): ${JSON.stringify(data.errors || data).slice(0, 300)}`);
-    for (const o of data.orders || []) if (o.metadata && o.metadata.promo === promo.tag) count++;
+    // An order counts if it carries the promo tag OR contains the free-gift line itself - the line
+    // can never be lost, so the count stays right even if Square drops the tag.
+    for (const o of data.orders || []) {
+      const tagged = o.metadata && o.metadata.promo === promo.tag;
+      const hasGiftLine = (o.line_items || []).some(li => String(li.name || '').startsWith(GIFT_LINE_PREFIX));
+      if (tagged || hasGiftLine) count++;
+    }
     cursor = data.cursor;
   } while (cursor);
   return count;

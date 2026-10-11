@@ -91,6 +91,9 @@ module.exports = async (req, res) => {
     if (p.status === 'special-order' || Products.isSoldOut(p)) {
       return fail(res, 400, `${p.name} isn't available to buy online right now. Text us at 650-248-2473.`);
     }
+    if (p.shippingIncluded && delivery !== 'ship') {
+      return fail(res, 400, ` has shipping built into its price, so it can't be picked up or shipped with your own label. For those, choose the regular UPC case.`);
+    }
     if (p.pickupOnly && delivery !== 'pickup') {
       return fail(res, 400, `${p.name} can't be shipped - it's local pick-up only. Please choose pick-up.`);
     }
@@ -165,7 +168,7 @@ module.exports = async (req, res) => {
     ask_for_shipping_address: delivery === 'ship',
     allow_tipping: false
   };
-  if (shipQuote) {
+  if (shipQuote && shipQuote.fee > 0) {
     checkoutOptions.shipping_fee = { name: 'Shipping', charge: { amount: toCents(shipQuote.fee), currency: 'USD' } };
   }
 
