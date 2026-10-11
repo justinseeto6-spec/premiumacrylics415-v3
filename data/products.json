@@ -303,7 +303,7 @@
   {
     "id": "mini-tin-ascended-heros",
     "weightOz": 32,
-    "stock": 11,
+    "stockGroup": "mini-tin-display",
     "name": "Mini Tin Display Case \u2014 Ascended Heroes",
     "category": "pokemon",
     "price": 18,
@@ -323,7 +323,7 @@
   {
     "id": "30th-anniversary-mini-tin-display",
     "weightOz": 32,
-    "stock": 11,
+    "stockGroup": "mini-tin-display",
     "name": "30th Anniversary Mini Tin Display Case",
     "category": "pokemon",
     "price": 18,

@@ -22,6 +22,14 @@ const ROOT = path.join(__dirname, '..');
 const PRODUCTS_JSON = path.join(ROOT, 'data', 'products.json');
 const OUT_DIR = path.join(ROOT, 'products');
 
+// Shared stock pools (data/stock-groups.json): products with the same stockGroup share one count.
+let STOCK_GROUPS = {};
+try { STOCK_GROUPS = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'stock-groups.json'), 'utf8')); } catch (e) { /* none */ }
+function stockOf(p) {
+  if (p.stockGroup && typeof STOCK_GROUPS[p.stockGroup] === 'number') return STOCK_GROUPS[p.stockGroup];
+  return typeof p.stock === 'number' ? p.stock : null;
+}
+
 function escapeHtml(s) {
   return String(s)
     .replace(/&/g, '&amp;')
@@ -41,7 +49,8 @@ function truncate(s, max) {
 
 // schema.org Offer availability for a product's current state.
 function availabilityFor(p) {
-  if (p.inStock === false || (typeof p.stock === 'number' && p.stock <= 0)) return 'https://schema.org/OutOfStock';
+  const s = stockOf(p);
+  if (p.inStock === false || (s !== null && s <= 0)) return 'https://schema.org/OutOfStock';
   return 'https://schema.org/InStock';
 }
 

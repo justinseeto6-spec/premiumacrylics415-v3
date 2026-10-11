@@ -15,8 +15,9 @@
  * destination district rates. Tax is charged on the items only, not on shipping.
  */
 const Tax = {
-  // State code -> tax percent. Empty until you give me the rates. Example: { CA: 9.875 }
-  rates: {},
+  // State code -> tax percent. A state not listed here is charged no tax.
+  // CA 9.875% = official CDTFA rate for 1158 Mission Rd, South San Francisco (checked 2026-10-09).
+  rates: { CA: 9.875 },
   homeState: 'CA',
 
   // US states (+ DC) for the "ship-to state" choice at checkout.

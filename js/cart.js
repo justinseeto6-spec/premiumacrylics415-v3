@@ -24,20 +24,32 @@ const Cart = {
     this._emit();
   },
 
-  // Max units per product id, filled in by Products.all() from each product's
-  // optional "stock" number in data/products.json. No entry = no limit.
+  // Stock limits, filled in by Products.all() from data/products.json and data/stock-groups.json.
+  //   limits      product id -> max units (the product's own "stock")
+  //   groupOf     product id -> shared stock group id (its "stockGroup")
+  //   groupLimits group id   -> max units shared by EVERY product in that group
+  // No entry = no limit.
   limits: {},
+  groupOf: {},
+  groupLimits: {},
 
   qtyOf(productId) {
     const existing = this.read().find(i => i.id === productId);
     return existing ? existing.qty : 0;
   },
 
+  // Units already in the cart from one shared stock group.
+  groupQty(groupId) {
+    return this.read().filter(i => this.groupOf[i.id] === groupId).reduce((s, i) => s + i.qty, 0);
+  },
+
   // Units of this product that can still be added (Infinity if it has no stock limit).
   remaining(productId) {
-    const limit = this.limits[productId];
-    if (limit == null) return Infinity;
-    return Math.max(0, limit - this.qtyOf(productId));
+    let left = Infinity;
+    if (this.limits[productId] != null) left = Math.min(left, this.limits[productId] - this.qtyOf(productId));
+    const g = this.groupOf[productId];
+    if (g && this.groupLimits[g] != null) left = Math.min(left, this.groupLimits[g] - this.groupQty(g));
+    return Math.max(0, left);
   },
 
   // Returns how many units were actually added (0 if the stock limit is already reached).
@@ -57,8 +69,8 @@ const Cart = {
 
   setQty(productId, qty) {
     let items = this.read();
-    const limit = this.limits[productId];
-    if (limit != null) qty = Math.min(qty, limit);
+    // The most this line can hold = what it has now + whatever stock is still free.
+    qty = Math.min(qty, this.qtyOf(productId) + this.remaining(productId));
     if (qty <= 0) {
       items = items.filter(i => i.id !== productId);
     } else {
@@ -71,17 +83,23 @@ const Cart = {
   // Trims any cart line that exceeds its stock (e.g. stock was lowered after it was added).
   enforceLimits() {
     const items = this.read();
+    const usedByGroup = {};
     let changed = false;
-    const kept = items.filter(i => {
-      const limit = this.limits[i.id];
-      if (limit == null || i.qty <= limit) return true;
-      i.qty = limit;
-      changed = true;
-      return limit > 0;
-    });
-    if (changed || kept.length !== items.length) this.write(kept);
+    const kept = [];
+    for (const i of items) {
+      let cap = this.limits[i.id] != null ? this.limits[i.id] : Infinity;
+      const g = this.groupOf[i.id];
+      if (g && this.groupLimits[g] != null) cap = Math.min(cap, this.groupLimits[g] - (usedByGroup[g] || 0));
+      if (i.qty > cap) { i.qty = Math.max(0, cap); changed = true; }
+      if (i.qty > 0) {
+        kept.push(i);
+        if (g) usedByGroup[g] = (usedByGroup[g] || 0) + i.qty;
+      } else {
+        changed = true;
+      }
+    }
+    if (changed) this.write(kept);
   },
-
   remove(productId) {
     const items = this.read().filter(i => i.id !== productId);
     this.write(items);

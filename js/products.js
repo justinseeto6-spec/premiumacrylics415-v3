@@ -2,22 +2,40 @@
 
 const Products = {
   _cache: null,
+  _groups: {},   // shared stock pools: group id -> units (data/stock-groups.json)
 
   async all() {
     if (this._cache) return this._cache;
     const res = await fetch('/data/products.json');
     this._cache = await res.json();
-    // Optional "stock" per product caps how many a customer can add to the cart.
+    try {
+      const gr = await fetch('/data/stock-groups.json');
+      if (gr.ok) this._groups = await gr.json();
+    } catch (e) { /* no shared pools: every product uses its own stock */ }
+    // "stock" caps how many a customer can add to the cart. A product with a "stockGroup"
+    // shares one pool with every other product in that group instead of having its own.
     this._cache.forEach(p => {
       if (typeof p.stock === 'number') Cart.limits[p.id] = p.stock;
+      if (p.stockGroup) {
+        Cart.groupOf[p.id] = p.stockGroup;
+        if (typeof this._groups[p.stockGroup] === 'number') Cart.groupLimits[p.stockGroup] = this._groups[p.stockGroup];
+      }
     });
     Cart.enforceLimits();
     return this._cache;
   },
 
-  // Sold out = marked inStock:false, or an optional "stock" count of 0.
+  // Units in stock for a product: its shared pool if it has a "stockGroup", else its own
+  // "stock", else null (unlimited).
+  stockOf(p) {
+    if (p.stockGroup && typeof this._groups[p.stockGroup] === 'number') return this._groups[p.stockGroup];
+    return typeof p.stock === 'number' ? p.stock : null;
+  },
+
+  // Sold out = marked inStock:false, or a stock count (own or shared) of 0.
   isSoldOut(p) {
-    return p.inStock === false || (typeof p.stock === 'number' && p.stock <= 0);
+    const s = this.stockOf(p);
+    return p.inStock === false || (s !== null && s <= 0);
   },
 
   async byId(id) {

@@ -77,6 +77,13 @@ module.exports = async (req, res) => {
 
   // ---- price the cart from our own catalog ----
   const catalog = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data', 'products.json'), 'utf8'));
+  try { Products._groups = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'data', 'stock-groups.json'), 'utf8')); } catch (e) { Products._groups = {}; }
+  // Units of each shared-stock group in this order (e.g. both mini tin cases draw from one pool).
+  const groupQty = {};
+  for (const it of items) {
+    const g = (catalog.find(pp => pp.id === it.id) || {}).stockGroup;
+    if (g) groupQty[g] = (groupQty[g] || 0) + it.qty;
+  }
   for (const it of items) {
     const p = catalog.find(pp => pp.id === it.id);
     if (!p) return fail(res, 400, 'One of the items in your cart is no longer available.');
@@ -86,8 +93,12 @@ module.exports = async (req, res) => {
     if (p.pickupOnly && delivery !== 'pickup') {
       return fail(res, 400, `${p.name} can't be shipped - it's local pick-up only. Please choose pick-up.`);
     }
-    if (typeof p.stock === 'number' && it.qty > p.stock) {
-      return fail(res, 400, `Only ${p.stock} of ${p.name} available.`);
+    const inStock = Products.stockOf(p);
+    if (p.stockGroup && inStock !== null && groupQty[p.stockGroup] > inStock) {
+      return fail(res, 400, `Only ${inStock} of these are available in total (they share one stock), and your order has ${groupQty[p.stockGroup]}.`);
+    }
+    if (!p.stockGroup && inStock !== null && it.qty > inStock) {
+      return fail(res, 400, `Only ${inStock} of ${p.name} available.`);
     }
   }
   const { lines } = Products.cartTotals(catalog, items);

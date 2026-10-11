@@ -40,7 +40,7 @@
   const images = (product.images && product.images.length) ? product.images : [product.image];
   const isSpecialOrder = product.status === 'special-order';
   // Optional "stock" in data/products.json = units available. The cart can't hold more than that.
-  const stock = typeof product.stock === 'number' ? product.stock : null;
+  const stock = Products.stockOf(product);
   const soldOut = Products.isSoldOut(product);
   // A sold-out product can carry an optional "restock" note, e.g. "mid to late October".
   const soldOutLabel = product.restock ? `Sold out &mdash; restock estimated ${product.restock}` : 'Sold out';
