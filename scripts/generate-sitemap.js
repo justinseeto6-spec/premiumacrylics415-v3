@@ -30,7 +30,7 @@ const STATIC_PAGES = [
 ];
 
 function main() {
-  const products = JSON.parse(fs.readFileSync(PRODUCTS_JSON, 'utf8'));
+  const products = JSON.parse(fs.readFileSync(PRODUCTS_JSON, 'utf8')).filter(p => !p.hidden);
 
   const urls = [
     ...STATIC_PAGES.map(p => `  <url>\n    <loc>${SITE_URL}${p.path}</loc>\n    <changefreq>${p.changefreq}</changefreq>\n    <priority>${p.priority}</priority>\n  </url>`),

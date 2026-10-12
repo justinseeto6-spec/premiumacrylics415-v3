@@ -139,7 +139,7 @@ function main() {
   fs.mkdirSync(OUT_DIR, { recursive: true });
 
   let written = 0;
-  for (const p of products) {
+  for (const p of products.filter(p => !p.hidden)) {
     const dir = path.join(OUT_DIR, p.id);
     fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(path.join(dir, 'index.html'), pageFor(p), 'utf8');

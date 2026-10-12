@@ -58,6 +58,37 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     <p class="cart-note" id="shipRowNote" style="text-align:left;margin-top:10px;"></p>
     <p class="cart-note" id="labelHint" style="text-align:left;margin-top:6px;display:none;">Shipping too high? <a href="#deliveryLabel" id="labelHintLink" style="color:var(--accent);">Send your own shipping label instead</a> — Pirate Ship members save up to 60%.</p>
   `;
+  // ---- Checkout add-on: up to 3 booster bundle cases at the add-on price (shipping not included) ----
+  const addon = products.find(p => p.id === 'booster-bundle-addon');
+  const addonBox = document.getElementById('addonOffer');
+  if (addon && addonBox && !Products.isSoldOut(addon)) {
+    const inCart = Cart.qtyOf(addon.id);
+    const room = Math.min(addon.maxPerOrder || 3, inCart + Cart.remaining(addon.id));
+    const regular = products.find(p => p.id === 'ascended-heros-booster-bundle');
+    const pctOff = regular && regular.price > addon.price ? Math.round((1 - addon.price / regular.price) * 100) : 0;
+    if (room > 0) {
+      const opts = Array.from({ length: room + 1 }, (_, n) => `<option value="${n}"${n === inCart ? ' selected' : ''}>${n === 0 ? 'None' : `${n} &mdash; ${Products.formatPrice(addon.price * n)}`}</option>`).join('');
+      addonBox.style.display = '';
+      addonBox.innerHTML = `
+        <h3 style="margin-top:0;">Add more display cases?</h3>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+          <img src="${addon.image}" alt="" style="width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--border);">
+          <div style="flex:1;min-width:200px;">
+            <p style="margin:0;font-weight:600;">30th Anniversary Booster Bundle Display Case</p>
+            <p class="cart-note" style="text-align:left;margin:4px 0 0;">Also fits Ascended Heroes. ${pctOff ? `<strong style="color:var(--accent);">Save ${pctOff}%</strong> vs. the regular ${Products.formatPrice(regular.price)} each. ` : ''}Add up to ${addon.maxPerOrder || 3} for ${Products.formatPrice(addon.price * (addon.maxPerOrder || 3))} (${Products.formatPrice(addon.price)} each). Shipping not included.</p>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:0.85rem;">How many?
+            <select id="addonQty" style="padding:8px;border-radius:8px;">${opts}</select>
+          </label>
+        </div>`;
+      document.getElementById('addonQty').addEventListener('change', e => {
+        Cart.setQty(addon.id, Number(e.target.value));
+        if (Number(e.target.value) > 0 && !Cart.qtyOf(addon.id)) Cart.add(addon.id, Number(e.target.value));
+        window.location.reload();
+      });
+    }
+  }
+
   // ---- Delivery choice + shipping price (prices live in js/shipping.js) ----
   const pickupRadio = document.getElementById('deliveryPickup');
   const shipRadio = document.getElementById('deliveryShip');

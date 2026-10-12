@@ -34,8 +34,10 @@
     "price": 30,
     "quantityPricing": [{ "qty": 2, "price": 55 }],
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-3.jpg",
+    "image": "/images/30th-anniversary-upc-square.jpg",
     "images": [
+      "/images/30th-anniversary-upc-square.jpg",
+      "/images/30th-anniversary-upc-main.jpg",
       "/images/30th-anniversary-upc-3.jpg",
       "/images/30th-anniversary-upc-1.jpg",
       "/images/30th-anniversary-upc-2.jpg"
@@ -61,8 +63,10 @@
     "category": "pokemon",
     "price": 67,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-3.jpg",
+    "image": "/images/30th-anniversary-upc-square.jpg",
     "images": [
+      "/images/30th-anniversary-upc-square.jpg",
+      "/images/30th-anniversary-upc-main.jpg",
       "/images/30th-anniversary-upc-3.jpg",
       "/images/30th-anniversary-upc-1.jpg",
       "/images/30th-anniversary-upc-2.jpg"
@@ -148,6 +152,7 @@
   },
   {
     "id": "151-prismatic-booster-bundle",
+    "noDiscount": true,
     "weightOz": 32,
     "stock": 3,
     "name": "151 & Prismatic Evolutions Booster Bundle Display Case (fits 6-pack bundle)",
@@ -209,8 +214,9 @@
   },
   {
     "id": "ascended-heros-booster-bundle",
+    "noDiscount": true,
     "weightOz": 32,
-    "stock": 40,
+    "stockGroup": "booster-bundle-display",
     "name": "Ascended Heroes Booster Bundle Display",
     "category": "pokemon",
     "price": 10.5,
@@ -294,6 +300,7 @@
   },
   {
     "id": "sealed-booster-bundle-display",
+    "noDiscount": true,
     "weightOz": 32,
     "stock": 5,
     "name": "Sealed Booster Bundle Display Case",
@@ -592,6 +599,24 @@
       "Finish: Crystal clear, scratch-resistant",
       "Assembly: No Assembly Required"
     ],
+    "inStock": true,
+    "featured": false
+  },
+  {
+    "id": "booster-bundle-addon",
+    "hidden": true,
+    "maxPerOrder": 3,
+    "noDiscount": true,
+    "weightOz": 32,
+    "stockGroup": "booster-bundle-display",
+    "name": "30th Anniversary Booster Bundle Display Case (Add-On)",
+    "category": "pokemon",
+    "price": 8,
+    "compareAtPrice": null,
+    "image": "/images/ascended-heros-booster-bundle.jpg",
+    "shortDescription": "Checkout add-on: 3 for $24. Fits the 30th Celebration and Ascended Heroes booster bundles.",
+    "description": "Checkout add-on offer (not listed in the shop).",
+    "specs": [],
     "inStock": true,
     "featured": false
   }

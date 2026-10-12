@@ -184,7 +184,7 @@
   refreshStock();
 
   // Related products
-  const related = products.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+  const related = products.filter(p => !p.hidden && p.category === product.category && p.id !== product.id).slice(0, 4);
   if (related.length) {
     document.getElementById('relatedSection').style.display = 'block';
     Products.renderGrid(document.getElementById('relatedGrid'), related);

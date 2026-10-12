@@ -165,7 +165,7 @@
 <script>
   (async () => {
     const products = await Products.all();
-    const featured = products.filter(p => p.featured).slice(0, 8);
+    const featured = products.filter(p => p.featured && !p.hidden).slice(0, 8);
     Products.renderGrid(document.getElementById('featuredGrid'), featured.length ? featured : products.slice(0, 8));
   })();
 

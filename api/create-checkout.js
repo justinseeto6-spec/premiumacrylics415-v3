@@ -97,6 +97,9 @@ module.exports = async (req, res) => {
     if (p.pickupOnly && delivery !== 'pickup') {
       return fail(res, 400, `${p.name} can't be shipped - it's local pick-up only. Please choose pick-up.`);
     }
+    if (typeof p.maxPerOrder === 'number' && it.qty > p.maxPerOrder) {
+      return fail(res, 400, `Limit ${p.maxPerOrder} per order for ${p.name}. Please lower the quantity.`);
+    }
     const inStock = Products.stockOf(p);
     if (p.stockGroup && inStock !== null && groupQty[p.stockGroup] > inStock) {
       return fail(res, 400, `We don't have that many of these in stock. Please lower the quantity or text us at 650-248-2473.`);

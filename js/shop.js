@@ -38,7 +38,7 @@
   }
 
   function applyFilters() {
-    let list = products;
+    let list = products.filter(p => !p.hidden);
     if (currentCat !== 'all') {
       list = list.filter(p => p.category === currentCat);
     }

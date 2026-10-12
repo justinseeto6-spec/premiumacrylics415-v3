@@ -16,6 +16,8 @@ const Products = {
     // shares one pool with every other product in that group instead of having its own.
     this._cache.forEach(p => {
       if (typeof p.stock === 'number') Cart.limits[p.id] = p.stock;
+      // "maxPerOrder" caps one product per order (the checkout add-on offer: up to 3).
+      if (typeof p.maxPerOrder === 'number') Cart.limits[p.id] = Math.min(p.maxPerOrder, Cart.limits[p.id] != null ? Cart.limits[p.id] : Infinity);
       if (p.stockGroup) {
         Cart.groupOf[p.id] = p.stockGroup;
         if (typeof this._groups[p.stockGroup] === 'number') Cart.groupLimits[p.stockGroup] = this._groups[p.stockGroup];
