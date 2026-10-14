@@ -1,5 +1,5 @@
 {
   "_note": "Shared stock pools. Products with the same \"stockGroup\" in products.json draw from ONE count here. Change the number after each sale, then commit + push.",
-  "mini-tin-display": 11,
+  "mini-tin-display": 3,
   "booster-bundle-display": 40
 }
