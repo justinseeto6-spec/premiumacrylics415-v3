@@ -43,7 +43,7 @@
   const stock = Products.stockOf(product);
   const soldOut = Products.isSoldOut(product);
   // A sold-out product can carry an optional "restock" note, e.g. "mid to late October".
-  const soldOutLabel = product.restock ? `Sold out &mdash; restock estimated ${product.restock}` : 'Sold out';
+  const soldOutLabel = product.restock ? (/^tbd$/i.test(product.restock) ? 'Sold out &mdash; restock date to be announced' : `Sold out &mdash; restock estimated ${product.restock}`) : 'Sold out';
   const stockLabel = isSpecialOrder
     ? 'Special Order Only &mdash; contact us to order'
     : (soldOut ? soldOutLabel : (Products.isLowStock(product) ? 'Low stock' : 'In stock, ready to ship'));
