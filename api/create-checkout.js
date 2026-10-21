@@ -92,7 +92,7 @@ module.exports = async (req, res) => {
       return fail(res, 400, `${p.name} isn't available to buy online right now. Text us at 650-248-2473.`);
     }
     if (p.shippingIncluded && delivery !== 'ship') {
-      return fail(res, 400, ` has shipping built into its price, so it can't be picked up or shipped with your own label. For those, choose the regular UPC case.`);
+      return fail(res, 400, `${p.name} has shipping built into its price, so it can't be picked up or shipped with your own label. For pick-up or your own label, choose the regular single case instead.`);
     }
     if (p.pickupOnly && delivery !== 'pickup') {
       return fail(res, 400, `${p.name} can't be shipped - it's local pick-up only. Please choose pick-up.`);
