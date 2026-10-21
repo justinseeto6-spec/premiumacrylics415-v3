@@ -89,7 +89,7 @@ const Products = {
   //   giftProductId  the free item (its weight is not added to shipping - you absorb it)
   //   startsAt       Square orders created before this are not searched
   promo: {
-    active: true,
+    active: false,   // paused 2026-10-21: no ETBs on hand. Set to true to turn the free-gift promo back on.
     tag: 'grand-opening',
     title: 'Grand opening',
     minSpend: 75,
