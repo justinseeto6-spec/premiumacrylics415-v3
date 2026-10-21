@@ -455,7 +455,7 @@
   {
     "id": "mini-tin-ascended-heros",
     "weightOz": 32,
-    "stockGroup": "mini-tin-display",
+    "stock": 0,
     "restock": "TBD",
     "name": "Mini Tin Display Case — Ascended Heroes",
     "category": "pokemon",
@@ -486,11 +486,10 @@
   {
     "id": "30th-anniversary-mini-tin-display",
     "weightOz": 32,
-    "stockGroup": "mini-tin-display",
-    "restock": "TBD",
+    "stock": 3,
     "name": "30th Anniversary Mini Tin Display Case",
     "category": "pokemon",
-    "price": 18,
+    "price": 25,
     "compareAtPrice": null,
     "image": "/images/30th-anniversary-mini-tin-1.jpg",
     "images": [
@@ -502,10 +501,9 @@
       "/images/30th-anniversary-mini-tin-6.jpg",
       "/images/30th-anniversary-mini-tin-7.jpg"
     ],
-    "shortDescription": "Sold out — restock date to be announced. Crystal-clear case for the Pokémon 30th Celebration Mini Tin Display box.",
-    "description": "A precisely sized, crystal-clear acrylic case for the Pokémon 30th Celebration Mini Tin Display box. It keeps the sealed display protected from dust, sun fade, and shelf wear while the artwork stays fully visible from every side. This item is currently sold out — restock date to be announced.",
+    "shortDescription": "Crystal-clear case for the Pokémon 30th Celebration Mini Tin Display box.",
+    "description": "A precisely sized, crystal-clear acrylic case for the Pokémon 30th Celebration Mini Tin Display box. It keeps the sealed display protected from dust, sun fade, and shelf wear while the artwork stays fully visible from every side.",
     "specs": [
-      "Status: Sold out — restock date to be announced",
       "Fits: Pokémon 30th Celebration Mini Tin Display box",
       "Precision measured for each specific product",
       "Precision measured for each specific product",
