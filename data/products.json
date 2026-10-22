@@ -108,7 +108,7 @@
     "price": 14.5,
     "quantityPricing": [{ "qty": 5, "price": 67 }, { "qty": 10, "price": 127.5 }],
     "compareAtPrice": null,
-    "image": "/images/pokemon-center-30th-etb-multi.jpg",
+    "image": "/images/pokemon-center-30th-etb-studio.jpg",
     "shortDescription": "Sold out \u2014 restock estimated mid to late October. Exclusive-fit case for the Pok\u00e9mon Center 30th Anniversary Elite Trainer Box.",
     "description": "A dedicated display case sized precisely for the Pok\u00e9mon Center exclusive 30th Anniversary Elite Trainer Box. This item is currently sold out \u2014 we expect to restock mid to late October. Keep this hard-to-find ETB safe from dust, sun fade, and shelf wear while it stays on full display.",
     "specs": [
@@ -125,6 +125,7 @@
     "inStock": true,
     "featured": false,
     "images": [
+      "/images/pokemon-center-30th-etb-studio.jpg",
       "/images/pokemon-center-30th-etb-multi.jpg",
       "/images/pokemon-center-30th-etb.jpg"
     ]
@@ -475,7 +476,7 @@
   {
     "id": "mini-tin-ascended-heros",
     "weightOz": 32,
-    "stock": 0,
+    "stockGroup": "mini-tin-case",
     "restock": "TBD",
     "name": "Mini Tin Display Case — Ascended Heroes",
     "category": "pokemon",
@@ -499,6 +500,32 @@
       "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
       "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
       "Edges: Rounded"
+    ],
+    "inStock": true,
+    "featured": false
+  },
+  {
+    "id": "pokemon-151-mini-tin-4pack-sams-club",
+    "weightOz": 32,
+    "stockGroup": "mini-tin-case",
+    "restock": "TBD",
+    "name": "Pokémon 151 Mini Tin 4-Pack Display Case (Sam's Club Exclusive)",
+    "category": "pokemon",
+    "price": 18,
+    "compareAtPrice": null,
+    "image": "/images/pokemon-151-mini-tin-4pack-studio.jpg",
+    "shortDescription": "Sold out — restock date to be announced. Crystal-clear case for the Sam's Club exclusive Pokémon 151 mini tin 4-pack.",
+    "description": "A precision-fit, crystal-clear acrylic display case for the Sam's Club exclusive Pokémon 151 Mini Tin 4-Pack. It keeps the sealed 4-pack protected from dust, sun fade, and shelf wear while the tins and cards stay fully visible. This item is currently sold out — restock date to be announced.",
+    "specs": [
+      "Status: Sold out — restock date to be announced",
+      "Fits: Pokémon 151 Mini Tin 4-Pack (Sam's Club exclusive)",
+      "Precision measured for each specific product",
+      "Material: Cast acrylic, crystal-clear finish",
+      "UV protection: 98% UV rejection rate",
+      "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
+      "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
+      "Edges: Rounded",
+      "Assembly: No assembly required"
     ],
     "inStock": true,
     "featured": false
