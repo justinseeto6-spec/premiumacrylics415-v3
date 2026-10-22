@@ -226,7 +226,11 @@
     "price": 10.5,
     "mixMatch": { "group": "booster-bundle-6pack", "minQty": 6, "price": 9.5 },
     "compareAtPrice": null,
-    "image": "/images/151-prismatic-booster-bundle.jpg",
+    "image": "/images/151-prismatic-booster-bundle-studio.jpg",
+    "images": [
+      "/images/151-prismatic-booster-bundle-studio.jpg",
+      "/images/151-prismatic-booster-bundle.jpg"
+    ],
     "shortDescription": "Display case for 6-pack booster bundles from 151 and Prismatic Evolutions.",
     "description": "A snug-fit case built for the 6-count booster bundle packs from Scarlet & Violet 151 and Prismatic Evolutions. Keeps your bundle sealed, dust-free, and shelf-ready.",
     "specs": [
@@ -304,7 +308,11 @@
     "price": 10.5,
     "mixMatch": { "group": "booster-bundle-6pack", "minQty": 6, "price": 9.5 },
     "compareAtPrice": null,
-    "image": "/images/ascended-heros-booster-bundle.jpg",
+    "image": "/images/ascended-heroes-bundle-studio.jpg",
+    "images": [
+      "/images/ascended-heroes-bundle-studio.jpg",
+      "/images/ascended-heros-booster-bundle.jpg"
+    ],
     "shortDescription": "Display case for the Ascended Heroes booster bundle.",
     "description": "A precise fit for the Ascended Heroes booster bundle pack, keeping it sealed and shelf-ready with a clean, transparent finish.",
     "specs": [
@@ -330,7 +338,11 @@
     "category": "pokemon",
     "price": 38.99,
     "compareAtPrice": null,
-    "image": "/images/ascended-heros-booster-bundle.jpg",
+    "image": "/images/ascended-heroes-bundle-studio.jpg",
+    "images": [
+      "/images/ascended-heroes-bundle-studio.jpg",
+      "/images/ascended-heros-booster-bundle.jpg"
+    ],
     "shortDescription": "Three crystal-clear cases for Ascended Heroes booster bundles, with shipping already included.",
     "description": "Three precision-fit, crystal-clear acrylic display cases for Ascended Heroes booster bundles, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
     "specs": [
@@ -433,7 +445,11 @@
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
-    "image": "/images/team-rocket-moltres-upc.jpg",
+    "image": "/images/team-rocket-moltres-upc-studio.jpg",
+    "images": [
+      "/images/team-rocket-moltres-upc-studio.jpg",
+      "/images/team-rocket-moltres-upc.jpg"
+    ],
     "shortDescription": "Premium case for the Team Rocket's Moltres ex Ultra Premium Collection.",
     "description": "A premium acrylic case cut precisely for the Team Rocket's Moltres ex UPC. Keep this striking box protected and front-and-center on your shelf.",
     "specs": [
@@ -480,7 +496,7 @@
     "restock": "TBD",
     "name": "Mini Tin Display Case — Ascended Heroes",
     "category": "pokemon",
-    "price": 18,
+    "price": 20,
     "compareAtPrice": null,
     "image": "/images/mini-tin-ascended-heros.jpg",
     "shortDescription": "Sold out — restock date to be announced. Compact case for Ascended Heroes mini tins.",
@@ -511,7 +527,7 @@
     "restock": "TBD",
     "name": "Pokémon 151 Mini Tin 4-Pack Display Case (Sam's Club Exclusive)",
     "category": "pokemon",
-    "price": 18,
+    "price": 20,
     "compareAtPrice": null,
     "image": "/images/pokemon-151-mini-tin-4pack-studio.jpg",
     "shortDescription": "Sold out — restock date to be announced. Crystal-clear case for the Sam's Club exclusive Pokémon 151 mini tin 4-pack.",
