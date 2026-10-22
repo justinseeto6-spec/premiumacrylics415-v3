@@ -137,8 +137,9 @@
     "category": "pokemon",
     "price": 19,
     "compareAtPrice": 25,
-    "image": "/images/25th-anniversary-etb-1.jpg",
+    "image": "/images/25th-anniversary-etb-studio.jpg",
     "images": [
+      "/images/25th-anniversary-etb-studio.jpg",
       "/images/25th-anniversary-etb-1.jpg",
       "/images/25th-anniversary-etb-2.jpg",
       "/images/25th-anniversary-etb-3.jpg"
