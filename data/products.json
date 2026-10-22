@@ -254,7 +254,11 @@
     "category": "pokemon",
     "price": 16,
     "compareAtPrice": null,
-    "image": "/images/japanese-regional-boxes-display.jpg",
+    "image": "/images/japanese-regional-boxes-studio.jpg",
+    "images": [
+      "/images/japanese-regional-boxes-studio.jpg",
+      "/images/japanese-regional-boxes-display.jpg"
+    ],
     "shortDescription": "Fits Hiroshima, Fukuoka, and Tohoku regional promo boxes.",
     "description": "Purpose-built for the Japanese exclusive Pok\u00e9mon Center \"Hiroshima Special Collection\" box \u2014 also fits Fukuoka and Tohoku regional editions. A great way to protect these limited-run imports.",
     "specs": [
@@ -477,7 +481,11 @@
     "category": "pokemon",
     "price": 25,
     "compareAtPrice": null,
-    "image": "/images/costco-151-five-pack-tin.jpg",
+    "image": "/images/costco-151-five-pack-tin-studio.jpg",
+    "images": [
+      "/images/costco-151-five-pack-tin-studio.jpg",
+      "/images/costco-151-five-pack-tin.jpg"
+    ],
     "shortDescription": "Exclusive-fit case for the Costco 151 five-pack tin.",
     "description": "Sized specifically for the Costco-exclusive 151 five-pack tin. A great way to protect this retailer-exclusive piece while keeping it fully visible.",
     "specs": [
@@ -502,7 +510,11 @@
     "category": "pokemon",
     "price": 20,
     "compareAtPrice": null,
-    "image": "/images/mini-tin-ascended-heros.jpg",
+    "image": "/images/mini-tin-ascended-heros-studio.jpg",
+    "images": [
+      "/images/mini-tin-ascended-heros-studio.jpg",
+      "/images/mini-tin-ascended-heros.jpg"
+    ],
     "shortDescription": "Sold out — restock date to be announced. Compact case for Ascended Heroes mini tins.",
     "description": "A compact, precisely-sized case for Ascended Heroes mini tins — perfect for collectors building out a shelf of smaller sealed product. This item is currently sold out — restock date to be announced.",
     "specs": [
