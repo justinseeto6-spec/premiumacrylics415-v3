@@ -83,7 +83,7 @@ module.exports = async (req, res) => {
   const groupQty = {};
   for (const it of items) {
     const g = (catalog.find(pp => pp.id === it.id) || {}).stockGroup;
-    if (g) groupQty[g] = (groupQty[g] || 0) + it.qty;
+    if (g) groupQty[g] = (groupQty[g] || 0) + it.qty * ((catalog.find(pp => pp.id === it.id) || {}).groupUnits || 1);
   }
   for (const it of items) {
     const p = catalog.find(pp => pp.id === it.id);
@@ -101,7 +101,7 @@ module.exports = async (req, res) => {
       return fail(res, 400, `Limit ${p.maxPerOrder} per order for ${p.name}. Please lower the quantity.`);
     }
     const inStock = Products.stockOf(p);
-    if (p.stockGroup && inStock !== null && groupQty[p.stockGroup] > inStock) {
+    if (p.stockGroup && typeof Products._groups[p.stockGroup] === 'number' && groupQty[p.stockGroup] > Products._groups[p.stockGroup]) {
       return fail(res, 400, `We don't have that many of these in stock. Please lower the quantity or text us at 650-248-2473.`);
     }
     if (!p.stockGroup && inStock !== null && it.qty > inStock) {

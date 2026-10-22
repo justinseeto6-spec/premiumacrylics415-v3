@@ -20,6 +20,7 @@ const Products = {
       if (typeof p.maxPerOrder === 'number') Cart.limits[p.id] = Math.min(p.maxPerOrder, Cart.limits[p.id] != null ? Cart.limits[p.id] : Infinity);
       if (p.stockGroup) {
         Cart.groupOf[p.id] = p.stockGroup;
+        if (p.groupUnits) Cart.groupUnits[p.id] = p.groupUnits;
         if (typeof this._groups[p.stockGroup] === 'number') Cart.groupLimits[p.stockGroup] = this._groups[p.stockGroup];
       }
     });
@@ -30,7 +31,7 @@ const Products = {
   // Units in stock for a product: its shared pool if it has a "stockGroup", else its own
   // "stock", else null (unlimited).
   stockOf(p) {
-    if (p.stockGroup && typeof this._groups[p.stockGroup] === 'number') return this._groups[p.stockGroup];
+    if (p.stockGroup && typeof this._groups[p.stockGroup] === 'number') return Math.floor(this._groups[p.stockGroup] / (p.groupUnits || 1));
     return typeof p.stock === 'number' ? p.stock : null;
   },
 

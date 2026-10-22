@@ -26,7 +26,7 @@ const OUT_DIR = path.join(ROOT, 'products');
 let STOCK_GROUPS = {};
 try { STOCK_GROUPS = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'stock-groups.json'), 'utf8')); } catch (e) { /* none */ }
 function stockOf(p) {
-  if (p.stockGroup && typeof STOCK_GROUPS[p.stockGroup] === 'number') return STOCK_GROUPS[p.stockGroup];
+  if (p.stockGroup && typeof STOCK_GROUPS[p.stockGroup] === 'number') return Math.floor(STOCK_GROUPS[p.stockGroup] / (p.groupUnits || 1));
   return typeof p.stock === 'number' ? p.stock : null;
 }
 

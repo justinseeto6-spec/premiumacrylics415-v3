@@ -32,7 +32,7 @@
   {
     "id": "30th-anniversary-upc",
     "weightOz": 80,
-    "stock": 20,
+    "stockGroup": "30th-upc-cases",
     "name": "30th Anniversary UPC Display Case",
     "category": "pokemon",
     "price": 30,
@@ -65,7 +65,8 @@
   {
     "id": "30th-anniversary-upc-2pack",
     "weightOz": 160,
-    "stock": 5,
+    "stockGroup": "30th-upc-cases",
+    "groupUnits": 2,
     "noDiscount": true,
     "shippingIncluded": true,
     "name": "30th Anniversary UPC 2-Pack (Shipping Included)",

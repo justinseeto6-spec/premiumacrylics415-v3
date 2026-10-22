@@ -32,6 +32,8 @@ const Cart = {
   limits: {},
   groupOf: {},
   groupLimits: {},
+  groupUnits: {},   // product id -> units it uses from its pool per item (default 1; a 2-pack uses 2)
+  unitsOf(productId) { return this.groupUnits[productId] || 1; },
 
   qtyOf(productId) {
     const existing = this.read().find(i => i.id === productId);
@@ -40,7 +42,7 @@ const Cart = {
 
   // Units already in the cart from one shared stock group.
   groupQty(groupId) {
-    return this.read().filter(i => this.groupOf[i.id] === groupId).reduce((s, i) => s + i.qty, 0);
+    return this.read().filter(i => this.groupOf[i.id] === groupId).reduce((s, i) => s + i.qty * this.unitsOf(i.id), 0);
   },
 
   // Units of this product that can still be added (Infinity if it has no stock limit).
@@ -48,7 +50,7 @@ const Cart = {
     let left = Infinity;
     if (this.limits[productId] != null) left = Math.min(left, this.limits[productId] - this.qtyOf(productId));
     const g = this.groupOf[productId];
-    if (g && this.groupLimits[g] != null) left = Math.min(left, this.groupLimits[g] - this.groupQty(g));
+    if (g && this.groupLimits[g] != null) left = Math.min(left, Math.floor((this.groupLimits[g] - this.groupQty(g)) / this.unitsOf(productId)));
     return Math.max(0, left);
   },
 
@@ -89,11 +91,11 @@ const Cart = {
     for (const i of items) {
       let cap = this.limits[i.id] != null ? this.limits[i.id] : Infinity;
       const g = this.groupOf[i.id];
-      if (g && this.groupLimits[g] != null) cap = Math.min(cap, this.groupLimits[g] - (usedByGroup[g] || 0));
+      if (g && this.groupLimits[g] != null) cap = Math.min(cap, Math.floor((this.groupLimits[g] - (usedByGroup[g] || 0)) / this.unitsOf(i.id)));
       if (i.qty > cap) { i.qty = Math.max(0, cap); changed = true; }
       if (i.qty > 0) {
         kept.push(i);
-        if (g) usedByGroup[g] = (usedByGroup[g] || 0) + i.qty;
+        if (g) usedByGroup[g] = (usedByGroup[g] || 0) + i.qty * this.unitsOf(i.id);
       } else {
         changed = true;
       }
