@@ -421,7 +421,11 @@
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
-    "image": "/images/sealed-booster-bundle-display.jpg",
+    "image": "/images/sealed-booster-bundle-display-studio.jpg",
+    "images": [
+      "/images/sealed-booster-bundle-display-studio.jpg",
+      "/images/sealed-booster-bundle-display.jpg"
+    ],
     "shortDescription": "Premium display case for a sealed booster bundle.",
     "description": "Our premium option for sealed booster bundles \u2014 a tight, precisely measured fit and a crystal-clear finish for collectors who want the best on their shelf.",
     "specs": [
@@ -841,14 +845,21 @@
   {
     "id": "one-piece-2nd-anniversary-set-english",
     "weightOz": 64,
+    "stock": 0,
+    "restock": "TBD",
     "name": "One Piece 2nd Anniversary Set (English)",
     "category": "one-piece",
     "price": 16,
     "compareAtPrice": null,
-    "image": "/images/one-piece-2nd-anniversary-set-english.jpg",
-    "shortDescription": "Acrylic display case for the One Piece Card Game 2nd Anniversary Set (English).",
-    "description": "A precision-fit acrylic display case for the One Piece Card Game 2nd Anniversary Set (English edition). Keep this collector's set sealed, dust-free, and on full display.",
+    "image": "/images/one-piece-2nd-anniversary-set-studio.jpg",
+    "images": [
+      "/images/one-piece-2nd-anniversary-set-studio.jpg",
+      "/images/one-piece-2nd-anniversary-set-english.jpg"
+    ],
+    "shortDescription": "Sold out — restock date to be announced. Acrylic display case for the One Piece Card Game 2nd Anniversary Set (English).",
+    "description": "A precision-fit acrylic display case for the One Piece Card Game 2nd Anniversary Set (English edition). Keep this collector's set sealed, dust-free, and on full display. This item is currently sold out — restock date to be announced.",
     "specs": [
+      "Status: Sold out — restock date to be announced",
       "Fits: One Piece Card Game 2nd Anniversary Set (English)",
       "Precision measured for each specific product",
       "Material: Cast acrylic, crystal-clear finish",
