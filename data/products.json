@@ -193,7 +193,11 @@
     "category": "pokemon",
     "price": 15,
     "compareAtPrice": 27,
-    "image": "/images/prismatic-evolutions-figure-collection.jpg",
+    "image": "/images/prismatic-evolutions-figure-collection-studio.jpg",
+    "images": [
+      "/images/prismatic-evolutions-figure-collection-studio.jpg",
+      "/images/prismatic-evolutions-figure-collection.jpg"
+    ],
     "shortDescription": "On sale: display case for the Prismatic Evolutions Figure Collection box.",
     "description": "Fitted acrylic protection for the Prismatic Evolutions Figure Collection. Currently on sale \u2014 grab it while it lasts.",
     "specs": [
@@ -267,7 +271,11 @@
     "category": "pokemon",
     "price": 30,
     "compareAtPrice": null,
-    "image": "/images/mega-charizard-ex-upc.jpg",
+    "image": "/images/mega-charizard-ex-upc-studio.jpg",
+    "images": [
+      "/images/mega-charizard-ex-upc-studio.jpg",
+      "/images/mega-charizard-ex-upc.jpg"
+    ],
     "shortDescription": "Premium case for the Mega Charizard EX Ultra Premium Collection.",
     "description": "A premium acrylic case sized precisely for the Mega Charizard EX UPC. Rounded edges and a strong magnetic lid keep one of the hobby's most iconic boxes protected for years to come.",
     "specs": [
@@ -538,7 +546,11 @@
     "category": "one-piece",
     "price": 25,
     "compareAtPrice": null,
-    "image": "/images/one-piece-tin-display-vol1-2.jpg",
+    "image": "/images/one-piece-studio.jpg",
+    "images": [
+      "/images/one-piece-studio.jpg",
+      "/images/one-piece-tin-display-vol1-2.jpg"
+    ],
     "shortDescription": "Display case for One Piece Card Game tins, Volumes 1\u20132.",
     "description": "A dedicated acrylic case for One Piece Card Game collector tins from Volumes 1 and 2. Keep your One Piece sealed product safe and on display.",
     "specs": [
@@ -564,7 +576,11 @@
     "category": "one-piece",
     "price": 70,
     "compareAtPrice": null,
-    "image": "/images/one-piece-booster-box-op05-op16.jpg",
+    "image": "/images/one-piece-studio.jpg",
+    "images": [
+      "/images/one-piece-studio.jpg",
+      "/images/one-piece-booster-box-op05-op16.jpg"
+    ],
     "shortDescription": "Five crystal-clear cases for One Piece booster boxes (OP-05 to OP-17), with shipping already included.",
     "description": "Five precision-fit, crystal-clear acrylic display cases for One Piece Card Game booster boxes (OP-05 to OP-17), delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
     "specs": [
@@ -619,7 +635,11 @@
     "category": "one-piece",
     "price": 14,
     "compareAtPrice": null,
-    "image": "/images/one-piece-booster-box-op05-op16.jpg",
+    "image": "/images/one-piece-studio.jpg",
+    "images": [
+      "/images/one-piece-studio.jpg",
+      "/images/one-piece-booster-box-op05-op16.jpg"
+    ],
     "shortDescription": "Universal-fit case for One Piece booster boxes, sets OP-05 through OP-17.",
     "description": "A universal-fit case sized for One Piece Card Game booster boxes across sets OP-05 through OP-17. One case, an entire range of sets covered.",
     "specs": [
@@ -643,7 +663,11 @@
     "price": 25,
     "compareAtPrice": null,
     "status": "special-order",
-    "image": "/images/dark-sylveon-25th.jpg",
+    "image": "/images/dark-sylveon-25th-studio.jpg",
+    "images": [
+      "/images/dark-sylveon-25th-studio.jpg",
+      "/images/dark-sylveon-25th.jpg"
+    ],
     "shortDescription": "SPECIAL ORDER ONLY \u2014 character-specific case for the Dark Sylveon 25th Anniversary box. Text us to order.",
     "description": "A precision case built specifically for the Dark Sylveon 25th Anniversary box \u2014 a fan-favorite piece deserving a dedicated display. This case is special order only \u2014 text us at 650-248-2473 or message us through the Contact page to arrange one.",
     "specs": [
@@ -744,7 +768,11 @@
     "category": "pokemon",
     "price": 13.5,
     "compareAtPrice": null,
-    "image": "/images/elite-trainer-box-standard.jpg",
+    "image": "/images/elite-trainer-box-standard-studio.jpg",
+    "images": [
+      "/images/elite-trainer-box-standard-studio.jpg",
+      "/images/elite-trainer-box-standard.jpg"
+    ],
     "shortDescription": "Universal-fit case for a standard Elite Trainer Box.",
     "description": "A dependable, precisely-fitted case for any standard Elite Trainer Box. Our most popular everyday case for collectors building out a full shelf.",
     "specs": [
