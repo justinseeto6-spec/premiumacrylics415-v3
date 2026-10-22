@@ -38,8 +38,9 @@
     "price": 30,
     "quantityPricing": [{ "qty": 2, "price": 55 }],
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-square.jpg",
+    "image": "/images/30th-anniversary-upc-studio.jpg",
     "images": [
+      "/images/30th-anniversary-upc-studio.jpg",
       "/images/30th-anniversary-upc-square.jpg",
       "/images/30th-anniversary-upc-main.jpg",
       "/images/30th-anniversary-upc-3.jpg",
@@ -71,8 +72,9 @@
     "category": "pokemon",
     "price": 67,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-square.jpg",
+    "image": "/images/30th-anniversary-upc-studio.jpg",
     "images": [
+      "/images/30th-anniversary-upc-studio.jpg",
       "/images/30th-anniversary-upc-square.jpg",
       "/images/30th-anniversary-upc-main.jpg",
       "/images/30th-anniversary-upc-3.jpg",
@@ -163,7 +165,11 @@
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
-    "image": "/images/25th-anniversary-upc.jpg",
+    "image": "/images/25th-anniversary-upc-studio.jpg",
+    "images": [
+      "/images/25th-anniversary-upc-studio.jpg",
+      "/images/25th-anniversary-upc.jpg"
+    ],
     "shortDescription": "Precision-fit acrylic case for the Pok\u00e9mon 25th Anniversary Ultra Premium Collection.",
     "description": "Show off your 25th Anniversary Ultra Premium Collection in a museum-quality acrylic case, cut to fit the box exactly with zero wasted space. A permanent way to protect one of the most sought-after UPCs.",
     "specs": [
@@ -661,7 +667,11 @@
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
-    "image": "/images/pokemon-151-upc.jpg",
+    "image": "/images/pokemon-151-upc-studio.jpg",
+    "images": [
+      "/images/pokemon-151-upc-studio.jpg",
+      "/images/pokemon-151-upc.jpg"
+    ],
     "shortDescription": "Standard-fit case for the Scarlet & Violet 151 Ultra Premium Collection.",
     "description": "A precision-cut acrylic case for the 151 UPC, one of the most popular boxes in recent memory. Keep it dust-free and display-ready indefinitely.",
     "specs": [
