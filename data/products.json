@@ -99,6 +99,30 @@
     "featured": false
   },
   {
+    "id": "costco-30th-etb-bundle",
+    "weightOz": 48,
+    "stock": 3,
+    "name": "Costco Exclusive 30th Anniversary ETB Bundle Display Case",
+    "category": "pokemon",
+    "price": 20,
+    "compareAtPrice": null,
+    "image": "/images/costco-30th-etb-bundle-studio.jpg",
+    "shortDescription": "Crystal-clear case for the Costco exclusive Pokémon 30th Anniversary ETB 2-Pack (Elite Trainer Box + Booster Bundle).",
+    "description": "A precision-fit, crystal-clear acrylic display case for the Costco exclusive Pokémon 30th Anniversary 2-Pack, the Elite Trainer Box plus Booster Bundle set. It keeps this collector's bundle protected from dust, sun fade, and shelf wear while the artwork stays fully visible.",
+    "specs": [
+      "Fits: Costco exclusive Pokémon 30th Anniversary ETB 2-Pack (Elite Trainer Box + Booster Bundle)",
+      "Precision measured for each specific product",
+      "Material: Cast acrylic, crystal-clear finish",
+      "UV protection: 98% UV rejection rate",
+      "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
+      "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
+      "Edges: Rounded",
+      "Assembly: No assembly required"
+    ],
+    "inStock": true,
+    "featured": true
+  },
+  {
     "id": "pokemon-center-30th-etb",
     "weightOz": 56,
     "stock": 0,
