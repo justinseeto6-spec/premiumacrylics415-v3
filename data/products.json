@@ -338,7 +338,11 @@
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
-    "image": "/images/sword-shield-upc.jpg",
+    "image": "/images/sword-shield-upc-studio.jpg",
+    "images": [
+      "/images/sword-shield-upc-studio.jpg",
+      "/images/sword-shield-upc.jpg"
+    ],
     "shortDescription": "Standard-fit case for the Sword & Shield Ultra Premium Collection.",
     "description": "A precision-cut acrylic case for the Sword & Shield UPC, built to keep this fan-favorite box protected and on display without a speck of dust.",
     "specs": [
@@ -581,7 +585,11 @@
     "category": "pokemon",
     "price": 70,
     "compareAtPrice": null,
-    "image": "/images/pokemon-booster-box-standard.jpg",
+    "image": "/images/pokemon-booster-box-studio.jpg",
+    "images": [
+      "/images/pokemon-booster-box-studio.jpg",
+      "/images/pokemon-booster-box-standard.jpg"
+    ],
     "shortDescription": "Five crystal-clear cases for standard Pokémon booster boxes, with shipping already included.",
     "description": "Five precision-fit, crystal-clear acrylic display cases for standard 36-pack Pokémon booster boxes, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
     "specs": [
@@ -699,7 +707,11 @@
     "category": "pokemon",
     "price": 12.5,
     "compareAtPrice": null,
-    "image": "/images/pokemon-booster-box-standard.jpg",
+    "image": "/images/pokemon-booster-box-studio.jpg",
+    "images": [
+      "/images/pokemon-booster-box-studio.jpg",
+      "/images/pokemon-booster-box-standard.jpg"
+    ],
     "shortDescription": "Universal-fit case for a standard 36-pack Pok\u00e9mon booster box.",
     "description": "Our everyday-carry case for a standard Pok\u00e9mon booster box. Affordable, precisely fitted, and finished to the same crystal-clear standard as our premium cases.",
     "specs": [
