@@ -554,8 +554,9 @@
     "category": "pokemon",
     "price": 25,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-mini-tin-1.jpg",
+    "image": "/images/30th-anniversary-mini-tin-studio.jpg",
     "images": [
+      "/images/30th-anniversary-mini-tin-studio.jpg",
       "/images/30th-anniversary-mini-tin-1.jpg",
       "/images/30th-anniversary-mini-tin-2.jpg",
       "/images/30th-anniversary-mini-tin-3.jpg",
@@ -763,7 +764,11 @@
     "category": "pokemon",
     "price": 27,
     "compareAtPrice": null,
-    "image": "/images/prismatic-evolutions-super-premium.jpg",
+    "image": "/images/prismatic-evolutions-super-premium-studio.jpg",
+    "images": [
+      "/images/prismatic-evolutions-super-premium-studio.jpg",
+      "/images/prismatic-evolutions-super-premium.jpg"
+    ],
     "shortDescription": "Premium-fit case for the Prismatic Evolutions Super Premium Collection.",
     "description": "Built for the Prismatic Evolutions Super Premium Collection box, this case offers a snug, precise fit with a crystal-clear finish worthy of a top-tier release.",
     "specs": [
@@ -888,7 +893,11 @@
     "category": "pokemon",
     "price": 16,
     "compareAtPrice": null,
-    "image": "/images/crown-zenith-etb-plus.jpg",
+    "image": "/images/crown-zenith-etb-plus-studio.jpg",
+    "images": [
+      "/images/crown-zenith-etb-plus-studio.jpg",
+      "/images/crown-zenith-etb-plus.jpg"
+    ],
     "shortDescription": "Precision-fit case for the Pok\u00e9mon Center Crown Zenith Elite Trainer Box Plus.",
     "description": "A dedicated display case sized precisely for the Pok\u00e9mon Center exclusive Crown Zenith Elite Trainer Box Plus. Keep this collector favorite safe from dust, sun fade, and shelf wear while it stays on full display.",
     "specs": [
