@@ -788,16 +788,15 @@
   {
     "id": "30th-anniversary-sylveon-ex-box",
     "weightOz": 64,
+    "stock": 1,
     "name": "Pok\u00e9mon Center 30th Anniversary Sylveon ex Box",
     "category": "pokemon",
-    "price": 18,
+    "price": 20,
     "compareAtPrice": null,
-    "status": "special-order",
     "image": "/images/30th-anniversary-sylveon-ex-box-studio.jpg",
-    "shortDescription": "SPECIAL ORDER ONLY \u2014 exclusive-fit case for the Pok\u00e9mon Center 30th Anniversary Sylveon ex Box. Text us to order.",
-    "description": "A precision-fit acrylic display case for the Pok\u00e9mon Center 30th Anniversary Celebration Sylveon ex Box. This case is special order only \u2014 text us at 650-248-2473 or message us through the Contact page to arrange one.",
+    "shortDescription": "Crystal-clear case for the Pokémon Center 30th Anniversary Sylveon ex Box.",
+    "description": "A precision-fit, crystal-clear acrylic display case for the Pokémon Center 30th Anniversary Celebration Sylveon ex Box. It keeps the sealed box protected from dust, sun fade, and shelf wear while the artwork stays fully visible.",
     "specs": [
-      "Status: Special Order Only — contact us",
       "Fits: Pokémon Center 30th Anniversary Sylveon ex Box",
       "Precision measured for each specific product",
       "Material: Cast acrylic, crystal-clear finish",
@@ -807,7 +806,7 @@
       "Edges: Rounded",
       "Assembly: No assembly required"
     ],
-    "inStock": false,
+    "inStock": true,
     "featured": false
   },
   {
