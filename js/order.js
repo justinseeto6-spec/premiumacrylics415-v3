@@ -89,6 +89,50 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     }
   }
 
+  // ---- Case add-ons for TCG products: hidden products in data/products.json with "addOnForIds" ----
+  // A case is offered only when one of the products it is for is in the cart, one case per product.
+  // Anything left in the cart without its product is trimmed so the add-on price can't be used alone.
+  const tcgBox = document.getElementById('tcgAddonOffer');
+  const addOnProducts = products.filter(p => Array.isArray(p.addOnForIds));
+  const countFor = ao => cartLines.filter(l => ao.addOnForIds.includes(l.product.id)).reduce((s, l) => s + l.qty, 0);
+  let trimmedAddOns = false;
+  for (const ao of addOnProducts) {
+    const n = countFor(ao);
+    if (Cart.qtyOf(ao.id) > n) { Cart.setQty(ao.id, n); trimmedAddOns = true; }
+  }
+  if (trimmedAddOns) { window.location.reload(); return; }
+  if (tcgBox) {
+    addOnProducts.forEach(ao => {
+      const n = countFor(ao);
+      if (n <= 0 || Products.isSoldOut(ao)) return;
+      const have = Cart.qtyOf(ao.id);
+      const room = Math.min(n, have + Cart.remaining(ao.id));
+      if (room <= 0) return;
+      const opts = Array.from({ length: room + 1 }, (_, i) => `<option value="${i}"${i === have ? ' selected' : ''}>${i === 0 ? 'None' : `${i} &mdash; ${Products.formatPrice(ao.price * i)}`}</option>`).join('');
+      const card = document.createElement('div');
+      card.className = 'contact-card';
+      card.style.marginBottom = '24px';
+      card.innerHTML = `
+        <h3 style="margin-top:0;">${ao.offerTitle || 'Add an acrylic case?'}</h3>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap;">
+          <img src="${ao.image}" alt="" style="width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--border);">
+          <div style="flex:1;min-width:200px;">
+            <p style="margin:0;font-weight:600;">${ao.offerName || ao.name}</p>
+            <p class="cart-note" style="text-align:left;margin:4px 0 0;">Add a precision-fit, crystal-clear display case for ${Products.formatPrice(ao.price)} each, one per item in your order.</p>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:4px;font-size:0.85rem;">How many?
+            <select style="padding:8px;border-radius:8px;">${opts}</select>
+          </label>
+        </div>`;
+      card.querySelector('select').addEventListener('change', e => {
+        const v = Number(e.target.value);
+        Cart.setQty(ao.id, v);
+        if (v > 0 && !Cart.qtyOf(ao.id)) Cart.add(ao.id, v);
+        window.location.reload();
+      });
+      tcgBox.appendChild(card);
+    });
+  }
   // ---- Delivery choice + shipping price (prices live in js/shipping.js) ----
   const pickupRadio = document.getElementById('deliveryPickup');
   const shipRadio = document.getElementById('deliveryShip');

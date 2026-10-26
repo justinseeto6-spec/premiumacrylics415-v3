@@ -108,6 +108,15 @@ module.exports = async (req, res) => {
       return fail(res, 400, `We don't have that many ${p.name} in stock. Please lower the quantity or text us at 650-248-2473.`);
     }
   }
+  // Add-on cases (products with "addOnForIds") can only be bought alongside the products they are for,
+  // one case per product, so the discounted add-on price can't be used on its own.
+  for (const it of items) {
+    const p = catalog.find(pp => pp.id === it.id);
+    if (p && Array.isArray(p.addOnForIds)) {
+      const eligible = items.reduce((s, x) => s + (p.addOnForIds.includes(x.id) ? x.qty : 0), 0);
+      if (it.qty > eligible) return fail(res, 400, `The ${p.name} can only be added to an order with the product it is for (one case per item). Please refresh and try again.`);
+    }
+  }
   const { lines, subtotal } = Products.cartTotals(catalog, items);
   // Automatic spend-more-save-more discount (tiers in js/products.js). Only ELIGIBLE items count
   // toward the tiers and get the discount - products flagged "noDiscount" (the Eevee box) don't.
