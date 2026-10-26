@@ -833,6 +833,27 @@
     "featured": false
   },
   {
+    "id": "prismatic-evolutions-booster-bundle",
+    "weightOz": 8,
+    "stock": 1,
+    "name": "Pokémon TCG: Prismatic Evolutions Booster Bundle",
+    "category": "pokemon-tcg",
+    "price": 80,
+    "compareAtPrice": null,
+    "image": "/images/prismatic-evolutions-booster-bundle.jpg",
+    "shortDescription": "Sealed Pokémon TCG Scarlet & Violet—Prismatic Evolutions Booster Bundle with 6 booster packs.",
+    "description": "Eevee & Friends Light Up with Stellar Colors! From fluffy and fiery to freezing and fanciful, Eevee and its many Evolutions hold a special place in the hearts of Pokémon Trainers across the land! Discover their unique new powers as Stellar Tera Pokémon ex, and look for treasure of your very own across a grand gathering of Pokémon ex from Paldea and beyond. Glittering gems and hidden patterns await at the end of the rainbow in the Pokémon TCG: Scarlet & Violet—Prismatic Evolutions expansion! Includes six booster packs from the Pokémon TCG: Scarlet & Violet—Prismatic Evolutions expansion. Each booster pack contains 10 cards and 1 Basic Energy. Cards vary by pack.",
+    "specs": [
+      "Product: Pokémon TCG Scarlet & Violet—Prismatic Evolutions Booster Bundle",
+      "Includes: 6 booster packs from the Prismatic Evolutions expansion",
+      "Each booster pack: 10 cards and 1 Basic Energy (cards vary by pack)",
+      "Condition: Sealed",
+      "Ships in 24 hours (excluding Sundays)"
+    ],
+    "inStock": true,
+    "featured": false
+  },
+  {
     "id": "booster-bundle-addon",
     "hidden": true,
     "maxPerOrder": 3,

@@ -248,6 +248,7 @@ const Products = {
     const map = {
       'pokemon': 'Pokémon',
       'one-piece': 'One Piece',
+      'pokemon-tcg': 'Pokémon TCG',
       'custom': 'Custom'
     };
     return map[cat] || cat;

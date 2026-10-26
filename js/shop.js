@@ -23,6 +23,10 @@
       document.title = 'Shop All Display Cases | Premium Acrylics 415';
       if (headingEl) headingEl.textContent = 'Shop All Cases';
       if (subheadEl) subheadEl.textContent = 'Precision-fit acrylic display cases for your sealed product.';
+    } else if (currentCat === 'pokemon-tcg') {
+      document.title = 'Pokémon TCG Sealed Product | Premium Acrylics 415';
+      if (headingEl) headingEl.textContent = 'Pokémon TCG';
+      if (subheadEl) subheadEl.textContent = 'Sealed Pokémon TCG product, ready to ship.';
     } else {
       const label = Products.categoryLabel(currentCat);
       document.title = `${label} Acrylic Display Cases | Premium Acrylics 415`;
