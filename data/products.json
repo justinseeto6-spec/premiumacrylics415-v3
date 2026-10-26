@@ -880,7 +880,7 @@
   {
     "id": "tcg-bundle-case-addon",
     "hidden": true,
-    "addOnForIds": ["prismatic-evolutions-booster-bundle", "phantasmal-flames-booster-bundle"],
+    "addOnForIds": ["prismatic-evolutions-booster-bundle", "phantasmal-flames-booster-bundle", "destined-rivals-booster-bundle"],
     "offerTitle": "Protect your bundle with an acrylic case?",
     "offerName": "Acrylic Display Case for Your Booster Bundle",
     "noDiscount": true,
@@ -933,6 +933,29 @@
     "shortDescription": "Checkout add-on: a precision-fit acrylic display case for a booster box, $10 each, one per booster box in the order.",
     "description": "Checkout add-on offer (not listed in the shop). One case per Phantasmal Flames booster box in the order.",
     "specs": [],
+    "inStock": true,
+    "featured": false
+  },
+  {
+    "id": "destined-rivals-booster-bundle",
+    "weightOz": 8,
+    "stock": 1,
+    "noDiscount": true,
+    "shippingIncluded": true,
+    "name": "Pokémon TCG: Scarlet & Violet—Destined Rivals Booster Bundle (Shipping Included)",
+    "category": "pokemon-tcg",
+    "price": 63,
+    "compareAtPrice": null,
+    "image": "/images/destined-rivals-booster-bundle.jpg",
+    "shortDescription": "Sealed Pokémon TCG Scarlet & Violet—Destined Rivals Booster Bundle with 6 booster packs.",
+    "description": "A sealed Pokémon TCG Scarlet & Violet—Destined Rivals Booster Bundle. Each bundle holds 6 Destined Rivals booster packs, ready to open or to keep sealed in your collection.",
+    "specs": [
+      "Product: Pokémon TCG Scarlet & Violet—Destined Rivals Booster Bundle",
+      "Includes: 6 booster packs",
+      "Condition: Sealed",
+      "Shipping included (US addresses). This offer ships only; local pick-up is not available for this item.",
+      "Ships in 24 hours (excluding Sundays)"
+    ],
     "inStock": true,
     "featured": false
   },
