@@ -836,7 +836,9 @@
     "id": "prismatic-evolutions-booster-bundle",
     "weightOz": 8,
     "stock": 1,
-    "name": "Pokémon TCG: Prismatic Evolutions Booster Bundle",
+    "noDiscount": true,
+    "shippingIncluded": true,
+    "name": "Pokémon TCG: Prismatic Evolutions Booster Bundle (Shipping Included)",
     "category": "pokemon-tcg",
     "price": 80,
     "compareAtPrice": null,
@@ -848,6 +850,7 @@
       "Includes: 6 booster packs from the Prismatic Evolutions expansion",
       "Each booster pack: 10 cards and 1 Basic Energy (cards vary by pack)",
       "Condition: Sealed",
+      "Shipping included (US addresses). This offer ships only; local pick-up is not available for this item.",
       "Ships in 24 hours (excluding Sundays)"
     ],
     "inStock": true,
