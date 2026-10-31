@@ -11,8 +11,9 @@
  * Prices = the average real label cost for each kind of order (Pirate Ship shipments,
  * Jul-Oct 2026) plus a cushion for carrier adjustments and far-away orders:
  *   up to 4 lb   avg ~$8.50   -> $9.75  (+15%)
- *   4-6 lb       avg ~$13.50  -> $13.50 (no cushion; was $15.50 until 2026-10-11, lowered so a single UPC
- *                ships for less than the same case on eBay)
+ *   4-6 lb       avg ~$13.50  -> $10 (was $15.50 until 2026-10-11, then $13.50 until 2026-10-31; now
+ *                BELOW the average label cost on purpose, so a single UPC case totals about what the
+ *                same case costs on eBay. Raise it if labels keep coming in high.)
  *   6-12 lb      2 UPCs ship mostly by UPS: avg $22.95, high $28.57 -> $20 (was $28 until 2026-10-31;
  *                lowered to stay competitive, on purpose BELOW the average label cost. Real label:
  *                2 UPC cases CA -> Ohio, UPS, $23.90 on 2026-10-31, so far-state orders lose about
@@ -29,7 +30,7 @@
 const Shipping = {
   bands: [
     { maxLb: 4, price: 9.75 },    // 1 ETB, 1 booster bundle, 1 tin
-    { maxLb: 6, price: 13.5 },   // 1 UPC (lowered from $15.50 on 2026-10-11 to beat eBay)
+    { maxLb: 6, price: 10 },     // 1 UPC (lowered from $15.50 to $13.50 on 2026-10-11, then to $10 on 2026-10-31 to match eBay's ~$6.50-7 local rate)
     { maxLb: 12, price: 20 },     // 2 UPCs, 3 ETBs (lowered from $28 to $25, then to $20, on 2026-10-31)
     { maxLb: 20, price: 34 },      // 5 ETBs, 3-4 UPCs
     { maxLb: 25, price: 42 },      // 4-5 UPCs  (estimate - no real labels this heavy yet)
