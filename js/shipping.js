@@ -20,10 +20,14 @@
  *                Saver via Square Shipping, $17.51 (2026-11-01): they average about $20.70, so $20
  *                breaks even, near states earn a little and far states lose about $4. The $28.57
  *                high loses about $8. Raise it if labels keep coming in high.)
- *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $34. A 16 lb order
+ *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $30 (was $34 until 2026-11-01;
+ *                lowered after the real labels below. No far-state label for this weight yet, so
+ *                watch the first Ohio/New York order and raise it if it costs more). A 16 lb order
  *                (2 UPC + 3 booster-bundle add-on cases, CA -> Washington, 2026-11-01) shipped in TWO
  *                boxes for $25.15 total: 2 UPC $17.51 (UPS Ground Saver via Square Shipping) + 3 bundle
  *                cases $7.64 (UPS Ground Saver via Pirate Ship). The buyer paid $34. Near zone only.
+ *                Also 3 ETB + 1 UPC cases (about 15.5 lb, one box) CA -> Texas, UPS Ground Saver via
+ *                Pirate Ship, $21.69 (retail $62.73), 2026-11-01 - a mid-distance zone.
  *   20-25 lb     ESTIMATE $42, 25-30 lb ESTIMATE $48 (about $1 more per extra lb; added Oct 2026,
  *                no real labels this heavy yet - compare against Pirate Ship and adjust)
  *   30-40 lb     $65, from a real label: 8 UPCs (~40 lb) CA -> Massachusetts, UPS Ground, $63.35.
@@ -37,7 +41,7 @@ const Shipping = {
     { maxLb: 4, price: 9.75 },    // 1 ETB, 1 booster bundle, 1 tin
     { maxLb: 6, price: 10 },     // 1 UPC (lowered from $15.50 to $13.50 on 2026-10-11, then to $10 on 2026-10-31 to match eBay's ~$6.50-7 local rate)
     { maxLb: 12, price: 20 },     // 2 UPCs, 3 ETBs (lowered from $28 to $25, then to $20, on 2026-10-31)
-    { maxLb: 20, price: 34 },      // 5 ETBs, 3-4 UPCs
+    { maxLb: 20, price: 30 },      // 5 ETBs, 3-4 UPCs (lowered from $34 on 2026-11-01)
     { maxLb: 25, price: 42 },      // 4-5 UPCs  (estimate - no real labels this heavy yet)
     { maxLb: 30, price: 48 },      // 5-6 UPCs  (estimate - no real labels this heavy yet)
     { maxLb: 40, price: 65 }       // 7-8 UPCs  (real: 8 UPCs to MA by UPS Ground cost $63.35)
