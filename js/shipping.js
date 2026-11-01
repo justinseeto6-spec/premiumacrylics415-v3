@@ -16,9 +16,14 @@
  *                same case costs on eBay. Raise it if labels keep coming in high.)
  *   6-12 lb      2 UPCs ship mostly by UPS: avg $22.95, high $28.57 -> $20 (was $28 until 2026-10-31;
  *                lowered to stay competitive, on purpose BELOW the average label cost. Real label:
- *                2 UPC cases CA -> Ohio, UPS, $23.90 on 2026-10-31, so far-state orders lose about
- *                $4 and the $28.57 high loses about $8. Raise it if labels keep coming in high.)
- *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $34
+ *                2 UPC cases CA -> Ohio, UPS, $23.90 (2026-10-31) and CA -> Washington, UPS Ground
+ *                Saver via Square Shipping, $17.51 (2026-11-01): they average about $20.70, so $20
+ *                breaks even, near states earn a little and far states lose about $4. The $28.57
+ *                high loses about $8. Raise it if labels keep coming in high.)
+ *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $34. A 16 lb order
+ *                (2 UPC + 3 booster-bundle add-on cases, CA -> Washington, 2026-11-01) shipped in TWO
+ *                boxes for $25.15 total: 2 UPC $17.51 (UPS Ground Saver via Square Shipping) + 3 bundle
+ *                cases $7.64 (UPS Ground Saver via Pirate Ship). The buyer paid $34. Near zone only.
  *   20-25 lb     ESTIMATE $42, 25-30 lb ESTIMATE $48 (about $1 more per extra lb; added Oct 2026,
  *                no real labels this heavy yet - compare against Pirate Ship and adjust)
  *   30-40 lb     $65, from a real label: 8 UPCs (~40 lb) CA -> Massachusetts, UPS Ground, $63.35.
