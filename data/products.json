@@ -36,10 +36,15 @@
     "name": "30th Anniversary UPC Display Case",
     "category": "pokemon",
     "price": 30,
-    "quantityPricing": [{ "qty": 2, "price": 55 }],
+    "quantityPricing": [
+      {
+        "qty": 2,
+        "price": 55
+      }
+    ],
     "compareAtPrice": null,
     "image": "/images/30th-anniversary-upc-studio.jpg",
-    "shortDescription": "Crystal-clear acrylic case built for the Pok\u00e9mon 30th Anniversary Ultra Premium Collection box.",
+    "shortDescription": "Crystal-clear acrylic case built for the Pokémon 30th Anniversary Ultra Premium Collection box.",
     "description": "Protect and showcase your 30th Anniversary Ultra Premium Collection with a precision-cut, crystal-clear acrylic display case. Built to fit the UPC box exactly, with a strong magnetic lid for easy access that keeps your collection looking pristine.",
     "specs": [
       "Fits: Pokémon 30th Anniversary UPC",
@@ -112,14 +117,23 @@
     "id": "pokemon-center-30th-etb",
     "weightOz": 56,
     "stockGroup": "30th-etb-case",
-    "name": "Pok\u00e9mon Center 30th Anniversary ETB Case",
+    "name": "Pokémon Center 30th Anniversary ETB Case",
     "category": "pokemon",
     "price": 14.5,
-    "quantityPricing": [{ "qty": 5, "price": 67 }, { "qty": 10, "price": 127.5 }],
+    "quantityPricing": [
+      {
+        "qty": 5,
+        "price": 67
+      },
+      {
+        "qty": 10,
+        "price": 127.5
+      }
+    ],
     "compareAtPrice": null,
     "image": "/images/pokemon-center-30th-etb-studio.jpg",
-    "shortDescription": "Exclusive-fit case for the Pok\u00e9mon Center 30th Anniversary Elite Trainer Box.",
-    "description": "A dedicated display case sized precisely for the Pok\u00e9mon Center exclusive 30th Anniversary Elite Trainer Box. Keep this hard-to-find ETB safe from dust, sun fade, and shelf wear while it stays on full display.",
+    "shortDescription": "Exclusive-fit case for the Pokémon Center 30th Anniversary Elite Trainer Box.",
+    "description": "A dedicated display case sized precisely for the Pokémon Center exclusive 30th Anniversary Elite Trainer Box. Keep this hard-to-find ETB safe from dust, sun fade, and shelf wear while it stays on full display.",
     "specs": [
       "Fits: Pokémon Center 30th Anniv. ETB (exclusive)",
       "Precision measured for each specific product",
@@ -159,7 +173,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "launchesAt": "2026-11-02T10:00:00-08:00"
   },
   {
     "id": "25th-anniversary-etb",
@@ -194,7 +209,7 @@
     "price": 27,
     "compareAtPrice": null,
     "image": "/images/25th-anniversary-upc-studio.jpg",
-    "shortDescription": "Precision-fit acrylic case for the Pok\u00e9mon 25th Anniversary Ultra Premium Collection.",
+    "shortDescription": "Precision-fit acrylic case for the Pokémon 25th Anniversary Ultra Premium Collection.",
     "description": "Show off your 25th Anniversary Ultra Premium Collection in a museum-quality acrylic case, cut to fit the box exactly with zero wasted space. A permanent way to protect one of the most sought-after UPCs.",
     "specs": [
       "Fits: Pokémon 25th Anniversary UPC",
@@ -219,7 +234,7 @@
     "compareAtPrice": 27,
     "image": "/images/prismatic-evolutions-figure-collection-studio.jpg",
     "shortDescription": "On sale: display case for the Prismatic Evolutions Figure Collection box.",
-    "description": "Fitted acrylic protection for the Prismatic Evolutions Figure Collection. Currently on sale \u2014 grab it while it lasts.",
+    "description": "Fitted acrylic protection for the Prismatic Evolutions Figure Collection. Currently on sale — grab it while it lasts.",
     "specs": [
       "Fits: Prismatic Evolutions Figure Collection",
       "Precision measured for each specific product",
@@ -241,7 +256,11 @@
     "name": "151 & Prismatic Evolutions Booster Bundle Display Case (fits 6-pack bundle)",
     "category": "pokemon",
     "price": 10.5,
-    "mixMatch": { "group": "booster-bundle-6pack", "minQty": 6, "price": 9.5 },
+    "mixMatch": {
+      "group": "booster-bundle-6pack",
+      "minQty": 6,
+      "price": 9.5
+    },
     "compareAtPrice": null,
     "image": "/images/151-prismatic-booster-bundle-studio.jpg",
     "shortDescription": "Display case for 6-pack booster bundles from 151 and Prismatic Evolutions.",
@@ -269,7 +288,7 @@
     "compareAtPrice": null,
     "image": "/images/japanese-regional-boxes-studio.jpg",
     "shortDescription": "Fits Hiroshima, Fukuoka, and Tohoku regional promo boxes.",
-    "description": "Purpose-built for the Japanese exclusive Pok\u00e9mon Center \"Hiroshima Special Collection\" box \u2014 also fits Fukuoka and Tohoku regional editions. A great way to protect these limited-run imports.",
+    "description": "Purpose-built for the Japanese exclusive Pokémon Center \"Hiroshima Special Collection\" box — also fits Fukuoka and Tohoku regional editions. A great way to protect these limited-run imports.",
     "specs": [
       "Fits: Hiroshima / Fukuoka / Tohoku regional boxes",
       "Precision measured for each specific product",
@@ -290,7 +309,12 @@
     "name": "Mega Charizard EX UPC Display Case",
     "category": "pokemon",
     "price": 30,
-    "quantityPricing": [{ "qty": 2, "price": 48 }],
+    "quantityPricing": [
+      {
+        "qty": 2,
+        "price": 48
+      }
+    ],
     "compareAtPrice": null,
     "image": "/images/mega-charizard-ex-upc-studio.jpg",
     "shortDescription": "Premium case for the Mega Charizard EX Ultra Premium Collection.",
@@ -316,7 +340,11 @@
     "name": "Ascended Heroes Booster Bundle Display",
     "category": "pokemon",
     "price": 10.5,
-    "mixMatch": { "group": "booster-bundle-6pack", "minQty": 6, "price": 9.5 },
+    "mixMatch": {
+      "group": "booster-bundle-6pack",
+      "minQty": 6,
+      "price": 9.5
+    },
     "compareAtPrice": null,
     "image": "/images/ascended-heroes-bundle-studio.jpg",
     "shortDescription": "Display case for the Ascended Heroes booster bundle.",
@@ -421,7 +449,7 @@
     "compareAtPrice": null,
     "image": "/images/sealed-booster-bundle-display-studio.jpg",
     "shortDescription": "Premium display case for a sealed booster bundle.",
-    "description": "Our premium option for sealed booster bundles \u2014 a tight, precisely measured fit and a crystal-clear finish for collectors who want the best on their shelf.",
+    "description": "Our premium option for sealed booster bundles — a tight, precisely measured fit and a crystal-clear finish for collectors who want the best on their shelf.",
     "specs": [
       "Fits: Sealed booster bundle",
       "Precision measured for each specific product",
@@ -562,12 +590,12 @@
   {
     "id": "one-piece-tin-display-vol1-2",
     "weightOz": 64,
-    "name": "One Piece Tin Display Case (Vol. 1\u20132)",
+    "name": "One Piece Tin Display Case (Vol. 1–2)",
     "category": "one-piece",
     "price": 25,
     "compareAtPrice": null,
     "image": "/images/one-piece-studio.jpg",
-    "shortDescription": "Display case for One Piece Card Game tins, Volumes 1\u20132.",
+    "shortDescription": "Display case for One Piece Card Game tins, Volumes 1–2.",
     "description": "A dedicated acrylic case for One Piece Card Game collector tins from Volumes 1 and 2. Keep your One Piece sealed product safe and on display.",
     "specs": [
       "Fits: One Piece Card Game tin, Vol. 1–2",
@@ -745,8 +773,8 @@
     "compareAtPrice": null,
     "status": "special-order",
     "image": "/images/dark-sylveon-25th-studio.jpg",
-    "shortDescription": "SPECIAL ORDER ONLY \u2014 character-specific case for the Dark Sylveon 25th Anniversary box. Text us to order.",
-    "description": "A precision case built specifically for the Dark Sylveon 25th Anniversary box \u2014 a fan-favorite piece deserving a dedicated display. This case is special order only \u2014 text us at 650-248-2473 or message us through the Contact page to arrange one.",
+    "shortDescription": "SPECIAL ORDER ONLY — character-specific case for the Dark Sylveon 25th Anniversary box. Text us to order.",
+    "description": "A precision case built specifically for the Dark Sylveon 25th Anniversary box — a fan-favorite piece deserving a dedicated display. This case is special order only — text us at 650-248-2473 or message us through the Contact page to arrange one.",
     "specs": [
       "Status: Special Order Only — contact us",
       "Fits: Dark Sylveon 25th Anniversary box",
@@ -764,10 +792,15 @@
   {
     "id": "pokemon-151-upc",
     "weightOz": 80,
-    "name": "Pok\u00e9mon 151 UPC Display Case",
+    "name": "Pokémon 151 UPC Display Case",
     "category": "pokemon",
     "price": 30,
-    "quantityPricing": [{ "qty": 2, "price": 48 }],
+    "quantityPricing": [
+      {
+        "qty": 2,
+        "price": 48
+      }
+    ],
     "compareAtPrice": null,
     "image": "/images/pokemon-151-upc-studio.jpg",
     "shortDescription": "Standard-fit case for the Scarlet & Violet 151 Ultra Premium Collection.",
@@ -811,13 +844,13 @@
   {
     "id": "pokemon-booster-box-standard",
     "weightOz": 48,
-    "name": "Pok\u00e9mon Booster Box Display Case (Standard)",
+    "name": "Pokémon Booster Box Display Case (Standard)",
     "category": "pokemon",
     "price": 12.5,
     "compareAtPrice": null,
     "image": "/images/pokemon-booster-box-studio.jpg",
-    "shortDescription": "Universal-fit case for a standard 36-pack Pok\u00e9mon booster box.",
-    "description": "Our everyday-carry case for a standard Pok\u00e9mon booster box. Affordable, precisely fitted, and finished to the same crystal-clear standard as our premium cases.",
+    "shortDescription": "Universal-fit case for a standard 36-pack Pokémon booster box.",
+    "description": "Our everyday-carry case for a standard Pokémon booster box. Affordable, precisely fitted, and finished to the same crystal-clear standard as our premium cases.",
     "specs": [
       "Fits: Standard 36-pack Pokémon booster box",
       "Precision measured for each specific product",
@@ -884,7 +917,7 @@
     "id": "30th-anniversary-sylveon-ex-box",
     "weightOz": 64,
     "stock": 1,
-    "name": "Pok\u00e9mon Center 30th Anniversary Sylveon ex Box",
+    "name": "Pokémon Center 30th Anniversary Sylveon ex Box",
     "category": "pokemon",
     "price": 20,
     "compareAtPrice": null,
@@ -907,13 +940,13 @@
   {
     "id": "crown-zenith-etb-plus",
     "weightOz": 56,
-    "name": "Crown Zenith Pok\u00e9mon Center ETB Plus Case",
+    "name": "Crown Zenith Pokémon Center ETB Plus Case",
     "category": "pokemon",
     "price": 16,
     "compareAtPrice": null,
     "image": "/images/crown-zenith-etb-plus-studio.jpg",
-    "shortDescription": "Precision-fit case for the Pok\u00e9mon Center Crown Zenith Elite Trainer Box Plus.",
-    "description": "A dedicated display case sized precisely for the Pok\u00e9mon Center exclusive Crown Zenith Elite Trainer Box Plus. Keep this collector favorite safe from dust, sun fade, and shelf wear while it stays on full display.",
+    "shortDescription": "Precision-fit case for the Pokémon Center Crown Zenith Elite Trainer Box Plus.",
+    "description": "A dedicated display case sized precisely for the Pokémon Center exclusive Crown Zenith Elite Trainer Box Plus. Keep this collector favorite safe from dust, sun fade, and shelf wear while it stays on full display.",
     "specs": [
       "Fits: Pokémon Center Crown Zenith Elite Trainer Box Plus",
       "Precision measured for each specific product",
@@ -975,7 +1008,11 @@
   {
     "id": "tcg-bundle-case-addon",
     "hidden": true,
-    "addOnForIds": ["prismatic-evolutions-booster-bundle", "phantasmal-flames-booster-bundle", "destined-rivals-booster-bundle"],
+    "addOnForIds": [
+      "prismatic-evolutions-booster-bundle",
+      "phantasmal-flames-booster-bundle",
+      "destined-rivals-booster-bundle"
+    ],
     "offerTitle": "Protect your bundle with an acrylic case?",
     "offerName": "Acrylic Display Case for Your Booster Bundle",
     "noDiscount": true,
@@ -1015,7 +1052,9 @@
   {
     "id": "tcg-box-case-addon",
     "hidden": true,
-    "addOnForIds": ["phantasmal-flames-booster-box"],
+    "addOnForIds": [
+      "phantasmal-flames-booster-box"
+    ],
     "offerTitle": "Protect your booster box with an acrylic case?",
     "offerName": "Acrylic Display Case for Your Booster Box",
     "noDiscount": true,

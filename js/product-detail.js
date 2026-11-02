@@ -43,7 +43,8 @@
   const stock = Products.stockOf(product);
   const soldOut = Products.isSoldOut(product);
   // A sold-out product can carry an optional "restock" note, e.g. "mid to late October".
-  const soldOutLabel = product.restock ? (/^tbd$/i.test(product.restock) ? 'Sold out &mdash; restock date to be announced' : `Sold out &mdash; restock estimated ${product.restock}`) : 'Sold out';
+  const comingSoon = Products.notYet(product);
+  const soldOutLabel = comingSoon ? Products.launchLabel(product) : product.restock ? (/^tbd$/i.test(product.restock) ? 'Sold out &mdash; restock date to be announced' : `Sold out &mdash; restock estimated ${product.restock}`) : 'Sold out';
   const stockLabel = isSpecialOrder
     ? 'Special Order Only &mdash; contact us to order'
     : (soldOut ? soldOutLabel : (Products.isLowStock(product) ? 'Low stock' : 'In stock, ready to ship'));
@@ -113,12 +114,12 @@
             <a class="btn btn-secondary" href="sms:6502482473" style="text-decoration:none;">Text 650-248-2473</a>
           ` : `
             <button class="btn btn-primary" id="addToCartBtn" ${soldOut ? 'disabled' : ''}>
-              ${soldOut ? 'Sold Out' : 'Add to Cart'}
+              ${comingSoon ? 'Coming Soon' : soldOut ? 'Sold Out' : 'Add to Cart'}
             </button>
             <button class="btn btn-secondary" id="pdpCheckoutBtn" ${soldOut ? 'disabled' : ''}>Order Now</button>
           `}
         </div>
-        ${soldOut && !isSpecialOrder ? `
+        ${soldOut && !comingSoon && !isSpecialOrder ? `
           <form id="notifyForm" class="notify-form" style="margin-top:16px;padding:14px;border:1px solid var(--border);border-radius:12px;">
             <p style="margin:0 0 4px;font-weight:600;">Get notified when it's back</p>
             <p class="cart-note" style="text-align:left;margin:0 0 10px;">Leave your email and we'll send you one message when this is back in stock. No spam.</p>
@@ -166,7 +167,7 @@
     const out = soldOut || left <= 0;
     addBtn.disabled = out;
     checkoutBtn.disabled = out;
-    addBtn.textContent = out ? 'Sold Out' : 'Add to Cart';
+    addBtn.textContent = comingSoon ? 'Coming Soon' : out ? 'Sold Out' : 'Add to Cart';
     // Customers never see exact stock numbers: "Low stock" under 10, otherwise "In stock".
     stockText.innerHTML = soldOut ? soldOutLabel
       : out ? 'Sold out &mdash; every available unit is in your cart'

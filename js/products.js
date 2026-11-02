@@ -45,10 +45,21 @@ const Products = {
     return p.inStock !== false && s !== null && s > 0 && s < this.LOW_STOCK_UNDER;
   },
 
-  // Sold out = marked inStock:false, or a stock count (own or shared) of 0.
+  // A product with "launchesAt" (ISO time with the Pacific offset, -08:00 in winter / -07:00 in summer)
+  // can't be bought until that moment: it shows "Coming soon" and checkout refuses it (api/create-checkout.js).
+  notYet(p) {
+    return !!(p && p.launchesAt && Date.now() < Date.parse(p.launchesAt));
+  },
+
+  launchLabel(p) {
+    const when = new Date(p.launchesAt).toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles', timeZoneName: 'short' });
+    return `Coming soon &mdash; available ${when}`;
+  },
+
+  // Sold out = marked inStock:false, or a stock count (own or shared) of 0. Not yet launched counts too.
   isSoldOut(p) {
     const s = this.stockOf(p);
-    return p.inStock === false || (s !== null && s <= 0);
+    return p.inStock === false || (s !== null && s <= 0) || this.notYet(p);
   },
 
   async byId(id) {
@@ -322,6 +333,7 @@ const Products = {
 
   statusBadge(p) {
     if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
+    if (this.notYet(p)) return { label: 'COMING SOON', bg: '#e8c14f', fg: '#201400' };
     if (this.isSoldOut(p)) return { label: 'SOLD OUT', bg: 'var(--text-faint)', fg: '#fff' };
     if (this.isLowStock(p)) return { label: 'LOW STOCK', bg: '#f5a524', fg: '#201400' };
     return null;
