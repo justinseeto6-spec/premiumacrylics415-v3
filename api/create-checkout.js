@@ -19,6 +19,7 @@ const Products = require('../js/products.js');
 const Shipping = require('../js/shipping.js');
 const Tax = require('../js/tax.js');
 const PromoCounter = require('./_promo.js');
+const FlashCounter = require('./_flash.js');
 const config = require('./_config.js');
 
 const SQUARE_VERSION = '2025-01-23';
@@ -117,7 +118,16 @@ module.exports = async (req, res) => {
       if (it.qty > eligible) return fail(res, 400, `The ${p.name} can only be added to an order with the product it is for (one case per item). Please refresh and try again.`);
     }
   }
+  // Launch deal (see Products.flash): only checked when the cart holds enough of its case. Set right
+  // before pricing, with nothing awaited in between, so concurrent orders can't see each other's flag.
+  const flash = Products.flash;
+  let flashApplied = false;
+  if (flash && flash.active && items.some(i => i.id === flash.productId && i.qty >= flash.qty)) {
+    flashApplied = (await FlashCounter.status()).available;
+  }
+  Products._flashOn = flashApplied;
   const { lines, subtotal } = Products.cartTotals(catalog, items);
+  Products._flashOn = false;
   // Automatic spend-more-save-more discount (tiers in js/products.js). Only ELIGIBLE items count
   // toward the tiers and get the discount - products flagged "noDiscount" (the Eevee box) don't.
   const discount = Products.discountForLines(lines);
@@ -141,7 +151,7 @@ module.exports = async (req, res) => {
   // Shipping is priced here from the cart weight (never from anything the browser sends).
   let shipQuote = null;
   if (delivery === 'ship') {
-    shipQuote = Shipping.quote(lines);
+    shipQuote = Shipping.quote(lines, flashApplied && typeof flash.shipping === 'number' ? { productId: flash.productId, qty: flash.qty, fee: flash.shipping } : undefined);
     if (!shipQuote.ok) {
       return fail(res, 400, 'We can\'t price shipping for this order online. Please text us at 650-248-2473 for a shipping quote, or choose pick-up.');
     }
@@ -163,7 +173,11 @@ module.exports = async (req, res) => {
   if (gift) lineItems.push({ name: `FREE GIFT: ${gift.name} (${promo.title})`, quantity: '1', base_price_money: { amount: 0, currency: 'USD' } });
 
   const order = { location_id: locationId, line_items: lineItems };
-  if (gift) order.metadata = { promo: promo.tag };
+  if (gift || flashApplied) {
+    order.metadata = {};
+    if (gift) order.metadata.promo = promo.tag;
+    if (flashApplied) order.metadata.flash = flash.tag;   // counted by api/_flash.js
+  }
   if (discount.percent > 0) {
     // Square takes this off the items before it figures sales tax.
     order.discounts = [{ uid: 'order-discount', name: `Order discount (${discount.percent}% off)`, percentage: String(discount.percent), scope: 'LINE_ITEM' }];
@@ -190,7 +204,7 @@ module.exports = async (req, res) => {
     checkout_options: checkoutOptions,
     payment_note: (shipQuote
       ? `${DELIVERY_NOTES[delivery]} - $${shipQuote.fee.toFixed(2)} for about ${(shipQuote.weightOz / 16).toFixed(1)} lb`
-      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`) + (discount.percent > 0 ? ` | ${discount.percent}% order discount` : '') + (gift ? ` | ${promo.title} gift: ${gift.name}` : '')
+      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`) + (discount.percent > 0 ? ` | ${discount.percent}% order discount` : '') + (gift ? ` | ${promo.title} gift: ${gift.name}` : '') + (flashApplied ? ` | ${flash.title}: ${flash.qty} for $${flash.price}` : '')
   };
 
   // ---- ask Square for the payment page ----

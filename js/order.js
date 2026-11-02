@@ -137,7 +137,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   const pickupRadio = document.getElementById('deliveryPickup');
   const shipRadio = document.getElementById('deliveryShip');
   const labelRadio = document.getElementById('deliveryLabel');
-  const shipQuote = Shipping.quote(cartLines);
+  const shipQuote = Shipping.quote(cartLines, Products.flashShipOpts(cartLines));
   const shipWeightText = shipQuote.ok ? `about ${Products.formatWeight(shipQuote.weightOz)}` : '';
 
   if (shipQuote.ok) {

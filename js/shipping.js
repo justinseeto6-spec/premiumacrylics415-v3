@@ -70,7 +70,11 @@ const Shipping = {
   // Products flagged "shippingIncluded" already have shipping built into their price, so the
   // customer only pays the EXTRA shipping their other items add (total weight price minus the
   // price of the shipping-included weight). A cart of only shipping-included items ships free.
-  quote(lines) {
+  // flashShip (optional, from Products.flashShipOpts or api/create-checkout.js while the launch deal
+  // is open): { productId, qty, fee } - the order pays `fee` flat if its weight band is the same band
+  // the deal's pair of cases falls in (so 2 UPC cases pay $18 instead of $20; an order that grows
+  // into a heavier band pays that band's normal price).
+  quote(lines, flashShip) {
     let weightOz = 0, includedOz = 0;
     for (const l of lines) {
       if (typeof l.product.weightOz !== 'number') return { ok: false, reason: 'noweight' };
@@ -80,7 +84,12 @@ const Shipping = {
     const total = this.feeForOz(weightOz);
     if (!total) return { ok: false, reason: 'heavy', weightOz };
     const included = this.feeForOz(includedOz);
-    const fee = Math.max(0, Math.round((total.fee - (included ? included.fee : 0)) * 100) / 100);
+    let fee = Math.max(0, Math.round((total.fee - (included ? included.fee : 0)) * 100) / 100);
+    if (flashShip && fee > flashShip.fee) {
+      const dealLine = lines.find(l => l.product.id === flashShip.productId && l.qty >= flashShip.qty);
+      const pair = dealLine && this.feeForOz(dealLine.product.weightOz * flashShip.qty);
+      if (pair && pair.bandIndex === total.bandIndex) fee = flashShip.fee;
+    }
     return { ok: true, fee, weightOz, bandIndex: total.bandIndex, includedOz };
   }
 };

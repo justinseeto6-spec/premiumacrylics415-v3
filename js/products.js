@@ -25,6 +25,8 @@ const Products = {
       }
     });
     Cart.enforceLimits();
+    // Is the launch deal open? Known before anything is priced, so every total on the page agrees.
+    if (this.flash && this.flash.active) this._flashOn = !!(await this.flashStatus()).available;
     return this._cache;
   },
 
@@ -99,6 +101,39 @@ const Products = {
     startsAt: '2026-10-10T00:00:00-07:00'
   },
 
+  // ---- Launch deal: "first 15 orders get 2 of a case for a special price" ----
+  // EDIT HERE. From `startsAt` until `limit` PAID orders have used it, the first `qty` of the case
+  // in each order cost `price` in total (any more of that case cost the normal price/tiers).
+  // Square keeps the count (api/_flash.js), so nothing to update by hand. active:false ends it early.
+  // `startsAt` must carry the Pacific UTC offset: -08:00 in winter (PST), -07:00 in summer (PDT).
+  flash: {
+    active: true,
+    tag: 'flash-30th-upc',
+    title: 'Launch deal',
+    productId: '30th-anniversary-upc',
+    qty: 2,
+    price: 50,
+    shipping: 18,   // flat shipping on a deal order whose shipping lands in the same weight band as the deal pair
+    limit: 5,
+    startsAt: '2026-11-02T10:00:00-08:00'
+  },
+  _flashOn: false,   // set by flashStatus() in the browser, and by api/create-checkout.js on the server
+
+  // Is the launch deal open right now? (asks /api/flash-status once per page)
+  flashStatus() {
+    if (!this._flash) {
+      this._flash = fetch('/api/flash-status').then(r => (r.ok ? r.json() : { available: false })).catch(() => ({ available: false }));
+    }
+    return this._flash;
+  },
+  _flash: null,
+
+  // Does the launch deal apply to `qty` of product `p` right now?
+  flashApplies(p, qty) {
+    const f = this.flash;
+    return !!(f && f.active && this._flashOn && p && p.id === f.productId && qty >= f.qty);
+  },
+
   _promo: null,
   // Is the promo still available? (asks /api/promo-status once per page; never shows a count)
   promoStatus() {
@@ -156,6 +191,11 @@ const Products = {
   lineTotal(p, qty) {
     let remaining = qty;
     let total = 0;
+    // Launch deal: the first `qty` of this case cost the deal price, the rest follow the normal pricing.
+    if (this.flashApplies(p, qty)) {
+      total = this.flash.price;
+      remaining = qty - this.flash.qty;
+    }
     const tiers = (p.quantityPricing || []).slice().sort((a, b) => b.qty - a.qty);
     for (const t of tiers) {
       const sets = Math.floor(remaining / t.qty);
@@ -171,11 +211,14 @@ const Products = {
   // omit it to get a general hint for cards/PDPs (used before anything's in the cart).
   dealLabel(p, qty) {
     const tiers = (p.quantityPricing || []).slice().sort((a, b) => b.qty - a.qty);
+    const f = this.flash;
     if (typeof qty === 'number') {
+      if (this.flashApplies(p, qty)) return `${f.title}: ${f.qty} for ${this.formatPrice(f.price)}`;
       const applied = tiers.find(t => qty >= t.qty);
       if (applied) return `${applied.qty} for ${this.formatPrice(applied.price)}`;
       return '';
     }
+    if (this.flash && this.flash.active && this._flashOn && p.id === this.flash.productId) return `${f.title}: ${f.qty} for ${this.formatPrice(f.price)}`;
     if (tiers.length === 1) return `${tiers[0].qty} for ${this.formatPrice(tiers[0].price)}`;
     if (tiers.length > 1) return 'Bulk pricing available';
     if (p.mixMatch) return `Mix & match ${p.mixMatch.minQty}+ for ${this.formatPrice(p.mixMatch.price)} each`;
@@ -187,11 +230,34 @@ const Products = {
   // (Mix-and-match deals are shown separately — see mixMatchLabel().)
   dealLabels(p) {
     const tiers = (p.quantityPricing || []).slice().sort((a, b) => a.qty - b.qty);
-    return tiers.map(t => {
+    const labels = tiers.map(t => {
       const each = t.price / t.qty;
       const save = p.price * t.qty - t.price;
       return `${t.qty}+ for ${this.formatPrice(t.price)} (${this.formatPrice(each)} each — save ${this.formatPrice(save)})`;
     });
+    return labels;
+  },
+
+  // Shipping override for js/shipping.js quote(): { productId, qty, fee } while the deal is open and
+  // one of these lines gets it, else undefined (normal weight-band shipping).
+  flashShipOpts(lines) {
+    const f = this.flash;
+    if (!f || typeof f.shipping !== 'number' || !lines.some(l => this.flashApplies(l.product, l.qty))) return undefined;
+    return { productId: f.productId, qty: f.qty, fee: f.shipping };
+  },
+
+  // The launch deal line for a product's page, or '' when the deal doesn't apply to it / is over.
+  // Before its start time it announces when it begins; while it is open it says "first N orders".
+  flashLabel(p) {
+    const f = this.flash;
+    if (!f || !f.active || !p || p.id !== f.productId) return '';
+    const allIn = typeof f.shipping === 'number' ? ` + $${f.shipping} flat shipping = $${f.price + f.shipping} delivered` : '';
+    if (this._flashOn) return `${f.title}: ${f.qty} for ${this.formatPrice(f.price)}${allIn} &mdash; first ${f.limit} orders only (one deal per order)`;
+    if (Date.now() < Date.parse(f.startsAt)) {
+      const when = new Date(f.startsAt).toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles', timeZoneName: 'short' });
+      return `${f.title}: ${f.qty} for ${this.formatPrice(f.price)}${allIn} starting ${when} &mdash; first ${f.limit} orders only`;
+    }
+    return '';
   },
 
   // Describes a product's mix-and-match deal against the sibling products that

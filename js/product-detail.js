@@ -76,8 +76,9 @@
           <span class="pdp-price">${Products.formatPrice(product.price)}</span>
           ${onSale ? `<span class="price-compare">${Products.formatPrice(product.compareAtPrice)}</span>` : ''}
         </div>
-        ${Products.dealLabels(product).length ? `
+        ${Products.dealLabels(product).length || Products.flashLabel(product) ? `
           <div class="pdp-deal" style="margin:6px 0 0;">
+            ${Products.flashLabel(product) ? `<p style="margin:2px 0;color:var(--accent);font-weight:700;">${Products.flashLabel(product)}</p>` : ''}
             ${Products.dealLabels(product).map(l => `<p style="margin:2px 0;color:var(--accent);font-weight:600;">Bulk pricing: ${l}</p>`).join('')}
           </div>
         ` : ''}
