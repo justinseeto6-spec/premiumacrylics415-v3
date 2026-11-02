@@ -116,7 +116,6 @@
   {
     "id": "pokemon-center-30th-etb",
     "weightOz": 56,
-    "stockGroup": "30th-etb-case",
     "name": "Pokémon Center 30th Anniversary ETB Case",
     "category": "pokemon",
     "price": 14.5,
@@ -145,7 +144,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "stock": 5
   },
   {
     "id": "pokemon-center-30th-etb-5pack",
