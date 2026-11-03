@@ -117,7 +117,8 @@ module.exports = async (req, res) => {
   if (preorderItems.length && preorderItems.length < items.length) {
     return fail(res, 400, 'Pre-order items ship later, so they need to be ordered on their own. Please remove the other items from your cart (or the pre-order) and check out again.');
   }
-  const preorderShips = preorderItems.length ? catalog.find(pp => pp.id === preorderItems[0].id).preorder.ships : null;
+  const preorderInfo = preorderItems.length ? catalog.find(pp => pp.id === preorderItems[0].id).preorder : null;
+  const preorderShips = preorderInfo ? preorderInfo.ships : null;
   // Add-on cases (products with "addOnForIds") can only be bought alongside the products they are for,
   // one case per product, so the discounted add-on price can't be used on its own.
   for (const it of items) {
@@ -213,7 +214,7 @@ module.exports = async (req, res) => {
     checkout_options: checkoutOptions,
     payment_note: (shipQuote
       ? `${DELIVERY_NOTES[delivery]} - $${shipQuote.fee.toFixed(2)} for about ${(shipQuote.weightOz / 16).toFixed(1)} lb`
-      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`) + (discount.percent > 0 ? ` | ${discount.percent}% order discount` : '') + (gift ? ` | ${promo.title} gift: ${gift.name}` : '') + (flashApplied ? ` | ${flash.title}: ${flash.qty} for $${flash.price}` : '') + (preorderShips ? ` | PRE-ORDER, ships in ${preorderShips}` : '')
+      : DELIVERY_NOTES[delivery]) + (delivery === 'pickup' ? '' : ` | ship-to state: ${shipState}`) + (discount.percent > 0 ? ` | ${discount.percent}% order discount` : '') + (gift ? ` | ${promo.title} gift: ${gift.name}` : '') + (flashApplied ? ` | ${flash.title}: ${flash.qty} for $${flash.price}` : '') + (preorderShips ? ` | PRE-ORDER, ships in ${preorderShips}${preorderInfo.cancelBy ? `; cancel by ${preorderInfo.cancelBy}, no refunds after` : ''}` : '')
   };
 
   // ---- ask Square for the payment page ----

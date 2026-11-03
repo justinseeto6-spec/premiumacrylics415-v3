@@ -82,6 +82,7 @@
         ${preorder ? `
           <div class="pdp-deal" style="margin:6px 0 0;">
             <p style="margin:2px 0;color:var(--accent);font-weight:700;">Pre-order: ships in ${product.preorder.ships}. Pay now and we ship it as soon as stock arrives. Pre-orders must be placed on their own (not with in-stock items).</p>
+            ${product.preorder.cancelBy ? `<p style="margin:6px 0 2px;color:#ff3b30;font-weight:700;">Cancellations accepted up until ${product.preorder.cancelBy}. After ${product.preorder.cancelBy}, refunds will NOT be provided.</p>` : ''}
           </div>
         ` : ''}
         ${Products.dealLabels(product).length || Products.flashLabel(product) ? `

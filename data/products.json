@@ -100,6 +100,7 @@
     "description": "Pre-order a precision-fit, crystal-clear acrylic display case for the Costco exclusive Pokémon 30th Anniversary 2-Pack, the Elite Trainer Box plus Booster Bundle set. It keeps this collector's bundle protected from dust, sun fade, and shelf wear while the artwork stays fully visible. Pre-orders ship in December, and shipping is included in the price.",
     "specs": [
       "Status: Pre-order — ships in December, shipping included",
+      "Pre-order cancellations accepted up until Nov 30. After Nov 30, refunds will NOT be provided",
       "Fits: Costco exclusive Pokémon 30th Anniversary ETB 2-Pack (Elite Trainer Box + Booster Bundle)",
       "Precision measured for each specific product",
       "Material: Cast acrylic, crystal-clear finish",
@@ -114,7 +115,8 @@
     "shippingIncluded": true,
     "noDiscount": true,
     "preorder": {
-      "ships": "December"
+      "ships": "December",
+      "cancelBy": "Nov 30"
     }
   },
   {
