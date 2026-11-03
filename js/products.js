@@ -51,6 +51,12 @@ const Products = {
     return !!(p && p.launchesAt && Date.now() < Date.parse(p.launchesAt));
   },
 
+  // A product with "preorder": { ships: "December" } is sold before it is in hand: still buyable while it has
+  // stock (the stock number is the pre-order cap), but labeled and kept out of carts with in-stock items.
+  isPreorder(p) {
+    return !!(p && p.preorder) && !this.isSoldOut(p);
+  },
+
   launchLabel(p) {
     const when = new Date(p.launchesAt).toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles', timeZoneName: 'short' });
     return `Coming soon &mdash; available ${when}`;
@@ -334,6 +340,7 @@ const Products = {
   statusBadge(p) {
     if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
     if (this.notYet(p)) return { label: 'COMING SOON', bg: '#e8c14f', fg: '#201400' };
+    if (this.isPreorder(p)) return { label: 'PRE-ORDER', bg: '#e8c14f', fg: '#201400' };
     if (this.isSoldOut(p)) return { label: 'SOLD OUT', bg: 'var(--text-faint)', fg: '#fff' };
     if (this.isLowStock(p)) return { label: 'LOW STOCK', bg: '#f5a524', fg: '#201400' };
     return null;
@@ -356,7 +363,7 @@ const Products = {
             <span class="price">${this.formatPrice(p.price)}</span>
             ${this.dealLabel(p) ? `<span class="price-compare" style="text-decoration:none;color:var(--accent);">${this.dealLabel(p)}</span>` : ''}
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
-            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (!this.isSoldOut(p) ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">Add to Cart</button>` : '')}
+            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (!this.isSoldOut(p) ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${this.isPreorder(p) ? 'Pre-order' : 'Add to Cart'}</button>` : '')}
           </div>
         </div>
       </a>

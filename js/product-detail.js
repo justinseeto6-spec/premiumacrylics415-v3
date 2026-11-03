@@ -45,9 +45,11 @@
   // A sold-out product can carry an optional "restock" note, e.g. "mid to late October".
   const comingSoon = Products.notYet(product);
   const soldOutLabel = comingSoon ? Products.launchLabel(product) : product.restock ? (/^tbd$/i.test(product.restock) ? 'Sold out &mdash; restock date to be announced' : `Sold out &mdash; restock estimated ${product.restock}`) : 'Sold out';
+  const preorder = Products.isPreorder(product);
+  const addLabel = preorder ? 'Pre-order Now' : 'Add to Cart';
   const stockLabel = isSpecialOrder
     ? 'Special Order Only &mdash; contact us to order'
-    : (soldOut ? soldOutLabel : (Products.isLowStock(product) ? 'Low stock' : 'In stock, ready to ship'));
+    : (soldOut ? soldOutLabel : (preorder ? `Pre-order &mdash; ships in ${product.preorder.ships}` : (Products.isLowStock(product) ? 'Low stock' : 'In stock, ready to ship')));
 
   root.innerHTML = `
     <div class="pdp">
@@ -77,6 +79,11 @@
           <span class="pdp-price">${Products.formatPrice(product.price)}</span>
           ${onSale ? `<span class="price-compare">${Products.formatPrice(product.compareAtPrice)}</span>` : ''}
         </div>
+        ${preorder ? `
+          <div class="pdp-deal" style="margin:6px 0 0;">
+            <p style="margin:2px 0;color:var(--accent);font-weight:700;">Pre-order: ships in ${product.preorder.ships}. Pay now and we ship it as soon as stock arrives. Pre-orders must be placed on their own (not with in-stock items).</p>
+          </div>
+        ` : ''}
         ${Products.dealLabels(product).length || Products.flashLabel(product) ? `
           <div class="pdp-deal" style="margin:6px 0 0;">
             ${Products.flashLabel(product) ? `<p style="margin:2px 0;color:var(--accent);font-weight:700;">${Products.flashLabel(product)}</p>` : ''}
@@ -114,9 +121,9 @@
             <a class="btn btn-secondary" href="sms:6502482473" style="text-decoration:none;">Text 650-248-2473</a>
           ` : `
             <button class="btn btn-primary" id="addToCartBtn" ${soldOut ? 'disabled' : ''}>
-              ${comingSoon ? 'Coming Soon' : soldOut ? 'Sold Out' : 'Add to Cart'}
+              ${comingSoon ? 'Coming Soon' : soldOut ? 'Sold Out' : addLabel}
             </button>
-            <button class="btn btn-secondary" id="pdpCheckoutBtn" ${soldOut ? 'disabled' : ''}>Order Now</button>
+            <button class="btn btn-secondary" id="pdpCheckoutBtn" ${soldOut ? 'disabled' : ''}>${preorder ? 'Pre-order &amp; Checkout' : 'Order Now'}</button>
           `}
         </div>
         ${soldOut && !comingSoon && !isSpecialOrder ? `
@@ -167,7 +174,7 @@
     const out = soldOut || left <= 0;
     addBtn.disabled = out;
     checkoutBtn.disabled = out;
-    addBtn.textContent = comingSoon ? 'Coming Soon' : out ? 'Sold Out' : 'Add to Cart';
+    addBtn.textContent = comingSoon ? 'Coming Soon' : out ? 'Sold Out' : addLabel;
     // Customers never see exact stock numbers: "Low stock" under 10, otherwise "In stock".
     stockText.innerHTML = soldOut ? soldOutLabel
       : out ? 'Sold out &mdash; every available unit is in your cart'

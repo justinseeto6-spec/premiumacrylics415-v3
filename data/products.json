@@ -90,17 +90,16 @@
   {
     "id": "costco-30th-etb-bundle",
     "weightOz": 64,
-    "stock": 0,
-    "restock": "late November",
-    "name": "Costco Exclusive 30th Anniversary ETB Bundle Display Case",
+    "stock": 45,
+    "name": "Costco Exclusive 30th Anniversary ETB Bundle Display Case — Pre-Order (Shipping Included)",
     "category": "pokemon",
-    "price": 20,
+    "price": 30,
     "compareAtPrice": null,
     "image": "/images/costco-30th-etb-bundle-photo2.jpg",
-    "shortDescription": "Sold out — restock estimated late November. Crystal-clear case for the Costco exclusive Pokémon 30th Anniversary ETB 2-Pack (Elite Trainer Box + Booster Bundle).",
-    "description": "A precision-fit, crystal-clear acrylic display case for the Costco exclusive Pokémon 30th Anniversary 2-Pack, the Elite Trainer Box plus Booster Bundle set. It keeps this collector's bundle protected from dust, sun fade, and shelf wear while the artwork stays fully visible. This item is currently sold out — we expect to restock late November.",
+    "shortDescription": "Pre-order now, ships in December. Shipping included. Crystal-clear case for the Costco exclusive Pokémon 30th Anniversary ETB 2-Pack (Elite Trainer Box + Booster Bundle).",
+    "description": "Pre-order a precision-fit, crystal-clear acrylic display case for the Costco exclusive Pokémon 30th Anniversary 2-Pack, the Elite Trainer Box plus Booster Bundle set. It keeps this collector's bundle protected from dust, sun fade, and shelf wear while the artwork stays fully visible. Pre-orders ship in December, and shipping is included in the price.",
     "specs": [
-      "Status: Sold out — restock estimated late November",
+      "Status: Pre-order — ships in December, shipping included",
       "Fits: Costco exclusive Pokémon 30th Anniversary ETB 2-Pack (Elite Trainer Box + Booster Bundle)",
       "Precision measured for each specific product",
       "Material: Cast acrylic, crystal-clear finish",
@@ -111,7 +110,12 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": true
+    "featured": true,
+    "shippingIncluded": true,
+    "noDiscount": true,
+    "preorder": {
+      "ships": "December"
+    }
   },
   {
     "id": "pokemon-center-30th-etb",
