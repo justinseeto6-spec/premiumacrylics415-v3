@@ -28,10 +28,11 @@ async function loadPartials() {
   });
 }
 
-// Soft-launch banner. Set SOFT_LAUNCH_BANNER to false to remove it everywhere. A visitor who
-// closes it won't see it again on this browser; change SOFT_LAUNCH_VERSION to show it to everyone again.
+// Top banner (text lives in partials/header.html; it was the soft-launch banner, now the 1 year anniversary).
+// Set SOFT_LAUNCH_BANNER to false to remove it everywhere. A visitor who closes it won't see it again on
+// this browser; change SOFT_LAUNCH_VERSION to show it to everyone again.
 const SOFT_LAUNCH_BANNER = true;
-const SOFT_LAUNCH_VERSION = 'v1';
+const SOFT_LAUNCH_VERSION = 'anniv1';
 
 function wireSoftLaunch() {
   const bar = document.getElementById('softLaunch');

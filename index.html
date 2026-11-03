@@ -50,6 +50,46 @@
     </div>
   </section>
 
+  <!-- 1 year anniversary deals. A card is hidden automatically when its product is sold out (data-pid) or,
+       for the launch deal, when the deal isn't open (data-flash). Prices below are typed text: update them
+       here if the prices in data/products.json change. Remove this whole section when the celebration ends. -->
+  <section class="section wrap" id="anniversaryDeals">
+    <div class="section-head">
+      <div>
+        <h2>&#127881; 1 Year Anniversary Deals</h2>
+        <p>Thank you for a great first year! Specials while supplies last.</p>
+      </div>
+      <a href="/shop.html" class="view-all">Shop all &rarr;</a>
+    </div>
+    <div class="category-grid">
+      <a class="category-card deal-card" id="dealFlash" data-flash href="/products/30th-anniversary-upc/" hidden>
+        <span class="deal-tag">Launch deal</span>
+        <h3>30th Anniversary UPC</h3>
+        <p>2 for $50 + $18 shipping = <strong>$68 delivered</strong>. First 5 orders only.</p>
+      </a>
+      <a class="category-card deal-card" data-pid="mega-charizard-ex-upc" href="/products/mega-charizard-ex-upc/">
+        <span class="deal-tag">Pair deal</span>
+        <h3>Mega Charizard EX &amp; 151 UPC</h3>
+        <p>2 of the same case: <strong>$68 shipped</strong></p>
+      </a>
+      <a class="category-card deal-card" data-pid="pokemon-center-30th-etb-5pack" href="/products/pokemon-center-30th-etb-5pack/">
+        <span class="deal-tag">5-pack</span>
+        <h3>Pokémon Center 30th ETB Cases</h3>
+        <p>5 for <strong>$65</strong>, shipping included</p>
+      </a>
+      <a class="category-card deal-card" data-pid="pokemon-booster-box-5pack" href="/products/pokemon-booster-box-5pack/">
+        <span class="deal-tag">5-pack</span>
+        <h3>Booster Box Cases</h3>
+        <p>5 for <strong>$60</strong>, shipping included (Pokémon &amp; One Piece)</p>
+      </a>
+      <a class="category-card deal-card" data-pid="costco-30th-etb-bundle" href="/products/costco-30th-etb-bundle/">
+        <span class="deal-tag">Pre-order</span>
+        <h3>Costco 30th ETB Bundle Case</h3>
+        <p><strong>$30 shipped</strong> &middot; ships in December</p>
+      </a>
+    </div>
+  </section>
+
   <section class="section wrap">
     <div class="section-head">
       <div>
@@ -173,6 +213,18 @@
     const products = await Products.all();
     const featured = products.filter(p => p.featured && !p.hidden).slice(0, 8);
     Products.renderGrid(document.getElementById('featuredGrid'), featured.length ? featured : products.slice(0, 8));
+
+    // Anniversary deals: hide a card whose product is sold out, show the launch deal only while it is open.
+    const deals = document.getElementById('anniversaryDeals');
+    if (deals) {
+      deals.querySelectorAll('[data-pid]').forEach(el => {
+        const p = products.find(x => x.id === el.dataset.pid);
+        if (!p || Products.isSoldOut(p)) el.hidden = true;
+      });
+      const flashCard = document.getElementById('dealFlash');
+      if (flashCard && Products._flashOn) flashCard.hidden = false;
+      if (!deals.querySelector('.deal-card:not([hidden])')) deals.hidden = true;
+    }
   })();
 
   (() => {
