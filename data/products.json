@@ -85,7 +85,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "deal": true
   },
   {
     "id": "costco-30th-etb-bundle",
@@ -180,7 +181,8 @@
     ],
     "inStock": true,
     "featured": false,
-    "launchesAt": "2026-11-02T10:00:00-08:00"
+    "launchesAt": "2026-11-02T10:00:00-08:00",
+    "deal": true
   },
   {
     "id": "25th-anniversary-etb",
@@ -393,7 +395,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "deal": true
   },
   {
     "id": "sword-shield-upc",
@@ -664,7 +667,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "deal": true
   },
   {
     "id": "one-piece-booster-box-3pack",
@@ -691,7 +695,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "deal": true
   },
   {
     "id": "one-piece-booster-box-5pack",
@@ -718,7 +723,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "deal": true
   },
   {
     "id": "pokemon-booster-box-5pack",
@@ -745,7 +751,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "deal": true
   },
   {
     "id": "one-piece-booster-box-op05-op16",

@@ -52,6 +52,15 @@ const Products = {
     return !!(p && p.launchesAt && Date.now() < Date.parse(p.launchesAt));
   },
 
+  // Shows on the shop page's Sale tab (/shop.html?category=deals): marked-down price, bulk or mix-and-match
+  // pricing, a pre-order, the launch deal's case, or anything flagged "deal": true in data/products.json
+  // (we flag the multi-case packs). Sold-out items are left out so every card on the tab can be bought.
+  isDeal(p) {
+    if (!p || p.status === 'special-order' || this.isSoldOut(p)) return false;
+    return !!(p.deal || p.preorder || p.mixMatch || (p.quantityPricing && p.quantityPricing.length) ||
+      (p.compareAtPrice && p.compareAtPrice > p.price) || this.flashLabel(p));
+  },
+
   // A product with "preorder": { ships: "December" } is sold before it is in hand: still buyable while it has
   // stock (the stock number is the pre-order cap), but labeled and kept out of carts with in-stock items.
   isPreorder(p) {
@@ -349,7 +358,8 @@ const Products = {
 
   cardHTML(p) {
     const onSale = p.compareAtPrice && p.compareAtPrice > p.price;
-    const status = this.statusBadge(p);
+    // A deal with no other badge gets a DEAL badge, so it stands out on the All tab too.
+    const status = this.statusBadge(p) || (!onSale && this.isDeal(p) ? { label: 'DEAL', bg: '#e8c14f', fg: '#201400' } : null);
     return `
       <a class="product-card" href="${this.url(p)}">
         <div class="product-thumb">
