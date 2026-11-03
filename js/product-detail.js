@@ -192,12 +192,16 @@
   qtyInput?.addEventListener('change', () => { qtyInput.value = wantedQty(); });
 
   addBtn?.addEventListener('click', () => {
+    const conflict = Cart.mixConflict(product.id);
+    if (conflict) { showToast(conflict); return; }
     const added = Cart.add(product.id, wantedQty());
     if (added) showToast(`Added ${added} × ${product.name} to cart`);
     refreshStock();
   });
 
   checkoutBtn?.addEventListener('click', () => {
+    const conflict = Cart.mixConflict(product.id);
+    if (conflict) { showToast(conflict); return; }
     Cart.add(product.id, wantedQty());
     goToCheckout();
   });

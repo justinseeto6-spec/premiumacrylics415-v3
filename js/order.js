@@ -253,6 +253,15 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     document.querySelector('.delivery-options').insertAdjacentHTML('beforebegin',
       `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">Local pick-up only: ${pickupOnlyNames.join(', ')} can't be shipped. Shipping options are off while it's in your cart.</p>`);
   }
+  // Pre-orders ship later, so a cart that mixes one with in-stock items can't be paid for: say so and
+  // turn the pay buttons off (the payment function refuses it too). Cart.mixConflict has the same rule.
+  const preorderNames = cartLines.filter(l => l.product.preorder).map(l => l.product.name);
+  const inStockNames = cartLines.filter(l => !l.product.preorder).map(l => l.product.name);
+  if (preorderNames.length && inStockNames.length) {
+    document.querySelector('.delivery-options').insertAdjacentHTML('beforebegin',
+      `<p class="cart-note" style="text-align:left;margin-top:8px;color:#ff3b30;font-weight:700;">Pre-orders must be ordered on their own. Please remove ${preorderNames.join(', ')} or the other items from your cart, then check out again.</p>`);
+    ['squarePayBtn', 'submitOrderBtn'].forEach(id => { const b = document.getElementById(id); if (b) b.disabled = true; });
+  }
   // A shipping-included product (products.json: "shippingIncluded": true, e.g. the UPC 2-pack) has
   // its shipping built into the price, so it can only be SHIPPED: pick-up and own-label are turned
   // off while one is in the cart. If that can't work (pick-up-only item in the cart, or too heavy

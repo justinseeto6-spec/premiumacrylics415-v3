@@ -15,6 +15,7 @@ const Products = {
     // "stock" caps how many a customer can add to the cart. A product with a "stockGroup"
     // shares one pool with every other product in that group instead of having its own.
     this._cache.forEach(p => {
+      if (p.preorder && !Cart.preorderIds.includes(p.id)) Cart.preorderIds.push(p.id);
       if (typeof p.stock === 'number') Cart.limits[p.id] = p.stock;
       // "maxPerOrder" caps one product per order (the checkout add-on offer: up to 3).
       if (typeof p.maxPerOrder === 'number') Cart.limits[p.id] = Math.min(p.maxPerOrder, Cart.limits[p.id] != null ? Cart.limits[p.id] : Infinity);
@@ -381,10 +382,12 @@ const Products = {
         e.preventDefault();
         e.stopPropagation();
         const id = decodeURIComponent(btn.dataset.addId);
+        const conflict = Cart.mixConflict(id);
         const added = Cart.add(id, 1);
         this.byId(id).then(p => {
           if (!window.showToast) return;
           const name = p ? p.name : 'item';
+          if (conflict) return showToast(conflict);
           showToast(added ? `Added ${name} to cart` : `All available ${name} are already in your cart`);
         });
       });

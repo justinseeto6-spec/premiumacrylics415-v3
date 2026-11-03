@@ -54,8 +54,25 @@ const Cart = {
     return Math.max(0, left);
   },
 
+  // Pre-order products ("preorder" in data/products.json; ids filled in by Products.all()) ship later,
+  // so they can't share a cart with in-stock items. Returns a message when adding this product would
+  // mix the two, else ''. The payment function (api/create-checkout.js) enforces the same rule.
+  preorderIds: [],
+  mixConflict(productId) {
+    const others = this.read().filter(i => i.id !== productId);
+    if (!others.length) return '';
+    const isPre = this.preorderIds.includes(productId);
+    if (others.some(i => this.preorderIds.includes(i.id) !== isPre)) {
+      return isPre
+        ? 'Pre-orders ship later, so they must be ordered on their own. Check out or remove the items in your cart first.'
+        : 'You have a pre-order in your cart. Pre-orders must be ordered on their own, so check out (or remove it) before adding other items.';
+    }
+    return '';
+  },
+
   // Returns how many units were actually added (0 if the stock limit is already reached).
   add(productId, qty = 1) {
+    if (this.mixConflict(productId)) return 0;
     const allowed = Math.min(qty, this.remaining(productId));
     if (allowed <= 0) return 0;
     const items = this.read();
