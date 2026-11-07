@@ -30,6 +30,35 @@
     "featured": false
   },
   {
+    "id": "ditto-premium-collection-30th",
+    "weightOz": 64,
+    "shippingIncluded": true,
+    "noDiscount": true,
+    "comingSoon": true,
+    "new": true,
+    "name": "Pokémon 30th Celebration Ditto Premium Collection Display Case (Shipping Included)",
+    "category": "pokemon",
+    "price": 27,
+    "compareAtPrice": null,
+    "image": "/images/ditto-premium-collection-studio.jpg",
+    "shortDescription": "New and coming soon. Crystal-clear case for the Pokémon 30th Celebration Ditto Premium Collection. Shipping included.",
+    "description": "A precision-fit, crystal-clear acrylic display case for the Pokémon 30th Celebration Ditto Premium Collection. It keeps the sealed box protected from dust, sun fade, and shelf wear while the artwork stays fully visible. Coming soon, with shipping included in the price. Leave your email below and we will message you when it is available.",
+    "specs": [
+      "Status: New, coming soon (launch date to be announced)",
+      "Fits: Pokémon 30th Celebration Ditto Premium Collection",
+      "Shipping included in the price",
+      "Precision measured for each specific product",
+      "Material: Cast acrylic, crystal-clear finish",
+      "UV protection: 98% UV rejection rate",
+      "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
+      "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
+      "Edges: Rounded",
+      "Assembly: No assembly required"
+    ],
+    "inStock": true,
+    "featured": false
+  },
+  {
     "id": "30th-anniversary-upc",
     "weightOz": 80,
     "stockGroup": "30th-upc-cases",

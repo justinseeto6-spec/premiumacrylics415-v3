@@ -14,7 +14,11 @@
  *   4-6 lb       avg ~$13.50  -> $10 (was $15.50 until 2026-10-11, then $13.50 until 2026-10-31; now
  *                BELOW the average label cost on purpose (real label 2026-11-07: 1 UPC case CA -> Tennessee,
  *                UPS Ground Saver via Pirate Ship $14.80, USPS $14.93 - $4.80 over the $10 charged), so a single UPC case totals about what the
- *                same case costs on eBay. Raise it if labels keep coming in high.)
+ *                same case costs on eBay. Raise it if labels keep coming in high.
+ *                Another real label, 2026-11-07: 2 UPC cases CA -> San Dimas CA (Southern California, nearest
+ *                zone), UPS Ground via Square Shipping, $12.91 - $7.09 under the $20 charged. With the OH $23.90
+ *                and WA $17.51 labels, the three real labels average about $18.11, so $20 is slightly above
+ *                the average of real labels; far zones (NY quote $29.57+) still lose money.)
  *   6-12 lb      2 UPCs ship mostly by UPS: avg $22.95, high $28.57 -> $20 (was $28 until 2026-10-31;
  *                lowered to stay competitive, on purpose BELOW the average label cost. Real label:
  *                2 UPC cases CA -> Ohio, UPS, $23.90 (2026-10-31) and CA -> Washington, UPS Ground

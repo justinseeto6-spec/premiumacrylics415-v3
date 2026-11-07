@@ -73,6 +73,7 @@
           <a href="/shop.html?category=${product.category}">${Products.categoryLabel(product.category)}</a> &rsaquo;
           ${product.name}
         </div>
+        ${product.new ? '<span style="display:inline-block;margin-bottom:8px;padding:3px 12px;border-radius:999px;background:#34d399;color:#06281c;font-size:0.75rem;font-weight:800;letter-spacing:0.05em;">NEW</span>' : ''}
         <h1>${product.name}</h1>
         <div class="stock-pill"><span class="dot"></span> <span id="stockText">${stockLabel}</span></div>
         <div class="pdp-price-row">
@@ -127,10 +128,10 @@
             <button class="btn btn-secondary" id="pdpCheckoutBtn" ${soldOut ? 'disabled' : ''}>${preorder ? 'Pre-order &amp; Checkout' : 'Order Now'}</button>
           `}
         </div>
-        ${soldOut && !comingSoon && !isSpecialOrder ? `
+        ${soldOut && (!comingSoon || !product.launchesAt) && !isSpecialOrder ? `
           <form id="notifyForm" class="notify-form" style="margin-top:16px;padding:14px;border:1px solid var(--border);border-radius:12px;">
-            <p style="margin:0 0 4px;font-weight:600;">Get notified when it's back</p>
-            <p class="cart-note" style="text-align:left;margin:0 0 10px;">Leave your email and we'll send you one message when this is back in stock. No spam.</p>
+            <p style="margin:0 0 4px;font-weight:600;">${comingSoon ? "Get notified when it's available" : "Get notified when it's back"}</p>
+            <p class="cart-note" style="text-align:left;margin:0 0 10px;">Leave your email and we'll send you one message when this is ${comingSoon ? 'available' : 'back in stock'}. No spam.</p>
             <div style="display:flex;gap:8px;flex-wrap:wrap;">
               <input type="email" id="notifyEmail" name="email" required placeholder="you@example.com" autocomplete="email" aria-label="Your email" style="flex:1;min-width:180px;padding:10px 12px;border-radius:8px;border:1px solid var(--border);background:transparent;color:inherit;">
               <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none;">
@@ -224,7 +225,7 @@
         headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         body: JSON.stringify({
           _subject: `Notify me: ${product.name}`,
-          'Request type': 'Back-in-stock notification',
+          'Request type': comingSoon ? 'Launch notification' : 'Back-in-stock notification',
           Product: product.name,
           'Product page': location.href,
           email: document.getElementById('notifyEmail').value,
@@ -232,7 +233,7 @@
         })
       });
       if (!res.ok) throw new Error('failed');
-      notifyForm.innerHTML = `<p style="margin:0;font-weight:600;">You're on the list.</p><p class="cart-note" style="text-align:left;margin:4px 0 0;">We'll email you when ${product.name} is back in stock.</p>`;
+      notifyForm.innerHTML = `<p style="margin:0;font-weight:600;">You're on the list.</p><p class="cart-note" style="text-align:left;margin:4px 0 0;">We'll email you when ${product.name} is ${comingSoon ? 'available' : 'back in stock'}.</p>`;
     } catch (err) {
       msg.textContent = 'Something went wrong. Please try again or text us at 650-248-2473.';
       msg.style.color = 'var(--accent)';

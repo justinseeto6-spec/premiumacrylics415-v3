@@ -49,6 +49,7 @@ function truncate(s, max) {
 
 // schema.org Offer availability for a product's current state.
 function availabilityFor(p) {
+  if (p.comingSoon) return 'https://schema.org/PreOrder';
   const s = stockOf(p);
   if (p.inStock === false || (s !== null && s <= 0)) return 'https://schema.org/OutOfStock';
   return 'https://schema.org/InStock';

@@ -90,6 +90,7 @@ module.exports = async (req, res) => {
     const p = catalog.find(pp => pp.id === it.id);
     if (!p) return fail(res, 400, 'One of the items in your cart is no longer available.');
     if (Products.notYet(p)) {
+      if (!p.launchesAt) return fail(res, 400, `${p.name} isn't on sale yet. Check back soon or text us at 650-248-2473.`);
       return fail(res, 400, `${p.name} isn't on sale yet. It launches ${new Date(p.launchesAt).toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles', timeZoneName: 'short' })}.`);
     }
     if (p.status === 'special-order' || Products.isSoldOut(p)) {

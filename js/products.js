@@ -48,8 +48,10 @@ const Products = {
 
   // A product with "launchesAt" (ISO time with the Pacific offset, -08:00 in winter / -07:00 in summer)
   // can't be bought until that moment: it shows "Coming soon" and checkout refuses it (api/create-checkout.js).
+  // "comingSoon": true locks a product that has no date yet (shows "launch date to be announced" and the
+  // notify form); remove the flag when it goes on sale.
   notYet(p) {
-    return !!(p && p.launchesAt && Date.now() < Date.parse(p.launchesAt));
+    return !!(p && (p.comingSoon || (p.launchesAt && Date.now() < Date.parse(p.launchesAt))));
   },
 
   // Shows on the shop page's Sale tab (/shop.html?category=deals): marked-down price, bulk or mix-and-match
@@ -68,6 +70,7 @@ const Products = {
   },
 
   launchLabel(p) {
+    if (!p.launchesAt) return 'Coming soon &mdash; launch date to be announced';
     const when = new Date(p.launchesAt).toLocaleString('en-US', { weekday: 'long', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/Los_Angeles', timeZoneName: 'short' });
     return `Coming soon &mdash; available ${when}`;
   },
@@ -349,10 +352,12 @@ const Products = {
 
   statusBadge(p) {
     if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
-    if (this.notYet(p)) return { label: 'COMING SOON', bg: '#e8c14f', fg: '#201400' };
+    // "new": true in data/products.json marks a newly added product (remove the flag after a few weeks).
+    if (this.notYet(p)) return { label: p.new ? 'NEW &middot; COMING SOON' : 'COMING SOON', bg: '#e8c14f', fg: '#201400' };
     if (this.isPreorder(p)) return { label: 'PRE-ORDER', bg: '#e8c14f', fg: '#201400' };
     if (this.isSoldOut(p)) return { label: 'SOLD OUT', bg: 'var(--text-faint)', fg: '#fff' };
     if (this.isLowStock(p)) return { label: 'LOW STOCK', bg: '#f5a524', fg: '#201400' };
+    if (p.new) return { label: 'NEW', bg: '#34d399', fg: '#06281c' };
     return null;
   },
 
