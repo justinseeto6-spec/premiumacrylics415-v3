@@ -43,7 +43,7 @@
       }
     ],
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-studio.jpg",
+    "image": "/images/30th-anniversary-upc-studio-v2.jpg",
     "shortDescription": "Crystal-clear acrylic case built for the Pokémon 30th Anniversary Ultra Premium Collection box.",
     "description": "Protect and showcase your 30th Anniversary Ultra Premium Collection with a precision-cut, crystal-clear acrylic display case. Built to fit the UPC box exactly, with a strong magnetic lid for easy access that keeps your collection looking pristine.",
     "specs": [
@@ -70,7 +70,7 @@
     "category": "pokemon",
     "price": 67,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-studio.jpg",
+    "image": "/images/30th-anniversary-upc-studio-v2.jpg",
     "shortDescription": "Two crystal-clear cases for the Pokémon 30th Anniversary Ultra Premium Collection, with shipping already included.",
     "description": "Two precision-fit, crystal-clear acrylic display cases for the Pokémon 30th Anniversary Ultra Premium Collection, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
     "specs": [
@@ -86,7 +86,11 @@
     ],
     "inStock": true,
     "featured": false,
-    "deal": true
+    "deal": true,
+    "images": [
+      "/images/30th-anniversary-upc-studio-v2.jpg",
+      "/images/30th-anniversary-upc-2pack-2x.jpg"
+    ]
   },
   {
     "id": "costco-30th-etb-bundle",

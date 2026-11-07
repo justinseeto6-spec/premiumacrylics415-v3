@@ -12,13 +12,17 @@
  * Jul-Oct 2026) plus a cushion for carrier adjustments and far-away orders:
  *   up to 4 lb   avg ~$8.50   -> $9.75  (+15%)
  *   4-6 lb       avg ~$13.50  -> $10 (was $15.50 until 2026-10-11, then $13.50 until 2026-10-31; now
- *                BELOW the average label cost on purpose, so a single UPC case totals about what the
+ *                BELOW the average label cost on purpose (real label 2026-11-07: 1 UPC case CA -> Tennessee,
+ *                UPS Ground Saver via Pirate Ship $14.80, USPS $14.93 - $4.80 over the $10 charged), so a single UPC case totals about what the
  *                same case costs on eBay. Raise it if labels keep coming in high.)
  *   6-12 lb      2 UPCs ship mostly by UPS: avg $22.95, high $28.57 -> $20 (was $28 until 2026-10-31;
  *                lowered to stay competitive, on purpose BELOW the average label cost. Real label:
  *                2 UPC cases CA -> Ohio, UPS, $23.90 (2026-10-31) and CA -> Washington, UPS Ground
  *                Saver via Square Shipping, $17.51 (2026-11-01): they average about $20.70, so $20
- *                breaks even, near states earn a little and far states lose about $4. The $28.57
+ *                breaks even, near states earn a little and far states lose about $4. Pirate Ship QUOTE
+ *                (not bought) for 2 UPC cases (10 lb) CA -> New York, 2026-11-04: UPS Ground Saver $29.57,
+ *                USPS Ground Advantage $31.34, UPS Ground $34.07 - so the farthest zone loses about $9.50
+ *                at $20, and the three labels average about $23.65. The $28.57
  *                high loses about $8. Raise it if labels keep coming in high.)
  *   12-20 lb     estimated (little data): about $8 more per extra UPC -> $30 (was $34 until 2026-11-01;
  *                lowered after the real labels below. No far-state label for this weight yet, so
@@ -28,6 +32,10 @@
  *                cases $7.64 (UPS Ground Saver via Pirate Ship). The buyer paid $34. Near zone only.
  *                Also 3 ETB + 1 UPC cases (about 15.5 lb, one box) CA -> Texas, UPS Ground Saver via
  *                Pirate Ship, $21.69 (retail $62.73), 2026-11-01 - a mid-distance zone.
+ *                Far zone: 4 UPC cases (20 lb, 2 x the eBay 2-pack), CA -> New York, FedEx via the eBay
+ *                label, $32.98 (2026-11-04). The same box quoted in Pirate Ship that day: UPS Ground $47.95
+ *                (Pirate Ship has no FedEx). So $30 is only fine if a FedEx / cheap USPS label can be bought
+ *                for site orders; at UPS Ground it is about $18 under. Check Pirate Ship USPS rates.
  *   20-25 lb     ESTIMATE $42, 25-30 lb ESTIMATE $48 (about $1 more per extra lb; added Oct 2026,
  *                no real labels this heavy yet - compare against Pirate Ship and adjust)
  *   30-40 lb     $65, from a real label: 8 UPCs (~40 lb) CA -> Massachusetts, UPS Ground, $63.35.
