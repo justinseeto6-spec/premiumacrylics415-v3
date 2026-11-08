@@ -137,7 +137,7 @@ const Products = {
   // Square keeps the count (api/_flash.js), so nothing to update by hand. active:false ends it early.
   // `startsAt` must carry the Pacific UTC offset: -08:00 in winter (PST), -07:00 in summer (PDT).
   flash: {
-    active: true,
+    active: false,   // ended 2026-11-08: the single UPC dropped to $23, so 2 for $50 + $18 shipping was no longer a deal
     tag: 'flash-30th-upc',
     title: 'Launch deal',
     productId: '30th-anniversary-upc',

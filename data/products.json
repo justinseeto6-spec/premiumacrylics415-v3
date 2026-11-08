@@ -64,13 +64,7 @@
     "stockGroup": "30th-upc-cases",
     "name": "30th Anniversary UPC Display Case",
     "category": "pokemon",
-    "price": 30,
-    "quantityPricing": [
-      {
-        "qty": 2,
-        "price": 55
-      }
-    ],
+    "price": 23,
     "compareAtPrice": null,
     "image": "/images/30th-anniversary-upc-studio-v2.jpg",
     "shortDescription": "Crystal-clear acrylic case built for the Pokémon 30th Anniversary Ultra Premium Collection box.",
