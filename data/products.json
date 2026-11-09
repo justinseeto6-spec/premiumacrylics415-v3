@@ -216,10 +216,10 @@
     "id": "25th-anniversary-etb",
     "weightOz": 56,
     "stock": 40,
-    "name": "25th Anniversary Celebrations Pokémon Center ETB Case",
+    "name": "25th Anniversary Celebrations Pokémon Center ETB Case (Shipping Included)",
     "category": "pokemon",
-    "price": 19,
-    "compareAtPrice": 25,
+    "price": 26,
+    "compareAtPrice": 34.75,
     "image": "/images/25th-anniversary-etb-studio.jpg",
     "shortDescription": "Display case for the Celebrations 25th Anniversary Pokémon Center Elite Trainer Box.",
     "description": "A precision-measured, crystal-clear acrylic display case for the Pokémon Center Celebrations 25th Anniversary Elite Trainer Box. It keeps this collector favorite protected from dust, sun fade, and shelf wear while the artwork stays fully visible from every side.",
@@ -234,7 +234,9 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "shippingIncluded": true,
+    "noDiscount": true
   },
   {
     "id": "25th-anniversary-upc",
