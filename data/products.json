@@ -179,7 +179,8 @@
     ],
     "inStock": true,
     "featured": false,
-    "stock": 5
+    "stock": 5,
+    "launchesAt": "2026-11-11T08:00:00-08:00"
   },
   {
     "id": "pokemon-center-30th-etb-5pack",
@@ -208,7 +209,7 @@
     ],
     "inStock": true,
     "featured": false,
-    "launchesAt": "2026-11-02T10:00:00-08:00",
+    "launchesAt": "2026-11-11T08:00:00-08:00",
     "deal": true
   },
   {
