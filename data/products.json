@@ -179,7 +179,6 @@
     ],
     "inStock": true,
     "featured": false,
-    "launchesAt": "2026-11-11T08:00:00-08:00",
     "stockGroup": "30th-etb-case"
   },
   {
@@ -209,13 +208,12 @@
     ],
     "inStock": true,
     "featured": false,
-    "launchesAt": "2026-11-11T08:00:00-08:00",
     "deal": true
   },
   {
     "id": "25th-anniversary-etb",
     "weightOz": 56,
-    "stock": 40,
+    "stock": 0,
     "name": "25th Anniversary Celebrations Pokémon Center ETB Case (Shipping Included)",
     "category": "pokemon",
     "price": 26,
@@ -938,7 +936,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": true
+    "featured": true,
+    "stock": 0
   },
   {
     "id": "one-piece-2nd-anniversary-set-english",
