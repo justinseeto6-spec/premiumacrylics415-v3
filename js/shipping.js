@@ -44,6 +44,11 @@
  *                no real labels this heavy yet - compare against Pirate Ship and adjust)
  *   30-40 lb     $65, from a real label: 8 UPCs (~40 lb) CA -> Massachusetts, UPS Ground, $63.35.
  *                Far zones cost this much; near zones cost less, so nearby buyers pay a bit extra.
+ *                Another real label, 2026-11-11: a mixed website order of 8 cases (about 33.5 lb: 25th ETB,
+ *                2 Prismatic Figure Collection, Mega Charizard UPC, Sword & Shield UPC, Prismatic Super Premium,
+ *                2 Crown Zenith ETB Plus) CA -> Florida, UPS Ground via Pirate Ship, $51.27 (retail $111.90).
+ *                The buyer paid $55.25 shipping (the $65 band minus the $9.75 the shipping-included 25th ETB
+ *                already covers), so this far-zone order made about $3.98 on shipping. The $65 band holds.
  * A heavier band should never cost less than a lighter one. Review the prices every few
  * months against your Pirate Ship costs.
  */
