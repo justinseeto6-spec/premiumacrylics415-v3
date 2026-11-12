@@ -213,7 +213,7 @@
   {
     "id": "25th-anniversary-etb",
     "weightOz": 56,
-    "stock": 0,
+    "stock": 40,
     "name": "25th Anniversary Celebrations Pokémon Center ETB Case (Shipping Included)",
     "category": "pokemon",
     "price": 26,
@@ -1011,7 +1011,7 @@
     ],
     "inStock": true,
     "featured": false,
-    "stock": 0
+    "stock": 1
   },
   {
     "id": "prismatic-evolutions-booster-bundle",
