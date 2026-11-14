@@ -22,7 +22,8 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   }
 
   const products = await Products.all();
-  const { lines: cartLines, subtotal } = Products.cartTotals(products, items);
+  // `let`: repriced when the customer picks "Local pick-up" (products with a "pickupPrice", see Products.cartTotals).
+  let { lines: cartLines, subtotal } = Products.cartTotals(products, items);
   const lines = [];
 
   const rows = cartLines.map(l => {
@@ -48,7 +49,7 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     <h3 style="margin-top:0;">Your cart</h3>
     ${rows}
     <div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
-      <div class="cart-subtotal-row"><span>Items</span><span>${Products.formatPrice(subtotal)}</span></div>
+      <div class="cart-subtotal-row"><span>Items</span><span id="itemsSubtotalAmount">${Products.formatPrice(subtotal)}</span></div>
       <div class="cart-subtotal-row" id="discountRow" style="margin-top:6px;display:none;color:var(--accent);"><span id="discountRowLabel">Order discount</span><span id="discountRowAmount"></span></div>
       <div class="cart-subtotal-row" id="giftRow" style="margin-top:6px;display:none;color:var(--accent);"><span id="giftRowLabel">Free gift</span><span>$0.00</span></div>
       <div class="cart-subtotal-row" style="margin-top:6px;"><span id="shipRowLabel">Shipping</span><span id="shipRowAmount"></span></div>
@@ -162,19 +163,53 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
   // Sales tax (rates + rules in js/tax.js): items only, rate follows the buyer's state (pick-up = home state).
   const taxPercent = () => Tax.rate(currentDelivery(), currentState());
   // Spend-more-save-more discount (tiers in js/products.js): off the items, before tax; shipping isn't discounted.
-  const discount = Products.discountForLines(cartLines);
+  let discount = Products.discountForLines(cartLines);
 
   // Grand-opening gift (settings in Products.promo): shown only while /api/promo-status says it is
   // still available. The real count is checked again by Square when the customer pays.
   const promo = Products.promo;
   const giftProduct = products.find(p => p.id === promo.giftProductId);
-  const eligibleNow = Products.eligibleSubtotal(cartLines);
-  const promoQualifies = promo.active && eligibleNow >= promo.minSpend;
+  let eligibleNow = Products.eligibleSubtotal(cartLines);
+  let promoQualifies = promo.active && eligibleNow >= promo.minSpend;
   let promoAvailable = false;
   const taxAmount = () => Tax.cents(subtotal - discount.amount, currentDelivery(), currentState()) / 100;
 
+  // Order-summary text for the emailed request (rebuilt on submit so it matches the delivery choice).
+  const summaryLine = l => {
+    const p = l.product;
+    if (l.pickupPriceApplied) return `${l.qty} × ${p.name} (${Products.formatPrice(p.pickupPrice)} each, pick-up price) = ${Products.formatPrice(l.lineTotal)}`;
+    const dealApplied = l.mixMatchApplied || l.lineTotal < p.price * l.qty;
+    const dealText = l.mixMatchApplied
+      ? `Mix & match ${p.mixMatch.minQty}+ for ${Products.formatPrice(p.mixMatch.price)} each`
+      : Products.dealLabel(p, l.qty);
+    return `${l.qty} × ${p.name} (${Products.formatPrice(p.price)} each${dealApplied ? `, ${dealText} deal applied` : ''}) = ${Products.formatPrice(l.lineTotal)}`;
+  };
+
+  // Some products cost a different amount at pick-up (data/products.json "pickupPrice"): reprice the cart
+  // for the chosen delivery and refresh the line items, items subtotal, discount and gift eligibility.
+  function repriceCart(d) {
+    const t = Products.cartTotals(products, items, d);
+    cartLines = t.lines;
+    subtotal = t.subtotal;
+    discount = Products.discountForLines(cartLines);
+    eligibleNow = Products.eligibleSubtotal(cartLines);
+    promoQualifies = promo.active && eligibleNow >= promo.minSpend;
+    cartLines.forEach(l => {
+      const row = summaryEl.querySelector(`.cart-item[data-id="${l.product.id}"]`);
+      if (!row) return;
+      row.querySelector('.cart-item-total').textContent = Products.formatPrice(l.lineTotal);
+      const priceEl = row.querySelector('.cart-item-price');
+      if (priceEl && !priceEl.dataset.orig) priceEl.dataset.orig = priceEl.innerHTML;
+      if (priceEl) priceEl.innerHTML = l.pickupPriceApplied
+        ? `Qty ${l.qty} × ${Products.formatPrice(l.product.pickupPrice)} &middot; Pick-up price`
+        : priceEl.dataset.orig;
+    });
+    document.getElementById('itemsSubtotalAmount').textContent = Products.formatPrice(subtotal);
+  }
+
   function updateTotals() {
     const d = currentDelivery();
+    repriceCart(d);
     stateSelect.required = d !== 'pickup';
     document.getElementById('shipRowLabel').textContent = d === 'ship' ? 'Shipping' : d === 'ship-label' ? 'Shipping (your own label)' : 'Local pick-up';
     document.getElementById('shipRowAmount').textContent = d === 'ship' ? (shippingFee() === 0 ? 'Included' : Products.formatPrice(shippingFee())) : d === 'pickup' ? 'Free' : '$0.00';
@@ -286,7 +321,6 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
         `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">${shipIncludedNames.join(', ')} has shipping included, so it ships only. For pick-up or your own shipping label, choose the regular UPC case instead.</p>`);
     }
   }
-  const orderSummaryText = lines.join('\n');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -302,6 +336,8 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     const shippingText = delivery === 'ship' ? `Shipping (flat rate, ${shipWeightText}): ${Products.formatPrice(shippingFee())}`
       : delivery === 'ship-label' ? 'Shipping: customer will send their own label'
       : 'Local pick-up (no shipping)';
+    repriceCart(delivery);
+    const orderSummaryText = cartLines.map(summaryLine).join('\n');
     document.getElementById('orderSummaryField').value = `${orderSummaryText}${giftText}${discountText}\n${shippingText}`;
     document.getElementById('orderTotalField').value = Products.formatPrice(subtotal - discount.amount + shippingFee() + taxAmount());
     document.getElementById('taxField').value = taxPercent() > 0 ? `${taxPercent()}% = ${Products.formatPrice(taxAmount())}` : 'none';

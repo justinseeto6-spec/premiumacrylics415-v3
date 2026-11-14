@@ -80,7 +80,8 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": true
+    "featured": true,
+    "pickupPrice": 25
   },
   {
     "id": "30th-anniversary-upc-2pack",
@@ -118,7 +119,7 @@
   {
     "id": "costco-30th-etb-bundle",
     "weightOz": 64,
-    "stock": 45,
+    "stock": 35,
     "name": "Costco Exclusive 30th Anniversary ETB Bundle Display Case — Pre-Order (Shipping Included)",
     "category": "pokemon",
     "price": 30,

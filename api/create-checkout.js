@@ -137,7 +137,7 @@ module.exports = async (req, res) => {
     flashApplied = (await FlashCounter.status()).available;
   }
   Products._flashOn = flashApplied;
-  const { lines, subtotal } = Products.cartTotals(catalog, items);
+  const { lines, subtotal } = Products.cartTotals(catalog, items, delivery);
   Products._flashOn = false;
   // Automatic spend-more-save-more discount (tiers in js/products.js). Only ELIGIBLE items count
   // toward the tiers and get the discount - products flagged "noDiscount" (the Eevee box) don't.

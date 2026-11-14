@@ -307,11 +307,17 @@ const Products = {
   // booster-bundle case + 2 of another still clears a "6 combined" mix-and-match
   // deal, even though neither product alone reaches it. Once a group's pooled
   // qty clears its minQty, every unit in that group is billed at its flat price.
-  cartTotals(allProducts, items) {
+  //
+  // `delivery` is optional ('pickup' | 'ship' | 'ship-label'). A product with a numeric "pickupPrice"
+  // in data/products.json costs that much EACH (no bulk tiers) when the order is picked up in person,
+  // e.g. the single 30th UPC case: $23 each when shipped (shipping is added on top) but $25 each at pick-up.
+  cartTotals(allProducts, items, delivery) {
     const lines = items.map(item => {
       const p = allProducts.find(pp => pp.id === item.id);
       if (!p) return null;
-      return { id: item.id, product: p, qty: item.qty, lineTotal: this.lineTotal(p, item.qty), mixMatchApplied: false };
+      const pickupPriced = delivery === 'pickup' && typeof p.pickupPrice === 'number';
+      const lineTotal = pickupPriced ? Math.round(p.pickupPrice * item.qty * 100) / 100 : this.lineTotal(p, item.qty);
+      return { id: item.id, product: p, qty: item.qty, lineTotal, mixMatchApplied: false, pickupPriceApplied: pickupPriced };
     }).filter(Boolean);
 
     const groups = {};
