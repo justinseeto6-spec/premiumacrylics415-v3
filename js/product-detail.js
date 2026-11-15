@@ -47,9 +47,11 @@
   const soldOutLabel = comingSoon ? Products.launchLabel(product) : product.restock ? (/^tbd$/i.test(product.restock) ? 'Sold out &mdash; restock date to be announced' : `Sold out &mdash; restock estimated ${product.restock}`) : 'Sold out';
   const preorder = Products.isPreorder(product);
   const addLabel = preorder ? 'Pre-order Now' : 'Add to Cart';
-  const stockLabel = isSpecialOrder
+  const stockLabel = product.inquiry
+    ? 'Potential new case &mdash; send an inquiry if you\'re interested'
+    : isSpecialOrder
     ? 'Special Order Only &mdash; contact us to order'
-    : (soldOut ? soldOutLabel : (preorder ? `Pre-order &mdash; ships in ${product.preorder.ships}` : (Products.isLowStock(product) ? 'Low stock' : 'In stock, ready to ship')));
+    : (soldOut ? soldOutLabel : (preorder ? `Pre-order &mdash; ships in ${product.preorder.ships}` : (Products.isLowStock(product) ? 'Low stock' : (product.limitedStock ? 'Limited stock &mdash; order soon, next shipment late November' : 'In stock, ready to ship'))));
 
   root.innerHTML = `
     <div class="pdp">
@@ -77,7 +79,7 @@
         <h1>${product.name}</h1>
         <div class="stock-pill"><span class="dot"></span> <span id="stockText">${stockLabel}</span></div>
         <div class="pdp-price-row">
-          <span class="pdp-price">${Products.formatPrice(product.price)}</span>
+          <span class="pdp-price">${product.inquiry ? 'Price on request' : Products.formatPrice(product.price)}</span>
           ${onSale ? `<span class="price-compare">${Products.formatPrice(product.compareAtPrice)}</span>` : ''}
         </div>
         ${preorder ? `
@@ -120,7 +122,7 @@
         `}
         <div class="pdp-actions">
           ${isSpecialOrder ? `
-            <a class="btn btn-primary" href="/contact.html" style="text-decoration:none;">Contact Us to Order</a>
+            <a class="btn btn-primary" href="/contact.html" style="text-decoration:none;">${product.inquiry ? 'Send an Inquiry' : 'Contact Us to Order'}</a>
             <a class="btn btn-secondary" href="sms:6502482473" style="text-decoration:none;">Text 650-248-2473</a>
           ` : `
             <button class="btn btn-primary" id="addToCartBtn" ${soldOut ? 'disabled' : ''}>

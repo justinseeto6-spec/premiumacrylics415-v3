@@ -357,12 +357,16 @@ const Products = {
   },
 
   statusBadge(p) {
+    // "inquiry": true = a potential new case we're gauging interest in: no price, no cart, "Send an Inquiry".
+    if (p.inquiry) return { label: 'NEW &middot; INQUIRE', bg: '#34d399', fg: '#06281c' };
     if (p.status === 'special-order') return { label: 'SPECIAL ORDER', bg: 'var(--text-faint)', fg: '#fff' };
     // "new": true in data/products.json marks a newly added product (remove the flag after a few weeks).
     if (this.notYet(p)) return { label: p.new ? 'NEW &middot; COMING SOON' : 'COMING SOON', bg: '#e8c14f', fg: '#201400' };
     if (this.isPreorder(p)) return { label: 'PRE-ORDER', bg: '#e8c14f', fg: '#201400' };
     if (this.isSoldOut(p)) return { label: 'SOLD OUT', bg: 'var(--text-faint)', fg: '#fff' };
     if (this.isLowStock(p)) return { label: 'LOW STOCK', bg: '#f5a524', fg: '#201400' };
+    // "limitedStock": true in data/products.json shows LIMITED STOCK (for an in-stock product, remove the flag after the restock).
+    if (p.limitedStock) return { label: 'LIMITED STOCK', bg: '#f5a524', fg: '#201400' };
     if (p.new) return { label: 'NEW', bg: '#34d399', fg: '#06281c' };
     return null;
   },
@@ -382,10 +386,10 @@ const Products = {
           <h3 class="product-name">${p.name}</h3>
           <p class="product-desc">${p.shortDescription}</p>
           <div class="product-price-row">
-            <span class="price">${this.formatPrice(p.price)}</span>
+            <span class="price">${p.inquiry ? 'Price on request' : this.formatPrice(p.price)}</span>
             ${this.dealLabel(p) ? `<span class="price-compare" style="text-decoration:none;color:var(--accent);">${this.dealLabel(p)}</span>` : ''}
             ${onSale ? `<span class="price-compare">${this.formatPrice(p.compareAtPrice)}</span>` : ''}
-            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">Contact to Order</button>` : (!this.isSoldOut(p) ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${this.isPreorder(p) ? 'Pre-order' : 'Add to Cart'}</button>` : '')}
+            ${p.status === 'special-order' ? `<button type="button" class="btn btn-secondary btn-card-contact">${p.inquiry ? 'Send Inquiry' : 'Contact to Order'}</button>` : (!this.isSoldOut(p) ? `<button type="button" class="btn btn-primary btn-card-add" data-add-id="${encodeURIComponent(p.id)}">${this.isPreorder(p) ? 'Pre-order' : 'Add to Cart'}</button>` : '')}
           </div>
         </div>
       </a>

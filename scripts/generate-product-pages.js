@@ -74,7 +74,8 @@ function pageFor(p) {
     image: allImages,
     url: canonical,
     brand: { '@type': 'Brand', name: 'Premium Acrylics 415' },
-    offers: {
+    // An "inquiry" product has no price or stock yet, so it gets no offer (Google would show a false price).
+    offers: p.inquiry ? undefined : {
       '@type': 'Offer',
       url: canonical,
       priceCurrency: 'USD',

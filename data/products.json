@@ -59,6 +59,33 @@
     "featured": false
   },
   {
+    "id": "mew-figure-collection-30th",
+    "weightOz": 64,
+    "name": "Pokémon 30th Celebration Figure Collection — Mew Display Case",
+    "category": "pokemon",
+    "price": 0,
+    "compareAtPrice": null,
+    "status": "special-order",
+    "inquiry": true,
+    "new": true,
+    "image": "/images/mew-figure-collection-30th-studio.jpg",
+    "shortDescription": "Potential new case for the Pokémon 30th Celebration Figure Collection — Mew. Interested? Send us an inquiry.",
+    "description": "We're gauging interest in a precision-fit, crystal-clear acrylic case for the Pokémon 30th Celebration Figure Collection — Mew box. Not made yet: if you'd like one, send us an inquiry (Contact page or text 650-248-2473) and we'll let you know price and timing as soon as we decide to make it.",
+    "specs": [
+      "Status: Potential new product — send an inquiry if you're interested",
+      "Fits: Pokémon 30th Celebration Figure Collection — Mew",
+      "Precision measured for each specific product",
+      "Material: Cast acrylic, crystal-clear finish",
+      "UV protection: 98% UV rejection rate",
+      "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
+      "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
+      "Edges: Rounded",
+      "Assembly: No assembly required"
+    ],
+    "inStock": false,
+    "featured": false
+  },
+  {
     "id": "30th-anniversary-upc",
     "weightOz": 80,
     "stockGroup": "30th-upc-cases",
@@ -81,7 +108,8 @@
     ],
     "inStock": true,
     "featured": true,
-    "pickupPrice": 25
+    "pickupPrice": 25,
+    "limitedStock": true
   },
   {
     "id": "30th-anniversary-upc-2pack",
@@ -114,7 +142,8 @@
     "images": [
       "/images/30th-anniversary-upc-studio-v2.jpg",
       "/images/30th-anniversary-upc-2pack-2x-v2.jpg"
-    ]
+    ],
+    "limitedStock": true
   },
   {
     "id": "costco-30th-etb-bundle",
