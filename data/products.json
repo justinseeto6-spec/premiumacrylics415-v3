@@ -88,7 +88,6 @@
   {
     "id": "30th-anniversary-upc",
     "weightOz": 80,
-    "stockGroup": "30th-upc-cases",
     "name": "30th Anniversary UPC Display Case (Shipping Included)",
     "category": "pokemon",
     "price": 33,
@@ -116,13 +115,12 @@
       "/images/30th-anniversary-upc-studio-v2.jpg"
     ],
     "shippingIncluded": true,
-    "noDiscount": true
+    "noDiscount": true,
+    "stock": 0
   },
   {
     "id": "30th-anniversary-upc-2pack",
     "weightOz": 160,
-    "stockGroup": "30th-upc-cases",
-    "groupUnits": 2,
     "noDiscount": true,
     "shippingIncluded": true,
     "name": "30th Anniversary UPC 2-Pack (Shipping Included)",
@@ -150,7 +148,8 @@
       "/images/30th-anniversary-upc-limited-stock.jpg",
       "/images/30th-anniversary-upc-2pack-2x-v2.jpg"
     ],
-    "limitedStock": true
+    "limitedStock": true,
+    "stock": 2
   },
   {
     "id": "costco-30th-etb-bundle",
