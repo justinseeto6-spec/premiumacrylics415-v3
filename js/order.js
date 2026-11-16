@@ -312,13 +312,20 @@ const FORMSPREE_ENDPOINT = 'https://formspree.io/f/moeqplrl';
     } else if (!shipQuote.ok) {
       block(`This order is too heavy to price online. Text us at ${Shipping.contactPhone} for a shipping quote.`);
     } else {
-      pickupRadio.disabled = true; labelRadio.disabled = true;
-      pickupRadio.closest('.delivery-option').style.opacity = '0.45';
+      // Shipping-included items that also have a pick-up price (pickupPrice) can still be picked up.
+      const pickupOk = cartLines.filter(l => l.product.shippingIncluded).every(l => typeof l.product.pickupPrice === 'number');
+      labelRadio.disabled = true;
       labelRadio.closest('.delivery-option').style.opacity = '0.45';
-      shipRadio.checked = true;
-      shipRadio.dispatchEvent(new Event('change', { bubbles: true }));
+      if (!pickupOk) {
+        pickupRadio.disabled = true;
+        pickupRadio.closest('.delivery-option').style.opacity = '0.45';
+      }
+      if (!pickupOk || labelRadio.checked) {
+        shipRadio.checked = true;
+        shipRadio.dispatchEvent(new Event('change', { bubbles: true }));
+      }
       document.querySelector('.delivery-options').insertAdjacentHTML('beforebegin',
-        `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">${shipIncludedNames.join(', ')} has shipping included, so it ships only. For pick-up or your own shipping label, choose the regular UPC case instead.</p>`);
+        `<p class="cart-note" style="text-align:left;margin-top:8px;color:var(--accent);">${shipIncludedNames.join(', ')} has shipping included, so it ships only${pickupOk ? ' or can be picked up locally' : ''}. ${pickupOk ? 'Your own shipping label isn\'t available for it.' : 'For pick-up or your own shipping label, choose the regular UPC case instead.'}</p>`);
     }
   }
 

@@ -96,7 +96,8 @@ module.exports = async (req, res) => {
     if (p.status === 'special-order' || Products.isSoldOut(p)) {
       return fail(res, 400, `${p.name} isn't available to buy online right now. Text us at 650-248-2473.`);
     }
-    if (p.shippingIncluded && delivery !== 'ship') {
+    // A shipping-included product may still be picked up if it has its own pick-up price (pickupPrice).
+    if (p.shippingIncluded && delivery !== 'ship' && !(delivery === 'pickup' && typeof p.pickupPrice === 'number')) {
       return fail(res, 400, `${p.name} has shipping built into its price, so it can't be picked up or shipped with your own label. For pick-up or your own label, choose the regular single case instead.`);
     }
     if (p.pickupOnly && delivery !== 'pickup') {
