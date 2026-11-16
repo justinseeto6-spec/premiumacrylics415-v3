@@ -93,7 +93,7 @@
     "category": "pokemon",
     "price": 23,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-studio-v2.jpg",
+    "image": "/images/30th-anniversary-upc-limited-stock.jpg",
     "shortDescription": "Crystal-clear acrylic case built for the Pokémon 30th Anniversary Ultra Premium Collection box.",
     "description": "Protect and showcase your 30th Anniversary Ultra Premium Collection with a precision-cut, crystal-clear acrylic display case. Built to fit the UPC box exactly, with a strong magnetic lid for easy access that keeps your collection looking pristine.",
     "specs": [
@@ -109,7 +109,11 @@
     "inStock": true,
     "featured": true,
     "pickupPrice": 25,
-    "limitedStock": true
+    "limitedStock": true,
+    "images": [
+      "/images/30th-anniversary-upc-limited-stock.jpg",
+      "/images/30th-anniversary-upc-studio-v2.jpg"
+    ]
   },
   {
     "id": "30th-anniversary-upc-2pack",
@@ -122,7 +126,7 @@
     "category": "pokemon",
     "price": 64.5,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-studio-v2.jpg",
+    "image": "/images/30th-anniversary-upc-limited-stock.jpg",
     "shortDescription": "Two crystal-clear cases for the Pokémon 30th Anniversary Ultra Premium Collection, with shipping already included.",
     "description": "Two precision-fit, crystal-clear acrylic display cases for the Pokémon 30th Anniversary Ultra Premium Collection, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
     "specs": [
@@ -140,7 +144,7 @@
     "featured": false,
     "deal": true,
     "images": [
-      "/images/30th-anniversary-upc-studio-v2.jpg",
+      "/images/30th-anniversary-upc-limited-stock.jpg",
       "/images/30th-anniversary-upc-2pack-2x-v2.jpg"
     ],
     "limitedStock": true
