@@ -88,7 +88,7 @@
   {
     "id": "30th-anniversary-upc",
     "weightOz": 80,
-    "name": "30th Anniversary UPC Display Case (Shipping Included)",
+    "name": "30th Anniversary UPC Display Case — Pre-Order (Shipping Included)",
     "category": "pokemon",
     "price": 33,
     "compareAtPrice": null,
@@ -97,6 +97,7 @@
     "description": "Protect and showcase your 30th Anniversary Ultra Premium Collection with a precision-cut, crystal-clear acrylic display case. Built to fit the UPC box exactly, with a strong magnetic lid for easy access that keeps your collection looking pristine.",
     "specs": [
       "Shipping included (US addresses). Local pick-up is $25",
+      "Status: Pre-order — ships early December or sooner",
       "Fits: Pokémon 30th Anniversary UPC",
       "Precision measured for each specific product",
       "Material: Cast acrylic, crystal-clear finish",
@@ -109,21 +110,23 @@
     "inStock": true,
     "featured": true,
     "pickupPrice": 25,
-    "limitedStock": true,
     "images": [
       "/images/30th-anniversary-upc-limited-stock.jpg",
       "/images/30th-anniversary-upc-studio-v2.jpg"
     ],
     "shippingIncluded": true,
     "noDiscount": true,
-    "stock": 0
+    "stock": 4,
+    "preorder": {
+      "ships": "early December or sooner"
+    }
   },
   {
     "id": "30th-anniversary-upc-2pack",
     "weightOz": 160,
     "noDiscount": true,
     "shippingIncluded": true,
-    "name": "30th Anniversary UPC 2-Pack (Shipping Included)",
+    "name": "30th Anniversary UPC 2-Pack — Pre-Order (Shipping Included)",
     "category": "pokemon",
     "price": 64.5,
     "compareAtPrice": null,
@@ -132,6 +135,7 @@
     "description": "Two precision-fit, crystal-clear acrylic display cases for the Pokémon 30th Anniversary Ultra Premium Collection, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
     "specs": [
       "Includes: 2 acrylic display cases for the Pokémon 30th Anniversary UPC",
+      "Status: Pre-order — ships early December or sooner",
       "Shipping included (US addresses). This offer ships only; for pick-up or your own shipping label, choose the regular 30th Anniversary UPC case",
       "Precision measured for each specific product",
       "Material: Cast acrylic, crystal-clear finish",
@@ -148,8 +152,10 @@
       "/images/30th-anniversary-upc-limited-stock.jpg",
       "/images/30th-anniversary-upc-2pack-2x-v2.jpg"
     ],
-    "limitedStock": true,
-    "stock": 0
+    "stock": 17,
+    "preorder": {
+      "ships": "early December or sooner"
+    }
   },
   {
     "id": "costco-30th-etb-bundle",
