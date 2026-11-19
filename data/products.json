@@ -32,19 +32,19 @@
   {
     "id": "ditto-premium-collection-30th",
     "weightOz": 64,
+    "stock": 20,
     "shippingIncluded": true,
     "noDiscount": true,
-    "comingSoon": true,
     "new": true,
-    "name": "Pokémon 30th Celebration Ditto Premium Collection Display Case (Shipping Included)",
+    "name": "Pokémon 30th Celebration Ditto Premium Collection Display Case — Pre-Order (Shipping Included)",
     "category": "pokemon",
-    "price": 27,
+    "price": 35,
     "compareAtPrice": null,
     "image": "/images/ditto-premium-collection-studio.jpg",
-    "shortDescription": "New and coming soon. Crystal-clear case for the Pokémon 30th Celebration Ditto Premium Collection. Shipping included.",
-    "description": "A precision-fit, crystal-clear acrylic display case for the Pokémon 30th Celebration Ditto Premium Collection. It keeps the sealed box protected from dust, sun fade, and shelf wear while the artwork stays fully visible. Coming soon, with shipping included in the price. Leave your email below and we will message you when it is available.",
+    "shortDescription": "Pre-order now, ships in January. Shipping included. Crystal-clear case for the Pokémon 30th Celebration Ditto Premium Collection.",
+    "description": "A precision-fit, crystal-clear acrylic display case for the Pokémon 30th Celebration Ditto Premium Collection. It keeps the sealed box protected from dust, sun fade, and shelf wear while the artwork stays fully visible. Pre-orders ship in January, and shipping is included in the price.",
     "specs": [
-      "Status: New, coming soon (launch date to be announced)",
+      "Status: Pre-order — ships in January, shipping included",
       "Fits: Pokémon 30th Celebration Ditto Premium Collection",
       "Shipping included in the price",
       "Precision measured for each specific product",
@@ -56,7 +56,10 @@
       "Assembly: No assembly required"
     ],
     "inStock": true,
-    "featured": false
+    "featured": false,
+    "preorder": {
+      "ships": "January"
+    }
   },
   {
     "id": "mew-figure-collection-30th",
