@@ -2,6 +2,6 @@
   "_note": "Shared stock pools. Products with the same \"stockGroup\" in products.json draw from ONE count here. Change the number after each sale, then commit + push.",
   "booster-bundle-display": 40,
   "30th-upc-cases": 30,
-  "30th-etb-case": 0,
+  "30th-etb-case": 70,
   "mini-tin-case": 0
 }
