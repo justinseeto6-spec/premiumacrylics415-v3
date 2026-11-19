@@ -327,6 +327,34 @@
     "featured": true
   },
   {
+    "id": "prismatic-evolutions-surprise-box",
+    "weightOz": 64,
+    "stock": 10,
+    "name": "Prismatic Evolutions Surprise Box Case (Shipping Included)",
+    "category": "pokemon",
+    "price": 25,
+    "compareAtPrice": null,
+    "image": "/images/prismatic-evolutions-surprise-box-studio.jpg",
+    "shortDescription": "Crystal-clear display case for the Pokémon Prismatic Evolutions Surprise Box. Shipping included.",
+    "description": "Protect and showcase your Pokémon Prismatic Evolutions Surprise Box with a precision-cut, crystal-clear acrylic display case. Built to fit the box exactly, with a strong magnetic lid for easy access. Shipping is included in the price.",
+    "specs": [
+      "Fits: Pokémon Prismatic Evolutions Surprise Box",
+      "Shipping included (US addresses)",
+      "Precision measured for each specific product",
+      "Material: Cast acrylic, crystal-clear finish",
+      "UV protection: 98% UV rejection rate",
+      "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
+      "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
+      "Edges: Rounded",
+      "Assembly: No assembly required"
+    ],
+    "inStock": true,
+    "featured": false,
+    "shippingIncluded": true,
+    "noDiscount": true,
+    "new": true
+  },
+  {
     "id": "151-prismatic-booster-bundle",
     "noDiscount": true,
     "weightOz": 32,
