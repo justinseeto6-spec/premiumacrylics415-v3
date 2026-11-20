@@ -358,6 +358,35 @@
     "new": true
   },
   {
+    "id": "palworld-booster-box-2pack",
+    "weightOz": 96,
+    "stock": 10,
+    "noDiscount": true,
+    "shippingIncluded": true,
+    "new": true,
+    "name": "Palworld TCG Booster Box Display Case 2-Pack (Shipping Included)",
+    "category": "palworld",
+    "price": 30,
+    "compareAtPrice": null,
+    "image": "/images/palworld-dawn-of-palpagos-2pack-studio.jpg",
+    "shortDescription": "Two crystal-clear cases for Palworld Official Card Game booster boxes (Dawn of Palpagos), with shipping already included.",
+    "description": "Two precision-fit, crystal-clear acrylic display cases for Palworld Official Card Game booster boxes, such as Dawn of Palpagos (BP01), delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
+    "specs": [
+      "Includes: 2 acrylic display cases for Palworld Official Card Game booster boxes (Dawn of Palpagos, BP01)",
+      "Shipping included (US addresses). This offer ships only",
+      "Precision measured for each specific product",
+      "Material: Cast acrylic, crystal-clear finish",
+      "UV protection: 98% UV rejection rate",
+      "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
+      "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
+      "Edges: Rounded",
+      "Assembly: No assembly required"
+    ],
+    "inStock": true,
+    "featured": false,
+    "deal": true
+  },
+  {
     "id": "151-prismatic-booster-bundle",
     "noDiscount": true,
     "weightOz": 32,

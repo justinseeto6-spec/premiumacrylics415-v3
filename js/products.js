@@ -350,6 +350,7 @@ const Products = {
     const map = {
       'pokemon': 'Pokémon',
       'one-piece': 'One Piece',
+      'palworld': 'Palworld',
       'pokemon-tcg': 'Pokémon TCG',
       'custom': 'Custom'
     };
