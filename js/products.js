@@ -351,6 +351,7 @@ const Products = {
       'pokemon': 'Pokémon',
       'one-piece': 'One Piece',
       'palworld': 'Palworld',
+      'nintendo': 'Nintendo',
       'pokemon-tcg': 'Pokémon TCG',
       'custom': 'Custom'
     };

@@ -387,6 +387,40 @@
     "deal": true
   },
   {
+    "id": "switch-2-zelda-40th-case",
+    "weightOz": 80,
+    "stock": 25,
+    "noDiscount": true,
+    "shippingIncluded": true,
+    "new": true,
+    "name": "Nintendo Switch 2 Zelda 40th Anniversary Display Case — Pre-Order (Shipping Included)",
+    "category": "nintendo",
+    "price": 40,
+    "compareAtPrice": null,
+    "image": "/images/switch2-zelda-40th-case-studio.jpg",
+    "shortDescription": "Pre-order now, ships late December or early January. Shipping included. Very limited quantity. Crystal-clear case for the Nintendo Switch 2 The Legend of Zelda 40th Anniversary Edition.",
+    "description": "A precision-fit, crystal-clear acrylic display case for the Nintendo Switch 2 The Legend of Zelda 40th Anniversary Edition box. It keeps the sealed box protected from dust, sun fade, and shelf wear while the artwork stays fully visible. Very limited quantity. Pre-orders ship late December or early January, and shipping is included in the price. Case only: the console box is not included.",
+    "specs": [
+      "Status: Pre-order — ships late December or early January, shipping included",
+      "Very limited quantity",
+      "Fits: Nintendo Switch 2 The Legend of Zelda 40th Anniversary Edition box",
+      "Case only. The console box is not included",
+      "Shipping included (US addresses). This offer ships only",
+      "Precision measured for each specific product",
+      "Material: Cast acrylic, crystal-clear finish",
+      "UV protection: 98% UV rejection rate",
+      "Construction: 5mm outer walls, 8mm thick sections that hold the 6mm magnets",
+      "Closure: Strong magnetic lid (4 to 6 magnets, depending on case size)",
+      "Edges: Rounded",
+      "Assembly: No assembly required"
+    ],
+    "inStock": true,
+    "featured": false,
+    "preorder": {
+      "ships": "late December or early January"
+    }
+  },
+  {
     "id": "151-prismatic-booster-bundle",
     "noDiscount": true,
     "weightOz": 32,
