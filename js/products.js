@@ -351,7 +351,7 @@ const Products = {
       'pokemon': 'Pokémon',
       'one-piece': 'One Piece',
       'palworld': 'Palworld',
-      'nintendo': 'Nintendo',
+      'zelda-40th': 'Zelda 40th Anniversary',
       'pokemon-tcg': 'Pokémon TCG',
       'custom': 'Custom'
     };

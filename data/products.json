@@ -95,7 +95,7 @@
     "category": "pokemon",
     "price": 33,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-limited-stock.jpg",
+    "image": "/images/30th-anniversary-upc-preorder.jpg",
     "shortDescription": "Crystal-clear acrylic case built for the Pokémon 30th Anniversary Ultra Premium Collection box.",
     "description": "Protect and showcase your 30th Anniversary Ultra Premium Collection with a precision-cut, crystal-clear acrylic display case. Built to fit the UPC box exactly, with a strong magnetic lid for easy access that keeps your collection looking pristine.",
     "specs": [
@@ -114,7 +114,7 @@
     "featured": true,
     "pickupPrice": 25,
     "images": [
-      "/images/30th-anniversary-upc-limited-stock.jpg",
+      "/images/30th-anniversary-upc-preorder.jpg",
       "/images/30th-anniversary-upc-studio-v2.jpg"
     ],
     "shippingIncluded": true,
@@ -133,7 +133,7 @@
     "category": "pokemon",
     "price": 64.5,
     "compareAtPrice": null,
-    "image": "/images/30th-anniversary-upc-limited-stock.jpg",
+    "image": "/images/30th-anniversary-upc-preorder.jpg",
     "shortDescription": "Two crystal-clear cases for the Pokémon 30th Anniversary Ultra Premium Collection, with shipping already included.",
     "description": "Two precision-fit, crystal-clear acrylic display cases for the Pokémon 30th Anniversary Ultra Premium Collection, delivered to your door with shipping already included in the price. One flat price, nothing added at checkout.",
     "specs": [
@@ -152,7 +152,7 @@
     "featured": false,
     "deal": true,
     "images": [
-      "/images/30th-anniversary-upc-limited-stock.jpg",
+      "/images/30th-anniversary-upc-preorder.jpg",
       "/images/30th-anniversary-upc-2pack-2x-v2.jpg"
     ],
     "stock": 17,
@@ -394,7 +394,7 @@
     "shippingIncluded": true,
     "new": true,
     "name": "Nintendo Switch 2 Zelda 40th Anniversary Display Case — Pre-Order (Shipping Included)",
-    "category": "nintendo",
+    "category": "zelda-40th",
     "price": 40,
     "compareAtPrice": null,
     "image": "/images/switch2-zelda-40th-case-studio.jpg",
